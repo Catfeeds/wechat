@@ -1,0 +1,34 @@
+<div class="news-header">
+    <div class="header-top">
+        新晋传媒
+    </div>
+    <form method="get" action="./index.php">
+        <input type="hidden" name="i" value="{$_W['uniacid']}">
+        <input type="hidden" name="c" value="{$_GPC['c']}">
+        <input type="hidden" name="m" value="{$_GPC['m']}">
+        <input type="hidden" name="do" value="{$_GPC['do']}">
+        <input type="hidden" name="cid" value="{$_GPC['cid']}">
+        <div class="header-center">
+            <input type="text" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入关键字">
+            <button type="submit" class="s_btn">搜索</button>
+        </div>
+    </form>
+    <div class="header-bottom">
+        <div class="slide-box">
+            <a class="slide-item {if $_GPC['do'] == 'index'}active{/if}" href="{php echo $this->createMobileUrl('index');}">
+                全部
+            </a>
+            {if !empty($_W['location'])}
+            <a class="slide-item {if $_GPC['do'] == 'city'}active{/if}"  href="{php echo $this->createMobileUrl('city');}">
+                {$_W['location']['city']}
+            </a>
+            {/if}
+            {loop $categories $category}
+            <a class="slide-item {if $_GPC['cid'] == $category['id']}active{/if}"  href="{php echo $this->createMobileUrl('list',array('cid'=>$category['id']));}" class="slide-item">
+                {$category['title']}
+            </a>
+            {/loop}
+        </div>
+    </div>
+</div>
+<div style="height: 125px"></div>

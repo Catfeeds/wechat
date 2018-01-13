@@ -1,0 +1,171 @@
+{template 'common/header'}
+<div class="vapp-tab">
+    <ul>
+        <li {if $do == 'display'}class="active"{/if}>
+        <a href="{php echo url('article/display/display');}">栏目列表</a>
+        </li>
+        {if $do == 'post' && !empty($item)}
+        <li class="active">
+        <a href="{php echo url('article/display/post',array('id'=>$item['id']));}">修改栏目</a>
+        </li>
+        {/if}
+        <li {if $do == 'post' && empty($item)}class="active"{/if}>
+        <a href="{php echo url('article/display/post');}">添加栏目</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    {if $do == 'display'}
+    <div class="panel panel-info">
+        <div class="panel-heading">栏目列表</div>
+        <div class="panel-body">
+            <form method="post" class="form-horizontal" id="display_form">
+                <div class="panel panel-default ">
+                    <div class="table-responsive panel-body">
+                        <table class="table table-hover">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th>删?</th>
+                                <th>分类名称</th>
+                                <th>显示状态</th>
+                                <th>排序</th>
+                                <th>修改时间</th>
+                                <th>添加时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $li}
+                            <tr>
+                                <td><input type="checkbox" name="ids[]" value="{$li['id']}"></td>
+                                <td>{$li['title']}</td>
+                                <td >
+                                    {if $li['is_display']==1}<span class="label label-success">显示</span>{else}<span class="label label-default">隐藏</span>{/if}
+                                </td>
+                                <td>{$li['order_by']}</td>
+                                <td>
+                                    {if !empty($li['updatetime'])}
+                                        {php echo date('Y-m-d H:i',$li['updatetime']);}
+                                    {/if}
+                                </td>
+                                <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                                <td>
+                                    <a href="{php echo url('article/display/post',array('id'=>$li['id']));}" title="编辑"><i class="fa fa-edit"></i>&nbsp;编辑</a>
+                                </td>
+                            </tr>
+                            {/loop}
+                            {if !empty($list) && is_array($list)}
+                            <tr>
+                                <td><input type="checkbox" onclick="var ck = this.checked;$('#display_form').find('input').each(function(){this.checked = ck});"></td>
+                                <input name="token" type="hidden" value="{$_W['token']}" />
+                                <td colspan="5">
+                                    <button type="button" name="submit" class="btn btn-primary">删除</button>
+                                </td>
+                            </tr>
+                            {/if}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {$pager}
+            </form>
+            <script type="text/javascript">
+                require(['bootstrap'], function(){
+                    $('button[name="submit"]').bind('click',function() {
+                        if (confirm('删除后不可恢复，您确定删除吗？')) {
+                            if ($(":checkbox[name='ids[]']:checked").size() > 0) {
+                                $.post(
+                                    window.location.href,
+                                    $('#display_form').serialize(),
+                                    function (ret) {
+                                        util.message(ret.message, ret.redirect, ret.type);
+                                    }, 'json'
+                                );
+                            }
+                            util.message('没有选择要删除的分类！', '', 'error');
+                            return false;
+                        }
+                    });
+                });
+            </script>
+        </div>
+    </div>
+    {elseif $do == 'post'}
+    <div class="main">
+        <form method="post" class="form-horizontal form" id="post_form">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    添加栏目
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">栏目名称</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" name="title" value="{$item['title']}" placeholder="请输入分类名称"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">公司</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <select class="form-control" name="company_id">
+                                <option value="0">请选择公司</option>
+                                {loop $companies $company}
+                                <option {if $item['company_id'] == $company['id']}selected{/if} value="{$company['id']}">{$company['title']}</option>
+                                {/loop}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">缩略图</label>
+                        <div class="col-sm-8 col-xs-12">
+                            {php echo tpl_form_field_image('thumb',$item['thumb']);}
+                            <span class="help-block">建议尺寸：300*150(或比例：2:1)</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">排序</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="number" name="order_by" value="{$item['order_by']}" placeholder="请输入数字，越大排序越靠前" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">显示状态</label>
+                        <div class="col-sm-9 col-xs-12">
+                            <label class="radio-inline">
+                                <input type="radio" name="is_display" value="1" {if $item['is_display'] == 1}checked{/if} >
+                                显示
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="is_display" value="0" {if $item['is_display'] == 0}checked{/if}>
+                                隐藏
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-xs-12 col-sm-offset-2">
+                            <input type="hidden" name="id" value="{$item['id']}">
+                            <button type="button" name="submit" class="btn btn-primary js-push-category">提交</button>
+                            <input type="hidden" name="token" value="{$_W['token']}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        require(['util'],function(util){
+            //添加代理
+            $('.js-push-category').click(function(){
+                $.post(
+                    window.location.href,
+                    $('#post_form').serialize(),
+                    function(ret){
+                        util.message(ret.message,ret.redirect,ret.type);
+                    },'json'
+                );
+            });
+        });
+    </script>
+    {/if}
+</div>
+{template 'common/footer'}

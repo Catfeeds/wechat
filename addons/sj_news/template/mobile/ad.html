@@ -1,0 +1,146 @@
+{template 'common/header-sj-news'}
+<link rel="stylesheet" href="{ASSETS_URL}/sj_news/css/push.css?v={STYLE_VERSION}">
+<div class="page-push">
+    <form id="post_form" enctype="multipart/form-data">
+        <div class="push-header">
+            <span style="cursor: pointer;" onclick="history.back()">&lt;返回</span>
+            <span>发布广告</span>
+            <button type="button" class="js-push">发布</button>
+        </div>
+        <div style="height: 45px"></div>
+        <div class="text-box">
+            <div class="title-desc">
+                <span>套餐：</span>
+                <select name="package_id">
+                    {loop $adConfig['setting'] $ad_index $ad}
+                    <option value="{$ad_index}">{$ad['name']}</option>
+                    {/loop}
+                </select>
+            </div>
+            <div class="ad-introduce">
+                <span>说明：</span>
+                <p>
+                    费用：￥{$adConfig['setting'][1]['price']}<br>
+                    期限：{$adConfig['setting'][1]['day']}天<br>
+                    介绍：{$adConfig['setting'][1]['introduce']}
+                </p>
+            </div>
+            <div class="title-desc">
+                <span>标题：</span>
+                <input type="text" maxlength="255" name="title" placeholder="请输入标题">
+            </div>
+            <div class="title-desc">
+                <span>行业：</span>
+                <input type="text" maxlength="255" name="industry" placeholder="请输入行业">
+            </div>
+            <div class="title-desc">
+                <span>资质：</span>
+                <input type="file" name="qualifications">
+            </div>
+            <div class="title-desc">
+                <span>联系：</span>
+                <input type="text" maxlength="20" name="contact" placeholder="请输入手机号或电话">
+            </div>
+            <div class="link-box">
+                <span>链接：</span>
+                <textarea name="link" class="form-control" placeholder="请输入以https://或http://开头的完整的网址（广告的链接或者视频的链接）。如果没有合适的链接，请在平台底部的商城（宜方圆）申请平台店铺，上传资料后可以把链接复制粘贴在这个位置。"></textarea>
+            </div>
+            <textarea name="desc" style="border: 0" autofocus placeholder="描述一下广告内容吧..."></textarea>
+            <div class="images-box">
+                <div class="item">
+                    <input type="file" accept="image/*" name="thumb" >
+                    <span><i class="iconfont icon-shangchuantupian"></i></span>
+                </div>
+            </div>
+            <p style="font-size: 12px;color: red;">建议尺寸：300*100</p>
+            <a style="color: #333333;" href="{$_W['siteroot']}app/index.php?i={$_W['uniacid']}&c=entry&do=point&m=sj_news">
+                <i class="iconfont icon-coordinates_fill"></i>
+                {if empty($_W['location'])}
+                点击选择位置
+                {else}
+                {php echo $_W['location']['province'].$_W['location']['city'].$_W['location']['district'];}&nbsp;[切换]
+                {/if}
+            </a>
+        </div>
+        <div class="look-box">
+            <button type="button" class="js-ad-xy">已阅读且遵守</button>
+        </div>
+    </form>
+    {template 'common/location'}
+    {template 'common/nav-sj'}
+    <script type="text/javascript">
+        require(['util','layer'],function(util,layer){
+            //套餐选择
+            var ads = $.parseJSON('{php echo json_encode($adConfig['setting']);}');
+            $('select[name="package_id"]').change(function(){
+                var index = $(this).val();
+                var html = '费用：￥'+ ads[index]['price'] +'<br>期限：'+ ads[index]['day'] +'天<br>介绍：'+ ads[index]['introduce'];
+                $('.ad-introduce p').html(html);
+            });
+
+
+            $('.js-ad-xy').click(function(){
+                layer.alert('{php echo htmlspecialchars_decode($setting["ad_introduce"]);} ',{
+                    title:'发布说明',
+                    btn: ['同意']
+                });
+            });
+            //发布
+            $('.js-push').click(function(){
+                var obj = $(this);
+                $('.js-toast-loading').show();
+                util.loading();
+                obj.html('发布中').attr('disabled','disabled');
+                var formData = new FormData($( "#post_form" )[0]);
+                $.ajax({
+                    url: window.location.href ,
+                    type: 'POST',
+                    data: formData,
+                    dataType: "json",
+                    async: false,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function (ret) {
+                        if(ret.type == 'error'){
+                            obj.html('发布').removeAttr('disabled');
+                        }
+                        $('.js-toast-loading').hide();
+                        util.toast(ret.message,ret.redirect,ret.type);
+                    },
+                    error: function () {
+                        $('.js-toast-loading').hide();
+                        obj.html('发布').removeAttr('disabled');
+                        util.toast('网络请求错误！','','error');
+                    }
+                });
+            });
+
+            $('input[name="thumb"]').bind('change',function(){
+                $('.img-item').remove();
+                if(this.files.length > 0){
+                    for(var i in this.files){
+                        if(this.files.hasOwnProperty(i)){
+                            var src = getFileSrc(this.files[i]);
+                            $('.images-box').prepend('<div class="item img-item"><img src="'+src+'"></div>');
+                        }
+                    }
+                }
+            });
+
+            /* 获取元素路径 */
+            function getFileSrc(file){
+                var url = null;
+                if (window.createObjectURL != undefined) {
+                    url = window.createObjectURL(file)
+                } else if (window.URL != undefined) {
+                    url = window.URL.createObjectURL(file)
+                } else if (window.webkitURL != undefined) {
+                    url = window.webkitURL.createObjectURL(file)
+                }
+                return url;
+            }
+        });
+    </script>
+</div>
+{template 'common/footer-sj-news'}

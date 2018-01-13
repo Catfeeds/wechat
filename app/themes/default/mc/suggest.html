@@ -1,0 +1,118 @@
+{template 'common/header-oto'}
+<link rel="stylesheet" href="{$_W['siteroot']}app/resource/css/suggest.css?v={STYLE_VERSION}">
+<div class="page-suggest">
+    <div class="suggest-header">
+        <i class="icon iconfont icon-fanhui back" onclick="history.go('-1')"></i>
+        意见反馈
+    </div>
+    <div class="suggest-tabs">
+        <span class="active">发表意见</span>
+        <span>我的意见</span>
+    </div>
+    <div style="width: 100%;height: 100px;"></div>
+    <div class="suggest-box">
+        <textarea name="suggest" class="form-control" placeholder="请输入您的意见或问题"></textarea>
+        <button class="js-post-suggest" type="button">提交意见</button>
+    </div>
+    <div class="suggest-main">
+        <div class="suggest-list"></div>
+        <div class="ajax-more">加载更多&gt;&gt;</div>
+    </div>
+</div>
+<script type="text/javascript">
+    require([],function(){
+        /* 切换*/
+        var page = 1;
+        $('.suggest-tabs span').bind('click',function(){
+            var obj = $('.suggest-tabs span');
+            obj.removeClass('active');
+            $(this).addClass('active');
+            var index = obj.index(this);
+            if(index == 0){
+                $('.suggest-box').show();
+                $('.suggest-main').hide();
+            }else{
+                //意见列表
+                page = 1;
+                $('.suggest-box').hide();
+                $('.suggest-main').show();
+                $('.js-toast-loading').show();
+                util.loading();
+                $.post(
+                    window.location.href,
+                        {page:page},
+                        function(ret){
+                            $('.js-toast-loading').hide();
+                            if(ret.type == 'success'){
+                                var html = '';
+                                $.each(ret.message,function(index,item){
+                                    html +=
+                                    '<div class="item">'+
+                                        '<div class="item-header">'+item['createtime']+'<span class="label label-'+item['span_class']+'">'+item['span_desc']+'</span></div>'+
+                                        '<div class="item-content">'+item['content']+'</div>'+
+                                        '<div class="item-reply">回复内容：'+item['reply']+'</div>'+
+                                    '</div>';
+                                });
+                                $('.suggest-list').html(html);
+                            }else{
+                                util.toast(ret.message,ret.redirect,ret.type);
+                                $('.suggest-list').html('<div class="no-data" style="margin-top: 5px"> <div class="no-data-tips-box"> <i class="icon iconfont icon-ma"></i> </div> <div class="no-data-tips">没有找到相关信息</div> </div>');
+                            }
+                        },'json'
+                );
+            }
+        });
+
+        /* 加载更多 */
+        $('.ajax-more').bind('click',function(){
+            if(page < 2){
+                page = 2;
+            }
+            $('.js-toast-loading').show();
+            util.loading();
+            $.post(
+                    window.location.href,
+                    {page:page},
+                    function(ret){
+                        $('.js-toast-loading').hide();
+                        if(ret.type == 'success'){
+                            $('.no-data').remove();
+                            var html = '';
+                            $.each(ret.message,function(index,item){
+                                html +=
+                                        '<div class="item">'+
+                                        '<div class="item-header">'+item['createtime']+'<span class="label label-'+item['span_class']+'">'+item['span_desc']+'</span></div>'+
+                                        '<div class="item-content">'+item['content']+'</div>'+
+                                        '<div class="item-reply">回复内容：'+item['reply']+'</div>'+
+                                        '</div>';
+                            });
+                            $('.suggest-list').append(html);
+                            page++;
+                        }else{
+                            util.toast(ret.message,ret.redirect,ret.type);
+                        }
+                    },'json'
+            );
+
+        });
+
+
+        /* 发表建议 */
+        $('.js-post-suggest').bind('click',function(){
+            $.post(
+                "{php echo url('mc/suggest/suggest');}",
+                    {
+                        content:$('textarea[name="suggest"]').val()
+                    },
+                 function(ret){
+                     if(ret.type == 'success'){
+                         $('textarea[name="suggest"]').val('');
+                     }
+                    util.toast(ret.message,ret.redirect,ret.type);
+                 },'json'
+            );
+        });
+
+    });
+</script>
+{template 'common/footer-oto'}

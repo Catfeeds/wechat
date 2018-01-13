@@ -1,0 +1,370 @@
+{template 'common/header-oto'}
+<link rel="stylesheet" href="{ASSETS_URL}/oto/css/detail.css?v={STYLE_VERSION}">
+<link rel="stylesheet" href="{$_W['siteroot']}app/resource/components/swiper/swiper.min.css">
+<div class="page-detail">
+    <i class="icon iconfont icon-fanhui back" onclick="history.go('-1')"></i>
+    <div class="js-detail-header">
+        <!-- begin 宣传图 -->
+        {if !empty($goods['thumbs']) && is_array($goods['thumbs'])}
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                {loop $goods['thumbs'] $thumb}
+                <div class="swiper-slide">
+                    <img onerror="this.src='/assets/oto/images/error.png'" src="{php echo tomedia($thumb);}">
+                </div>
+                {/loop}
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+        </div>
+        {/if}
+        <div class="goods-title">
+            {$goods['title']}
+        </div>
+        <!-- end 宣传图 -->
+        <div class="desc-box">
+            {if $goods['store_id'] == '3928'}
+            <div><span class="goods-price">￥{$goods['sale_price']}</span><span style="font-size: 12px;color: green;">+{php echo ceil($goods['sale_price']*2/60);}个方圆宝</span></div>
+            <span style="color: #333333;font-size: 12px;text-decoration: line-through">￥{$goods['market_price']}</span>
+            {else}
+            <div class="goods-price">￥{$goods['sale_price']}</div>
+            {/if}
+            <div class="goods-stat">
+                <span>快递: {if $goods['is_free_post'] == POST_FREE_YES}包邮{else}不包邮{/if}</span>
+                <span>销量 {$goods['sale_count']}件</span>
+                <span>{$store_info['province']}{$store_info['city']}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- begin 限时购模式 -->
+    {if $goods['is_open_limit_time_buy'] == OPEN_STATUS}
+        {if $goods['limit_time_buy_start']<= TIMESTAMP && $goods['limit_time_buy_end'] >= TIMESTAMP}
+            <div class="limit-time-buy">
+                <div class="time-box">
+                    <span class="day">0</span>&nbsp;天
+                    <span class="hour">0</span>&nbsp;时
+                    <span class="minute">0</span>&nbsp;分
+                    <span class="second">0</span>&nbsp;秒
+                </div>
+                <div class="price-box">限时<span>￥{$goods['limit_time_price']}</span></div>
+            </div>
+        {/if}
+    {/if}
+    <!-- end 限时购模式 -->
+    <div class="detail-space">
+        <div class="goods-box">
+            <div class="shop-info">
+                <div class="shop-entry">
+                    <a href="{php echo $this->createMobileUrl('store',array('id'=>$goods['store_id'],'op'=>'goods'));}">所有商品</a>
+                    <a href="{php echo $this->createMobileUrl('store',array('id'=>$goods['store_id']));}">进店逛逛</a>
+                </div>
+            </div>
+            <!-- begin  详情-->
+            <div class="store-goods-detail">
+                {$goods['detail']}
+            </div>
+            <!-- end  详情-->
+        </div>
+        <div class="goods-detail">
+            <div class="goods-detail-content">
+                {$goods['detail']}
+            </div>
+        </div>
+        <div class="talk-list"></div>
+    </div>
+
+
+    <div style="width: 100%;height: 60px;"></div>
+    <div class="buy-box">
+        <div class="buy-nav">
+            <a class="look-cart" href="{php echo $this->createMobileUrl('cart');}">
+                <span><i class="icon iconfont icon-gouwuche1"></i></span>
+            </a>
+            <div class="icons">
+                <a class="icon-item" href="tel:{$store_info['tel']}">
+                   <i class="icon iconfont icon-shoujihao2" style="color: #06c1ae;"></i>
+                    <span>客服</span>
+                </a>
+                <a class="icon-item" href="{php echo $this->createMobileUrl('store',array('id'=>$store_info['id']));}">
+                    <i class="icon iconfont icon-dianpu1"></i>
+                    <span>店铺</span>
+                </a>
+                <a class="icon-item collect-item">
+                    <i class="icon iconfont {if !empty($is_collect) && is_array($is_collect)}icon-shoucang1 active{else}icon-shoucang2{/if}"></i>
+                    <span>收藏</span>
+                </a>
+            </div>
+           <div class="btns">
+               <a class="cart-btn">加入购物车</a>
+               <a href="{$_W['siteroot']}app/index.php?i={$_W['uniacid']}&c=entry&store_id={$store_info['id']}&auth={$auth}&do=pay&m=oto">立即购买</a>
+               <!-- buy-btn -->
+           </div>
+        </div>
+    </div>
+
+    <!-- begin 购物车，购买  data-type=2是立即购买 -->
+    <div class="preview-buy">
+        <div class="preview-box">
+            <div class="preview-main">
+                <div class="goods-desc">
+                    <div class="goods-image">
+                        <img  onerror="this.src='/assets/oto/images/error.png'"  src="{php echo tomedia($goods['thumb']);}">
+                    </div>
+                    <ul>
+                        <li class="goods-price js-sku-goods-price">￥{$goods['true_price']}</li>
+                        <li class="stock-num">库存：&nbsp;<span class="js-select-total">{$goods['total']}</span>件</li>
+                        {if !empty($goods['spec_list']) && is_array($goods['spec_list'])}
+                        <li class="goods-select">已选择：&nbsp;<span class="js-select-tips">未选择</span></li>
+                        {/if}
+                    </ul>
+                    <i class="icon iconfont icon-guanbi"></i>
+                </div>
+            </div>
+            <div class="goods-spec">
+                {if !empty($goods['spec_list']) && is_array($goods['spec_list']) && $goods['is_open_spec'] == 1}
+                <div class="spec-box">
+                    {loop $goods['spec_list'] $spec_filed $spec}
+                    <span class="spec-title">{$spec['key']}</span>
+                    <div class="spec-item">
+                        {loop $spec['value'] $spec_key $spec_val}
+                        <span data-field="{$spec_filed}" data-key="{$spec_key}" class="spec-item-title js-select-spec">{$spec_val}</span>
+                        {/loop}
+                        <div style="clear: both"></div>
+                    </div>
+                    {/loop}
+                </div>
+                {/if}
+                <div class="buy-num">
+                    <span>购买数量</span>
+                    <div class="control-bar">
+                        <button type="button" class="reduce-btn">-</button>
+                        <input type="number" name="buy_num" class="buy-num-input" value="1">
+                        <button type="button" class="add-btn">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="confirm-btn">
+                <button data-type="1" data-id="{$goods['id']}" class="buy-confirm-btn js-buy-confirm-btn">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- begin 立即购买表单 -->
+    <form method="post" id="buy_now_form" action="{php echo $this->createMobileUrl('check');}">
+        <input type="hidden" name="goods_id" value="{$goods['id']}">
+        <input id="buy_now_sku_key" type="hidden" name="sku_key">
+        <input id="buy_now_sku_desc" type="hidden" name="sku_desc">
+        <input id="buy_now_buy_num" type="hidden" name="buy_num">
+    </form>
+    <!-- end 立即购买表单 -->
+
+    <!-- end 购物车 购买-->
+</div>
+<script type="text/javascript">
+    require(['util','swiper'],function(util){
+        /* 搜藏 */
+        $('.collect-item').bind('click',function(){
+            var obj = $(this).find('i');
+            $('.js-toast-loading').show();
+            util.loading();
+            $.post(
+               "{php echo $this->createMobileUrl('detail',array('op'=>'collect'));}",
+               {
+                   id:"{$goods['id']}"
+               },
+               function(ret){
+                   $('.js-toast-loading').hide();
+                    if(ret.type == 'success') {
+                        if (obj.hasClass('active')) {
+                            obj.removeClass('icon-shoucang1 active').addClass('icon-shoucang2');
+                        } else {
+                            obj.addClass('icon-shoucang1 active').removeClass('icon-shoucang2');
+                        }
+                    }
+                    util.toast(ret.message,ret.redirect,ret.type);
+               },'json'
+            );
+        });
+
+        //tabs切换
+        $('.detail-tabs ul li').bind('click',function(){
+            $('.detail-tabs ul li a').removeClass('active');
+            $(this).find('a').addClass('active');
+            var index = $('.detail-tabs ul li').index(this);
+            $('.detail-space > div').hide();
+            if(index == '1'){
+                $('.goods-detail').show();
+                $('.js-detail-header').hide();
+                $('.limit-time-buy').hide();
+                $('.goods-options').show();
+            }else if(index == '2'){
+                $('.talk-list').show();
+                $('.js-detail-header').hide();
+                $('.limit-time-buy').hide();
+                $('.goods-options').hide();
+            }else{
+                $('.goods-box').show();
+                $('.js-detail-header').show();
+                $('.limit-time-buy').show();
+                $('.goods-options').hide();
+            }
+        });
+
+        //倒计时
+        {if $goods['is_open_limit_time_buy'] == OPEN_STATUS}
+            {if $goods['limit_time_buy_start']<= TIMESTAMP && $goods['limit_time_buy_end'] >= TIMESTAMP}
+            var ts = {php echo $goods['limit_time_buy_end']-TIMESTAMP;};
+            function timer() {
+                var dd = checkTime(parseInt(ts / 60 / 60 / 24, 10));//计算剩余的天数
+                var hh = checkTime(parseInt(ts / 60 / 60 % 24, 10));//计算剩余的小时数
+                var mm = checkTime(parseInt(ts / 60 % 60, 10));//计算剩余的分钟数
+                var ss = checkTime(parseInt(ts-- % 60, 10));//计算剩余的秒数
+                $('.day').html(dd);
+                $('.hour').html(hh);
+                $('.minute').html(mm);
+                $('.second').html(ss);
+                if(ts<=0){
+                    $('.limit-time-buy').slideUp();
+                    clearInterval(limit_buy_interval);
+                }
+
+            }
+            function checkTime(i) {
+                if (i < 10) {
+                    return i = "0" + i;
+                }
+                return i;
+            }
+            var limit_buy_interval = setInterval(function(){
+                timer();
+            },1000);
+           {/if}
+        {/if}
+
+        /* 选择规格事件 */
+        var sku = {$goods['sku_list']};
+        var sku_key = '';
+        var sku_desc = '';
+        var field_1 = '';
+        var field_2 = '';
+        $('.js-select-spec').bind('click',function(){
+            $(this).parent().find('.spec-item-title').removeClass('active');
+            $(this).addClass('active');
+            var filed = $(this).attr('data-field');
+            var key = $(this).attr('data-key');
+            if(filed == 1){
+                field_1 = key;
+            }else{
+                field_2 = key;
+            }
+            if(field_1 != '' && field_2 != ''){ //规格已选完
+                if(sku[field_1+'_'+field_2] != 'undefined'){
+                    sku_key = field_1+'_'+field_2;
+                    var goods = sku[sku_key];
+                    sku_desc = goods['filed_1']+'-'+goods['filed_2'];
+                    $('.js-select-total').html(goods['total']);
+                    $('.js-select-tips').html(sku_desc);
+                    $('.js-sku-goods-price').html('￥'+goods['sale_price']);
+                }
+            }
+        });
+
+
+        /* 展开右侧菜单 */
+        $('.more').bind('click',function(){
+            var menu = $('.menu');
+            var display = menu.css('display');
+            if(display == 'none'){
+                menu.css({right:'0',width:'0'}).show().animate({
+                    width:'80px'
+                });
+            }else{
+                menu.hide();
+            }
+        });
+
+        var swiper_1 = new Swiper('.swiper-container', {
+            pagination: '.swiper-pagination',
+            paginationClickable: true,
+            autoplay: 5000,//可选选项，自动滑动
+        });
+
+        $('.icon-guanbi').bind('click',function(){
+            $('.preview-buy').hide();
+        });
+
+        $('.cart-btn').bind('click',function(){
+            $('.js-buy-confirm-btn').attr('data-type','1');
+            $('.preview-buy').show();
+        });
+
+        $('.buy-btn').bind('click',function(){
+            $('.js-buy-confirm-btn').attr('data-type','2');
+            $('.preview-buy').show();
+        });
+
+        //购买数量
+        $('input[name="buy_num"]').bind('input propertychange', function(){
+            $(this).val($(this).val().replace(/\D/g,''));
+        });
+
+        //增加购买数量
+        $('.add-btn').bind('click',function(){
+            var buy_num_input = $('input[name="buy_num"]');
+            var num = parseInt(buy_num_input.val());
+            buy_num_input.val(num+1);
+        });
+
+        //减少购买数量
+        $('.reduce-btn').bind('click',function(){
+            var buy_num_input = $('input[name="buy_num"]');
+            var num = parseInt(buy_num_input.val());
+            if(num < 2){
+                return false;
+            }
+            buy_num_input.val(num-1);
+        });
+
+
+        //购买或加入购物车
+        $('.js-buy-confirm-btn').bind('click',function(){
+            $('.preview-buy').hide();
+            var type = $(this).attr('data-type');
+            var buy_info = {
+                sku_key:sku_key,
+                sku_desc:sku_desc,
+                buy_num:$('input[name="buy_num"]').val(),
+                goods_id:$(this).attr('data-id')
+            };
+            if(type == 1){//加入购物车
+                $.post(
+                    "{php echo $this->createMobileUrl('detail',array('op'=>'cart'));}",
+                    buy_info,
+                    function(ret){
+                        if(ret.type == 'success'){
+                            util.toast(ret.message,'','success');
+                            return true;
+                        }else{
+                            util.toast(ret.message,ret.redirect,'error');
+                            return false;
+                        }
+                    },'json'
+                );
+            }else{ //立即购买
+                var is_open_spec = "{$goods['is_open_spec']}";
+                if(is_open_spec == "1"){//开启规格
+                    if(sku_key == ''){
+                        util.toast('请选择规格','','error');
+                        return false;
+                    }
+                }
+                $('#buy_now_sku_key').val(buy_info.sku_key);
+                $('#buy_now_sku_desc').val(buy_info.sku_desc);
+                $('#buy_now_buy_num').val(buy_info.buy_num);
+                $('#buy_now_form').submit();
+            }
+        });
+    });
+</script>
+{template 'common/footer-oto'}

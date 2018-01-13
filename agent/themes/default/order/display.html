@@ -1,0 +1,24 @@
+{template 'common/header'}
+<div class="agent-tab">
+    <ul>
+        <li {if $do == 'display'}class="active"{/if}>
+        <a href="{php echo url('order/display/display');}">店铺订单</a>
+        </li>
+        <li {if $do == 'person'}class="active"{/if}>
+        <a href="{php echo url('order/display/person');}">个人收款二维码/二手货订单</a>
+        </li>
+        <li {if $do == 'fee'}class="active"{/if}>
+        <a href="{php echo url('order/display/fee');}">平台服务费</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    {if $do == 'display'}
+        {template 'order/shop'}
+    {elseif $do == 'person'}
+        {template 'order/person'}
+    {elseif $do == 'fee'}
+        {template 'order/fee'}
+    {/if}
+</div>
+{template 'common/footer'}

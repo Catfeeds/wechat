@@ -1,0 +1,31 @@
+{template 'common/header'}
+<link href="/assets/designer/res/css/designer.css" rel="stylesheet">
+<script src="/assets/designer/res/js/designer.js"></script>
+<div class="platform-tab">
+    <ul>
+        <li {if $op == 'display'}class="active"{/if}>
+            <a href="{php echo $this->createWebUrl('diy');}">模板列表</a>
+        </li>
+        <li {if $op == 'post' && empty($item)}class="active"{/if}>
+        <a  href="{php echo $this->createWebUrl('diy',array('op'=>'post'));}">添加模板</a>
+        </li>
+        {if $op == 'post' && !empty($item)}
+        <li class="active">
+        <a  href="{php echo $this->createWebUrl('diy',array('op'=>'post','id'=>$item['id']));}">编辑模板</a>
+        </li>
+        {/if}
+        <li {if $op == 'footnav'}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('diy',array('op'=>'footnav'));}">底部菜单</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    {if $op == 'display'}
+        {template 'oto/diy-display'}
+    {elseif $op == 'post'}
+        {template 'oto/diy-post'}
+    {elseif $op == 'foot_nav'}
+        {template 'oto/diy-footnav'}
+    {/if}
+</div>
+{template 'common/footer'}

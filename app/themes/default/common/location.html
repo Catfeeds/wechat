@@ -1,0 +1,30 @@
+{if empty($_SESSION['__location'])}
+<script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
+<script type="text/javascript">
+    var geolocation = new qq.maps.Geolocation("4Y5BZ-LYMCU-5XWVY-2R2FI-4VYJH-YLB45", "web端定位服务");
+    var options = {timeout: 8000};
+    geolocation.getLocation(showPosition, showErr, options);
+    function showPosition(position) {
+        $.post(
+                "{php echo url('utility/location/save');}",
+                {
+                    address:position['addr'],
+                    city:position['city'],
+                    district:position['district'],
+                    province:position['province'],
+                    lng:position['lng'],
+                    lat:position['lat']
+                } ,
+                function(ret){
+                    var address = ret.message.address == ''?ret.message.city:ret.message.address;
+                    util.toast('您当前位于：'+address,ret.redirect,'success');
+                    return false;
+                },'json'
+        );
+    }
+    function showErr() {
+        util.toast('定位失败，请刷新重试','','error');
+        return false;
+    }
+</script>
+{/if}

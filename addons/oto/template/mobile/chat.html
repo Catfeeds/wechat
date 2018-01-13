@@ -1,0 +1,159 @@
+<html lang="zh-cn" >
+<head>
+    <meta charset="utf-8" />
+    <meta HTTP-EQUIV="pragma" CONTENT="no-cache">
+    <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache, must-revalidate">
+    <meta HTTP-EQUIV="expires" CONTENT="0">
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no" media="screen" />
+    <title>{$page_title}</title>
+    <link rel="stylesheet" href="{ASSETS_URL}/oto/css/chat.css?v={STYLE_VERSION}">
+    <script type="text/javascript" src="{$_W['siteroot']}app/resource/js/lib/jquery-1.11.1.min.js"></script>
+</head>
+<body>
+<div class="speak_window">
+    <div class="speak_box">
+        <div class="chat-list"></div>
+    </div>
+</div>
+<div class="chat-send">
+    <input type="text" name="content" autofocus placeholder="请输入聊天内容...">
+    <button type="button" class="js-send">发送</button>
+</div>
+<script type="text/javascript">
+    $(function(){
+        var max_width = $(window).width()-60;
+        var last_time = 0;
+
+        //自己的UID
+        var send_uid = "{$_W['member']['uid']}";
+
+        //初始化加载聊天记录
+        $.post(
+            window.location.href,
+                {ac:'getall'},
+                function(ret){
+                    var obj = $('.chat-list');
+                    if(ret.type == 'success'){
+                        $.each(ret.message,function(index,item){
+                            if(ret.type == 'success'){
+                                if(index == 0){
+                                    last_time = item['createtime'];
+                                }
+                                var html = '';
+                                if(item['send_uid'] == send_uid){
+                                    //自己的
+                                    html = '<div class="question">' +
+                                            '<div class="heard_img right">' +
+                                            '<img src="{$userAvatar}">' +
+                                            '</div>' +
+                                            '<div class="question_text clear" style="max-width: '+max_width+'px;">' +
+                                            '<p>' +
+                                            item['content']+
+                                            '<br><span class="date-send">'+item['time_desc']+'</span>'+
+                                            '</p>' +
+                                            '<i></i>' +
+                                            '</div>' +
+                                            '</div>';
+                                }else{
+                                    //别人的
+                                    html ='<div class="answer">' +
+                                            '<div class="heard_img left">' +
+                                            '<img src="{$memberAvatar}">' +
+                                            '</div>' +
+                                            '<div class="answer_text"  style="max-width: '+max_width+'px;">' +
+                                            '<p>' +
+                                            item['content']+
+                                            '<br><span class="date-receiver">'+item['time_desc']+'</span>'+
+                                            '</p>' +
+                                            '<i></i>' +
+                                            '</div>' +
+                                            '</div>';
+                                }
+                                obj.prepend(html);
+                            }
+                        });
+                        $('.speak_window').animate({scrollTop:obj.height()},1000);
+                    }
+                },'json'
+        );
+
+        //返回底部
+        $('.speak_window').animate({scrollTop:$('.chat-list').height()},1000);
+
+        //发送消息
+        $("body").keydown(function() {
+            if (event.keyCode == "13") {//keyCode=13是回车键
+                $('.js-send').click();
+            }
+        });
+        $('.js-send').click(function(){
+            var obj = $('input[name="content"]');
+            var content = obj.val();
+            obj.val('');
+            if(content == ''){
+                return false;
+            }
+            $.post(
+                window.location.href,
+                    {ac:'log',content:content},
+                    function(ret){
+                        if(ret.type == 'success'){ //成功把消息添加界面上
+                            var html = '<div class="question">' +
+                                            '<div class="heard_img right">' +
+                                                '<img src="{$userAvatar}">' +
+                                            '</div>' +
+                                            '<div class="question_text clear" style="max-width: '+max_width+'px;">' +
+                                                '<p>' +
+                                                    content+
+                                                    '<br><span class="date-send">'+ret.message.time_desc+'</span>'+
+                                                '</p>' +
+                                                '<i></i>' +
+                                            '</div>' +
+                                        '</div>';
+                            $('.chat-list').append(html);
+                            $('.speak_window').animate({scrollTop:$('.chat-list').height()},1000);
+                            return true;
+                        }
+                        alert(ret.message);
+                    },'json'
+            )
+        });
+
+        //接收消息
+        setInterval(function(){
+            $.post(
+                 window.location.href,
+                    {last_time:last_time},
+                    function(ret){
+                        if(ret.type == 'success'){ //成功把消息添加界面上
+                            var html = '';
+                            $.each(ret.message,function(index,item){
+                                html+='<div class="answer">' +
+                                            '<div class="heard_img left">' +
+                                                '<img src="{$memberAvatar}">' +
+                                            '</div>' +
+                                            '<div class="answer_text">' +
+                                                '<p>' +
+                                                    item['content']+
+                                                    '<br><span class="date-receiver">'+item['time_desc']+'</span>'+
+                                                '</p>' +
+                                                '<i></i>' +
+                                            '</div>' +
+                                        '</div>';
+                                last_time = item['createtime'];
+                            });
+                            $('.chat-list').append(html);
+                            $('.speak_window').animate({scrollTop:$('.chat-list').height()},1000);
+                            return true;
+                        }
+                    },'json'
+            );
+        },5000);
+
+    });
+</script>
+</body>
+</html>

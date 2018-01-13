@@ -1,0 +1,47 @@
+{template 'common/header'}
+<div class="platform-tab">
+    <ul>
+        <li class="active" data-type="base">
+            <a>基本设置</a>
+        </li>
+        <li data-type="fangyuanbao">
+            <a>方圆宝设置</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <form class="form-horizontal form" method="post" id="distribution-form">
+        {template 'oto/distribution-base'}
+        {template 'oto/distribution-fangyuanbao'}
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label"></label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="hidden" name="token" value="{$_W['token']}">
+                <input name="submit" type="button" value="提交" class="btn btn-primary span2">
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    require([],function(){
+        /* tab切换 */
+        $('.platform-tab ul li').bind('click',function(){
+            var obj = $('.platform-tab ul li');
+            obj.removeClass('active');
+            $(this).addClass('active');
+            $('.js-distribution-box').hide();
+            $('.'+$(this).attr('data-type')).show();
+        });
+
+        $('input[name="submit"]').bind('click',function(){
+            $.post(
+                window.location.href,
+                $('#distribution-form').serialize(),
+                function(ret){
+                    util.message(ret.message,ret.redirect,ret.type);
+                },'json'
+            );
+        });
+    });
+</script>
+{template 'common/footer'}

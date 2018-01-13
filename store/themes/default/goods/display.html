@@ -1,0 +1,593 @@
+{template 'common/header'}
+<div class="store-tab">
+    <ul>
+        <li {if $do == 'display'}class="active"{/if}>
+            <a href="{php echo url('goods/display');}">商品列表</a>
+        </li>
+        <li {if $do == 'post' && empty($item)}class="active"{/if}>
+            <a href="{php echo url('goods/display/post');}">添加商品</a>
+        </li>
+        {if $do == 'post' && !empty($item)}
+        <li class="active">
+        <a href="{php echo url('goods/display/post',array('id'=>$item['id']));}">修改商品</a>
+        </li>
+        {/if}
+    </ul>
+</div>
+<div class="page-content">
+{if $do == 'display'}
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选</div>
+        <div class="panel-body">
+            <form method="post" class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入关键词，商品名称" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">类别</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <select name="category_id" class="form-control">
+                            <option value="0">全部类别</option>
+                            {if !empty($category) && is_array($category)}
+                            {loop $category $c_item}
+                            <option {if $category_id == $c_item['id']}selected{/if} value="{$c_item['id']}">{$c_item['title']}</option>
+                            {/loop}
+                            {/if}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">显示状态</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="display_status[]" value="{DISPLAY_YES}" {if in_array(DISPLAY_YES,$display_status)}checked{/if}>显示
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="display_status[]" value="{DISPLAY_NO}" {if in_array(DISPLAY_NO,$display_status)}checked{/if}>隐藏
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                        <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                        <input class="btn btn-primary" type="submit" name="export_submit" id="export_submit" value="导出">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form method="post" class="form-horizontal" id="delete_goods_form">
+        <input type="hidden" name="ac" value="delete" />
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>删?</th>
+                        <th>编号</th>
+                        <th>名称</th>
+                        <th>价格</th>
+                        <th>库存</th>
+                        <th>销量</th>
+                        <th>属性</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $li}
+                    <tr>
+                        <td><input type="checkbox" name="ids[]" value="{$li['id']}"></td>
+                        <td>{$li['id']}</td>
+                        <td>{$li['title']}</td>
+                        <td>{$li['sale_price']}/{$li['unit']}</td>
+                        <td>{$li['total']}</td>
+                        <td>{$li['sale_count']}</td>
+                        <td style="line-height: 25px;">
+                           {if $li['is_check']==1}<span class="label label-success">通过</span>{else}<span class="label label-default">未通过</span>{/if}
+                            {if $li['is_display']==1}<span class="label label-success">显示</span>{else}<span class="label label-default">隐藏</span>{/if}
+                            {if $li['is_free_post']==1}<span class="label label-success">包邮</span>{else}<span class="label label-default">不包邮</span>{/if}
+                        </td>
+                        <td>
+                            <a href="{php echo url('goods/display/post',array('id'=>$li['id']));}" title="编辑"><i class="fa fa-edit"></i>&nbsp;编辑</a>
+                        </td>
+                    </tr>
+                    {/loop}
+                    {if !empty($list) && is_array($list)}
+                    <tr>
+                        <td><input type="checkbox" name="" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});"></td>
+                        <input name="token" type="hidden" value="{$_W['token']}" />
+                        <td colspan="7"><button type="button" name="submit" class="btn btn-primary">删除</button></td>
+                    </tr>
+                    {/if}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+    <script type="text/javascript">
+        require(['bootstrap'], function(){
+            $('button[name="submit"]').bind('click',function() {
+                if (confirm('删除后不可恢复，您确定删除吗？')) {
+                    if ($(":checkbox[name='ids[]']:checked").size() > 0) {
+                        $.post(
+                                "{php echo url('goods/display/post');}",
+                                $('#delete_goods_form').serialize(),
+                                function (ret) {
+                                    util.message(ret.message, ret.redirect, ret.type);
+                                    return false;
+                                }, 'json'
+                        );
+                    }
+                    util.message('没有选择要删除的商品！', '', 'error');
+                    return false;
+                }
+            });
+        });
+    </script>
+{elseif $do == 'post'}
+    <div class="main">
+        <form method="post" class="form-horizontal form" id="post_goods_form">
+            <div class="panel panel-info">
+            <div class="panel-heading">
+                商品基本信息
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>商品名称</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" name="title" value="{$item['title']}" placeholder="请输入商品名称"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>平台商品分类</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <select class="form-control" name="category_id">
+                            <option value="0">平台商品分类</option>
+                            {loop $category $c_item}
+                            <option {if $c_item['parent_id'] == 0}disabled{/if} {if $item['category_id'] == $c_item['id']}selected{/if} value="{$c_item['id']}">{$c_item['title']}</option>
+                            {/loop}
+                        </select>
+                        <span class="help-block">请选第三级分类添加商品</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>店铺商品分类</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <select class="form-control" name="store_category_id">
+                            <option value="0">商家商品分类</option>
+                            {loop $store_category $sc_item}
+                            <option  {if $sc_item['parent_id'] == 0}disabled{/if} {if $sc_item['id'] == $item['store_category_id']}selected{/if}  value="{$sc_item['id']}">{$sc_item['title']}</option>
+                            {/loop}
+                        </select>
+                        <span class="help-block">请选第二级分类添加商品</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">商品类型</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <select class="form-control" name="type">
+                            <option value="0">实物</option>
+                            <option value="1">虚拟</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">商品条形编码</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="product_code"  class="form-control" placeholder="请输入商品条形编码" value="{$item['product_code']}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">商品简介</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <textarea name="desc"  class="form-control" placeholder="输入商品简介">{$item['desc']}</textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 商品图片</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {php echo tpl_form_field_image('thumb',$item['thumb']);}
+                        <span class="help-block">建议尺寸：300*300</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 商品详情轮播图</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {php echo tpl_form_field_multi_image('thumbs', $item['thumbs']);}
+                        <span class="help-block">建议尺寸：600*300</span>
+                    </div>
+                </div>
+                <div class="form-group" style="display: none">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 出厂价/成本</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" name="cost_price" value="{$item['cost_price']}" placeholder="请输入商品出厂价/成本，单位：元"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 原价/市场价</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" name="market_price" value="{$item['market_price']}" placeholder="请输入商品市场价/原价，单位：元"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 售价/现价</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" name="sale_price" value="{$item['sale_price']}" placeholder="请输入商品售价/现价，单位：元"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">开启限时购</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <label class="radio-inline">
+                            <input type="radio" name="is_open_limit_time_buy" value="{OPEN_STATUS}" {if $item['is_open_limit_time_buy'] == OPEN_STATUS}checked{/if}>
+                            开启限时购
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="is_open_limit_time_buy" value="{CLOSE_STATUS}" {if $item['is_open_limit_time_buy'] != OPEN_STATUS}checked{/if}>
+                            关闭限时购
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group js-limit-buy-box" {if $item['is_open_limit_time_buy'] != OPEN_STATUS}style="display:none"{/if}>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">限时购买价格</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" name="limit_time_price" value="{$item['limit_time_price']}" placeholder="请输入限时购买价格，单位：元"/>
+                    </div>
+                </div>
+                <div class="form-group js-limit-buy-box"{if $item['is_open_limit_time_buy'] != OPEN_STATUS}style="display:none"{/if}>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">限时购时间</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {php echo tpl_form_field_daterange('limit_buy_time', array('start'=>empty($item['limit_time_buy_start'])?date('Y-m-d 00:00:00'):date('Y-m-d H:i:s',$item['limit_time_buy_start']),'end'=>empty($item['limit_time_buy_end'])?date('Y-m-d 23:59:59'):date('Y-m-d H:i:s',$item['limit_time_buy_end'])), true);}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 单位</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" name="unit" value="{$item['unit']}" placeholder="请输入商品单位：件/个/只等"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">商品重量</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" name="weight" value="{$item['weight']}" placeholder="请输入商品重量，单位：kg"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 库存</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" name="total" value="{$item['total']}" placeholder="请输入商品库存"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>显示状态</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <label class="radio-inline">
+                            <input type="radio" name="is_display" value="1" {if $item['is_display'] == 1}checked{/if}>
+                            显示
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="is_display" value="0" {if $item['is_display'] != 1}checked{/if}>
+                            隐藏
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>是否推荐</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <label class="radio-inline">
+                            <input type="radio" name="is_recommend" value="1" {if $item['is_recommend'] == 1}checked{/if}>
+                            推荐
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="is_recommend" value="0" {if $item['is_recommend'] != 1}checked{/if}>
+                            不推荐
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">是否包邮</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <label class="radio-inline">
+                            <input type="radio" name="is_free_post" value="{POST_FREE_YES}" {if $item['is_free_post'] == POST_FREE_YES}checked{/if}>
+                            包邮
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="is_free_post" value="{POST_FREE_NO}" {if $item['is_free_post'] != POST_FREE_YES}checked{/if}>
+                            不包邮
+                        </label>
+                    </div>
+                </div>
+                <div class="free-post-box"{if  $item['is_free_post'] == POST_FREE_YES}style='display:none'{/if}>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">运费类型</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <label class="radio-inline">
+                                <input type="radio" id="postage_type_1" name="postage_type" value="{POSTAGE_TYPE_MONEY}" {if $item['postage_type'] != POSTAGE_TYPE_TEMPLATE}checked{/if}>
+                                固定金额
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" id="postage_type_2" name="postage_type" value="{POSTAGE_TYPE_TEMPLATE}" {if $item['postage_type'] == POSTAGE_TYPE_TEMPLATE}checked{/if}>
+                                运费模板
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group js-free-post-money" {if $item['postage_type'] == POSTAGE_TYPE_TEMPLATE}style='display:none'{/if}>
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">运费</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" name="postage_money" value="{$item['postage_money']}" placeholder="请输入运费"/>
+                        </div>
+                    </div>
+                    <div class="form-group js-free-post-template" {if $item['postage_type'] != POSTAGE_TYPE_TEMPLATE}style='display:none'{/if}>
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">选择运费模板</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <select class="form-control" name="postage_id">
+                                <option value="0">请选择运费模板</option>
+                                {if !empty($postageTemplateList) && is_array($postageTemplateList)}
+                                {loop $postageTemplateList $postTpItem}
+                                <option {if $item['postage_id'] == $postTpItem['id']}selected{/if} value="{$postTpItem['id']}">{$postTpItem['title']}</option>
+                                {/loop}
+                                {/if}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">排序</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" name="order_by" value="{$item['order_by']}" placeholder="请输入数字，越大排序越靠前"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 商品详情</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {php echo tpl_ueditor('detail', $item['detail']);}
+                    </div>
+                </div>
+                <div class="form-group" style="display: none">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 商品属性</label>
+                    <div class="col-sm-8 col-xs-12 js-attr-box">
+                        {if !empty($item['attr_list']) && is_array($item['attr_list'])}
+                            {loop $item['attr_list'] $attr_key $attr}
+                                <div class="row js-attr-item" {if $attr_key != 1}style='margin-top:5px'{/if} data-item="{$attr_key}">
+                                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                        <input class="form-control" name="attr[{$attr_key}][key]" value="{$attr['key']}" type="text" placeholder="请输入属性名,如：系统">
+                                    </div>
+                                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                        <input class="form-control" name="attr[{$attr_key}][value]" value="{$attr['value']}" type="text" placeholder="请输入属性值,如：安卓">
+                                    </div>
+                                    <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                        <div class="btn-group">
+                                            {if $attr_key == 1}
+                                            <button type="button" class="btn btn-info js-attr-add">添加</button>
+                                            {else}
+                                            <button type="button" class="btn btn-warning js-attr-remove">删除</button>
+                                            {/if}
+                                        </div>
+                                    </div>
+                                </div>
+                            {/loop}
+                        {else}
+                        <div class="row js-attr-item" data-item="1">
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <input class="form-control" name="attr[1][key]" type="text" placeholder="请输入属性名,如：系统">
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <input class="form-control" name="attr[1][value]" type="text" placeholder="请输入属性值,如：安卓">
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-info js-attr-add">添加</button>
+                                </div>
+                            </div>
+                        </div>
+                        {/if}
+                    </div>
+                </div>
+                <div class="form-group" style="display: none">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 是否启用规格</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <label class="radio-inline">
+                            <input type="radio" name="is_open_spec" value="1" {if $item['is_open_spec'] == 1}checked{/if}>
+                            启用
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="is_open_spec" value="0" {if $item['is_open_spec'] != 1}checked{/if}>
+                            不启用
+                        </label>
+                    </div>
+                </div>
+                <div style="display: none" class="form-group js-spec-box" {if $item['is_open_spec'] != 1}style="display: none"{/if}>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">商品规格</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                <input class="form-control js-sku-input" name="spec[1][key]" value="{$item['spec_list'][1]['key']}" type="text" placeholder="规格1,如：颜色">
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                <input class="form-control js-sku-input" name="spec[2][key]" value="{$item['spec_list'][2]['key']}"  type="text" placeholder="规格2,如：尺寸">
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 5px">
+                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                <textarea  class="form-control js-sku-input" style="height: 200px" name="spec[1][value]" placeholder="规格1的值，输入多个按回车键，每行代表一个，如：红色，按下回车，输入蓝色">{php echo implode("\n",$item['spec_list'][1]['value']);}</textarea>
+                            </div>
+                            <div class="col-xs-12 col-sm-6 col-md-6 col-lg-6">
+                                <textarea  class="form-control js-sku-input" style="height: 200px" name="spec[2][value]" placeholder="规格2的值，输入多个按回车键，每行代表一个，如：12寸，按下回车，输入14寸">{php echo implode("\n",$item['spec_list'][2]['value']);}</textarea>
+                            </div>
+                        </div>
+                        <span class="help-block">启用规格后，规格1和规格2必须全部填写</span>
+                        <div class="row" style="margin-top: 5px;">
+                            <div class="table-responsive panel-body">
+                                <table class="table table-hover spec-table">
+                                    <thead class="navbar-inner">
+                                    <tr>
+                                        <th id="spec_field_1">规格1</th>
+                                        <th id="spec_field_2">规格2</th>
+                                        <th>成本/出厂价(元)</th>
+                                        <th>原价/市场价(元)</th>
+                                        <th>售价/现价(元)</th>
+                                        <th>限时购价格(元)</th>
+                                        <th>条形码</th>
+                                        <th>库存</th>
+                                        <th>重量(kg)</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="sku_box">
+                                    {if !empty($item['sku_list']) && is_array($item['sku_list'])}
+                                        {loop $item['sku_list'] $sku_key $sku_item}
+                                            <tr>
+                                                <td><input class="form-control" name="sku[{$sku_key}][filed_1]" type="text" value="{$sku_item['filed_1']}"></td>
+                                                <td><input class="form-control" name="sku[{$sku_key}][filed_2]" type="text" value="{$sku_item['filed_2']}"></td>
+                                                <td><input class="form-control" name="sku[{$sku_key}][cost_price]" type="text" value="{$sku_item['cost_price']}"></td>
+                                                <td><input class="form-control" name="sku[{$sku_key}][market_price]" type="text" value="{if !empty($sku_item['market_price'])}{$sku_item['market_price']}{else}{$sku_item['cost_price']}{/if}"></td>
+                                                <td><input class="form-control" name="sku[{$sku_key}][sale_price]" type="text" value="{if !empty($sku_item['sale_price'])}{$sku_item['sale_price']}{else}{$sku_item['cost_price']}{/if}"></td>
+                                                <td><input class="form-control" name="sku[{$sku_key}][limit_time_price]" type="text" value="{$sku_item['limit_time_price']}"></td>
+                                                <td><input class="form-control"  name="sku[{$sku_key}][product_code]" type="text" value="{$sku_item['product_code']}"></td>
+                                                <td><input class="form-control"  name="sku[{$sku_key}][total]" type="text" value="{$sku_item['total']}"></td>
+                                                <td><input class="form-control"  name="sku[{$sku_key}][weight]" type="text" value="{$sku_item['weight']}"></td>
+                                            </tr>
+                                        {/loop}
+                                    {/if}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-8 col-xs-12 col-sm-offset-2">
+                        <input type="hidden" name="id" value="{$item['id']}">
+                        <button type="button" name="submit" class="btn btn-primary">提交</button>
+                        <input type="hidden" name="token" value="$_W['token']">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        require(['util'],function(util){
+            $('input[name="is_open_limit_time_buy"]').bind('click',function(){
+                var is_open = $(this).val();
+                if(is_open == '{OPEN_STATUS}'){
+                    $('.js-limit-buy-box').show();
+                }else{
+                    $('.js-limit-buy-box').hide();
+                }
+            });
+
+            $('input[name="postage_type"]').bind('click',function(){
+                if($(this).val() == '{POSTAGE_TYPE_TEMPLATE}'){
+                    $('.js-free-post-money').hide();
+                    $('.js-free-post-template').show();
+                }else{
+                    $('.js-free-post-money').show();
+                    $('.js-free-post-template').hide();
+                }
+            });
+
+            $('input[name="is_free_post"]').bind('click',function(){
+                if($(this).val() == '{POST_FREE_YES}'){
+                    $('.free-post-box').hide();
+                }else{
+                    $('.free-post-box').show();
+                }
+            });
+
+
+            $('input[name="is_open_spec"]').bind('click',function(){
+                var is_open_spec = $(this).val();
+                if(is_open_spec == 1){
+                    $('.js-spec-box').show();
+                }else{
+                    $('.js-spec-box').hide();
+                }
+            });
+
+            $('button[name="submit"]').bind('click',function(){
+                $.post(
+                     "{php echo url('goods/display/post');}",
+                     $('#post_goods_form').serialize(),
+                     function (ret) {
+                         util.message(ret.message, ret.redirect, ret.type);
+                         return false;
+                     }, 'json'
+                );
+            });
+            /* 添加属性 */
+            $(document).on('click','.js-attr-add',null,function(){
+                var append_html =
+                    '<div class="row js-attr-item" style="margin-top: 5px" data-item="'+($('.js-attr-item').length+1)+'">' +
+                        '<input type="hidden" name="attr_id[]" value="0">' +
+                        '<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">' +
+                            '<input class="form-control" name="attr['+($('.js-attr-item').length+1)+'][key]+" type="text" placeholder="请输入属性名,如：系统">' +
+                        '</div>' +
+                        '<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">' +
+                            '<input class="form-control" name="attr['+($('.js-attr-item').length+1)+'][value]+" type="text" placeholder="请输入属性值,如：安卓">' +
+                        '</div>' +
+                        '<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">' +
+                            '<div class="btn-group">' +
+                                '<button type="button" class="btn btn-warning js-attr-remove">删除</button>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>';
+                $('.js-attr-box').append(append_html);
+            });
+            /* 移除属性 */
+            $(document).on('click','.js-attr-remove',null,function(){
+                var parent = $(this).parent().parent().parent();
+                var item_num = $('.js-attr-item').length;
+                if( item_num < 2){
+                    util.message('最后一个不能删除','','error');
+                    return false;
+                }
+                if(parent.attr('data-item') != item_num){
+                    util.message('请先从最后一项删除','','error');
+                    return false;
+                }
+                parent.remove();
+            });
+
+            /* 生成sku列表 */
+            $('.js-sku-input').bind('input propertychange', function() {
+                //获取规格名
+                var filed_1 = $('input[name="spec[1][key]"]').val().trim();
+                var filed_2 = $('input[name="spec[2][key]"]').val().trim();
+                //设置规格名
+                $('#spec_field_1').html(filed_1);
+                $('#spec_field_2').html(filed_2);
+                //获取规格项
+                var filed_1_v = $('textarea[name="spec[1][value]"]').val().trim();
+                var filed_2_v = $('textarea[name="spec[2][value]"]').val().trim();
+                filed_1_v = filed_1_v.split("\n");
+                filed_2_v = filed_2_v.split("\n");
+                //生成SKU
+                var sku_html = '';
+                $.each(filed_1_v,function(k1,v1){
+                    $.each(filed_2_v,function(k2,v2){
+                        sku_html +=
+                                '<tr>' +
+                                '<td><input readonly class="form-control" name="sku['+(k1+'_'+k2)+'][filed_1]" type="text" value="'+v1+'"></td>' +
+                                '<td><input readonly class="form-control" name="sku['+(k1+'_'+k2)+'][filed_2]" type="text" value="'+v2+'"></td>' +
+                                '<td><input class="form-control" name="sku['+(k1+'_'+k2)+'][cost_price]" type="text"></td>' +
+                                '<td><input class="form-control" name="sku['+(k1+'_'+k2)+'][market_price]" type="text"></td>' +
+                                '<td><input class="form-control" name="sku['+(k1+'_'+k2)+'][sale_price]" type="text"></td>' +
+                                '<td><input class="form-control" name="sku['+(k1+'_'+k2)+'][limit_time_price]" type="text"></td>' +
+                                '<td><input class="form-control"  name="sku['+(k1+'_'+k2)+'][product_code]" type="text"></td>' +
+                                '<td><input class="form-control"  name="sku['+(k1+'_'+k2)+'][total]" type="text"></td>' +
+                                '<td><input class="form-control"  name="sku['+(k1+'_'+k2)+'][weight]" type="text"></td>' +
+                                '</tr>';
+                    });
+                });
+                $('#sku_box').html(sku_html);
+            });
+        });
+    </script>
+{/if}
+</div>
+{template 'common/footer'}

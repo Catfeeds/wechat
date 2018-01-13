@@ -1,0 +1,98 @@
+{template 'common/header-base'}
+<div class="login">
+	<form  method="post" role="form" id="login_form">
+		<div class="page-login">
+			<div class="title">
+				<!--<img src="/assets/common/images/servicer-logo.png">-->
+				<span>客服后台</span>
+			</div>
+			<div class="login-box">
+				<div class="tip">客服登录</div>
+				<div class="username">
+					<span><i class="icon iconfont icon-peoplefill"></i></span>
+					<input autofocus type="text" name="username" placeholder="请输入用户名">
+				</div>
+				<div class="password">
+					<span><i class="icon iconfont icon-commandfill"></i></span>
+					<input type="password" name="password" placeholder="请输入密码">
+				</div>
+				{if !empty($_W['setting']['copyright']['verifycode'])}
+				<div class="verify">
+					<span><i class="icon iconfont icon-commandfill"></i></span>
+					<input type="text" name="verify" placeholder="请输入验证码">
+					<img id="imgverify"  src="{php echo url('utility/code')}">
+				</div>
+				{/if}
+				<div class="remember">
+					<input id="remember" type="checkbox" value="true" name="rember"><label for="remember">记住用户名</label>
+				</div>
+				<div class="button">
+					<input type="button" id="submit"  value="登录" class="btn btn-primary btn-lg" />
+					<input name="token" value="{$_W['token']}" type="hidden" />
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+<script>
+	function formcheck() {
+		if($('#remember:checked').length == 1) {
+			cookie.set('remember-username', $(':text[name="username"]').val());
+		} else {
+			cookie.del('remember-username');
+		}
+		return true;
+	}
+	var h = document.documentElement.clientHeight;
+	$(".login").css('min-height',h);
+	$('#imgverify').click(function() {
+		$(this).prop('src', '{php echo url('utility/code')}r='+Math.round(new Date().getTime()));
+		return false;
+	});
+
+	$('#submit').bind('click',function(){
+		var username = $('input[name="username"]').val();
+		if(username == ''){
+			alert('请输入用户名','','error');
+			return false;
+		}
+		var password = $('input[name="password"]').val();
+		if(password == ''){
+			alert('请输入密码','','error');
+			return false;
+		}
+		{if !empty($_W['setting']['copyright']['verifycode'])}
+			var verify = $(':text[name="verify"]').val();
+			if (verify == '') {
+				alert('请填写验证码');
+				return false;
+			}
+			{/if}
+
+				$.post(
+						window.location.href,
+						$('#login_form').serialize(),
+						function(ret){
+							console.log(ret);
+							if(ret.type == 'success'){
+								alert(ret.message);
+								window.location.href = ret.redirect;
+								return true;
+							}else{
+								alert(ret.message);
+								$('#imgverify').click();
+								return false;
+							}
+						},'json'
+				);
+
+			});
+
+			$("body").keydown(function() {
+				if (event.keyCode == "13") {//keyCode=13是回车键
+					$('#submit').click();
+				}
+			});
+</script>
+</body>
+</html>

@@ -1,0 +1,445 @@
+{template 'common/header'}
+<div class="platform-tab">
+    <ul>
+        <li class="active" data-type="base">
+            <a>基本设置</a>
+        </li>
+        <li data-type="pay">
+            <a>支付参数</a>
+        </li>
+        <li data-type="sms">
+            <a>短信配置</a>
+        </li>
+        <li data-type="live">
+            <a>直播配置</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <form class="form-horizontal form" method="post" id="distribution-form">
+
+        <!-- 基本配置 -->
+       <div class="form-box base">
+           <div class="form-group">
+               <label class="col-xs-12 col-sm-3 col-md-2 control-label">APP版本号</label>
+               <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                   <input type="text" class="form-control" name="setting[base][version]" value="{$config['setting']['base']['version']}" placeholder="请输入版本号" />
+                   <span class="help-block">输入：1或2，或1.0.0,1.0.1，当输入最新版本号时，会在客户端提现升级</span>
+               </div>
+           </div>
+           <div class="form-group">
+               <label class="col-xs-12 col-sm-3 col-md-2 control-label">Android下载链接</label>
+               <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                   <input type="text" class="form-control" name="setting[base][android_download_url]" value="{$config['setting']['base']['android_download_url']}" placeholder="请输入下载链接" />
+               </div>
+           </div>
+           <div class="form-group">
+               <label class="col-xs-12 col-sm-3 col-md-2 control-label">IOS下载链接</label>
+               <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                   <input type="text" class="form-control" name="setting[base][ios_download_url]" value="{$config['setting']['base']['ios_download_url']}" placeholder="请输入下载链接" />
+               </div>
+           </div>
+           <div class="form-group">
+               <label class="col-xs-12 col-sm-3 col-md-2 control-label">官方微信</label>
+               <div class="col-sm-8 col-xs-12">
+                   {php echo tpl_form_field_image('setting[base][wx_code]',$config['setting']['base']['wx_code']);}
+                   <span class="help-block">建议尺寸：120*120(或比例：1:1)</span>
+               </div>
+           </div>
+           <div class="form-group">
+               <label class="col-xs-12 col-sm-3 col-md-2 control-label">软件介绍</label>
+               <div class="col-sm-9 col-xs-12">
+                   {php echo tpl_ueditor('setting[base][introduce]', $config['setting']['base']['introduce']);}
+               </div>
+           </div>
+           <div class="form-group">
+               <label class="col-xs-12 col-sm-3 col-md-2 control-label">使用说明</label>
+               <div class="col-sm-9 col-xs-12">
+                   {php echo tpl_ueditor('setting[base][use_introduce]', $config['setting']['base']['use_introduce']);}
+               </div>
+           </div>
+           <div class="form-group">
+               <label class="col-xs-12 col-sm-3 col-md-2 control-label">更新说明</label>
+               <div class="col-sm-9 col-xs-12">
+                   {php echo tpl_ueditor('setting[base][update_detail]', $config['setting']['base']['update_detail']);}
+               </div>
+           </div>
+           <div class="form-group">
+               <label class="col-xs-12 col-sm-3 col-md-2 control-label">版权说明</label>
+               <div class="col-sm-9 col-xs-12">
+                   {php echo tpl_ueditor('setting[base][copyright]', $config['setting']['base']['copyright']);}
+               </div>
+           </div>
+       </div>
+        <!-- 基本配置 -->
+
+
+        <!-- 支付配置 -->
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                设置余额支付开关
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">余额支付</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="radio-inline">
+                            <input type="radio" name="setting[payment][credit2][status]" {if $config['setting']['payment']['credit2']['status'] == 1}checked{/if} value="1">
+                            开启
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="setting[payment][credit2][status]" {if $config['setting']['payment']['credit2']['status'] == 0}checked{/if}  value="0">
+                            关闭
+                        </label>
+                        <span class="help-block">是否使用微信支付</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-box pay"  style="display: none">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    设置支付宝支付开关
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">支付宝无线支付</label>
+                        <div class="col-sm-9 col-xs-12">
+                            <label class="radio-inline">
+                                <input type="radio" name="setting[payment][alipay][status]" {if $config['setting']['payment']['alipay']['status'] == 1}checked{/if} value="1">
+                                开启
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="setting[payment][alipay][status]" {if $config['setting']['payment']['alipay']['status'] == 0}checked{/if}  value="0">
+                                关闭
+                            </label>
+                            <span class="help-block">是否使用支付宝无线支付</span>
+                        </div>
+                    </div>
+                    <div ng-show="alipay.switch == 'true'" class="">
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">收款支付宝账号</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="text" name="setting[payment][alipay][account]" class="form-control" value="{$config['setting']['payment']['alipay']['account']}">
+                                <span class="help-block">如果开启兑换或交易功能，请填写真实有效的支付宝账号，用于收取用户以现金兑换交易积分的相关款项。如账号无效或安全码有误，将导致用户支付后无法正确对其积分账户自动充值，或进行正常的交易对其积分账户自动充值，或进行正常的交易。 如您没有支付宝帐号，<a href="https://memberprod.alipay.com/account/reg/enterpriseIndex.htm" target="_blank">请点击这里注册</a></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">合作者身份</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="text" name="setting[payment][alipay][partner]" class="form-control" value="{$config['setting']['payment']['alipay']['partner']}">
+                                <span class="help-block">支付宝签约用户请在此处填写支付宝分配给您的合作者身份，签约用户的手续费按照您与支付宝官方的签约协议为准。<br>如果您还未签约，<a href="https://memberprod.alipay.com/account/reg/enterpriseIndex.htm" target="_blank">请点击这里签约</a>；如果已签约,<a href="https://b.alipay.com/order/pidKey.htm?pid=2088501719138773&amp;product=fastpay" target="_blank">请点击这里获取PID、Key</a>;如果在签约时出现合同模板冲突，请咨询0571-88158090</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">校验密钥</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="text" name="setting[payment][alipay][secret]" class="form-control" value="{$config['setting']['payment']['alipay']['secret']}">
+                                <span class="help-block">支付宝签约用户可以在此处填写支付宝分配给您的交易安全校验码，此校验码您可以到支付宝官方的商家服务功能处查看</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    设置微信支付开关
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">微信支付</label>
+                        <div class="col-sm-9 col-xs-12">
+                            <label class="radio-inline">
+                                <input type="radio" name="setting[payment][wechat][status]" {if $config['setting']['payment']['wechat']['status'] == 1}checked{/if} value="1">
+                                开启
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="setting[payment][wechat][status]" {if $config['setting']['payment']['wechat']['status'] == 0}checked{/if}  value="0">
+                                关闭
+                            </label>
+                            <span class="help-block">是否使用微信支付</span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">接口类型</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <label class="radio-inline" onclick="$('.s').show();$('#mchid').hide();$('#apikey').hide();">
+                                    <input type="radio" name="setting[payment][wechat][version]"  {if $config['setting']['payment']['wechat']['version'] == 1}checked{/if}  value="1">
+                                    旧版
+                                </label>
+                                <label class="radio-inline" onclick="$('.s').hide();$('#mchid').show();$('#apikey').show();">
+                                    <input type="radio" name="setting[payment][wechat][version]" {if $config['setting']['payment']['wechat']['version'] == 2}checked{/if}  value="2">
+                                    新版(2014年9月之后申请的)
+                                </label>
+                                <span class="help-block">由于微信支付接口调整，需要根据申请时间来区分支付接口</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">身份标识<br>(appId)</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="text" name="setting[payment][wechat][appid]" class="form-control" value="{$config['setting']['payment']['wechat']['appid']}">
+                                <span class="help-block">公众号身份标识</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">身份密钥<br>(appSecret)</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="text" class="form-control" name="setting[payment][wechat][appsecret]" value="{$config['setting']['payment']['wechat']['appsecret']}">
+                                <span class="help-block">公众平台API(参考文档API 接口部分)的权限获取所需密钥Key </span>
+                            </div>
+                        </div>
+                        <div class="form-group s" style="display: none;">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">商户身份<br>(partnerId)</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="text" name="setting[payment][wechat][partner]" class="form-control" value="{$config['setting']['payment']['wechat']['partner']}">
+                                <span class="help-block">财付通商户身份标识</span>
+                                <span class="help-block">公众号支付请求中用于加密的密钥Key</span>
+                            </div>
+                        </div>
+                        <div class="form-group s" style="display: none;">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">商户密钥<br>(partnerKey)</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="text" name="setting[payment][wechat][key]" class="form-control" value="{$config['setting']['payment']['wechat']['key']}">
+                                <span class="help-block">财付通商户权限密钥Key</span>
+                            </div>
+                        </div>
+                        <div class="form-group" id="mchid" style="display: block;">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">微信支付商户号(MchId)</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="text" name="setting[payment][wechat][mchid]" class="form-control" value="{$config['setting']['payment']['wechat']['mchid']}">
+                                <span class="help-block">公众号支付请求中用于加密的密钥Key</span>
+                            </div>
+                        </div>
+                        <div class="form-group s" id="signkey" style="display: none;">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">通信密钥(paySignKey)</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <input type="text" name="setting[payment][wechat][signkey]" class="form-control" value="{$config['setting']['payment']['wechat']['signkey']}">
+                                <span class="help-block">公众号支付请求中用于加密的密钥Key</span>
+                            </div>
+                        </div>
+                        <div class="form-group s" style="display: block;">
+                            <label class="col-xs-12 col-sm-3 col-md-2 control-label">商户支付密钥(API密钥)</label>
+                            <div class="col-sm-9 col-xs-12">
+                                <div class="input-group">
+                                    <input type="text" name="setting[payment][wechat][apikey]" class="form-control" maxlength="32" value="{$config['setting']['payment']['wechat']['apikey']}">
+                                </div>
+                                <span class="help-block">此值需要手动在腾讯商户后台API密钥保持一致。</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 支付配置 -->
+
+
+        <!-- 短信配置 -->
+        <div class="form-box sms"  style="display: none">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    公用配置
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">功能开关</label>
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            <label class="radio-inline">
+                                <input {if $config['setting']['sms']['status'] == 1}checked{/if} type="radio" name="setting[sms][status]" value="1">
+                                开启
+                            </label>
+                            <label class="radio-inline">
+                                <input {if $config['setting']['sms']['status'] != 1}checked{/if}  type="radio" name="setting[sms][status]" value="0">
+                                关闭
+                            </label>
+                            <span class="help-block">关闭时，将不能发送短信</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">平台选择</label>
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            <label class="radio-inline">
+                                <input  {if $config['setting']['sms']['type'] == 'tencent'}checked{/if} type="radio" name="setting[sms][type]" value="tencent">
+                                腾讯云
+                            </label>
+                            <span class="help-block">选择一个平台来发送短信</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">手机号限制</label>
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">每个手机号每天最多发送</span>
+                                <input type="number" name="setting[sms][mobile_limit]" value="{$config['setting']['sms']['mobile_limit']}" class="form-control" placeholder="请输入条数">
+                                <span class="input-group-addon">条短信</span>
+                            </div>
+                            <span class="help-block">设置为0或不填，不限制；如设置为5，则每个手机号每天最多发送5条短信</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">IP地址限制</label>
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            <div class="input-group">
+                                <span class="input-group-addon">每个IP地址每天最多发送</span>
+                                <input type="number" name="setting[sms][ip_limit]" value="{$config['setting']['sms']['ip_limit']}" class="form-control" placeholder="请输入条数">
+                                <span class="input-group-addon">条短信</span>
+                            </div>
+                            <span class="help-block">设置为0或不填，不限制；如设置为5，则每个IP地址每天最多发送5条短信</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">时间间隔</label>
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            <div class="input-group">
+                                <input type="number" name="setting[sms][time_range]" value="{$config['setting']['sms']['time_range']}" class="form-control" placeholder="请输入秒数">
+                                <span class="input-group-addon">秒</span>
+                            </div>
+                            <span class="help-block">设置为0或不填，不限制；如设置为30，则表示用户发送下一条短信，需要30秒后再操作</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">有效时间</label>
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            <div class="input-group">
+                                <input type="number" name="setting[sms][effective_time]" value="{$config['setting']['sms']['effective_time']}" class="form-control" placeholder="请输入秒数">
+                                <span class="input-group-addon">秒</span>
+                            </div>
+                            <span class="help-block">设置为0或不填，不限制；如设置为600，则表示当前短信的有效期为10分钟</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    腾讯云配置
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">appID</label>
+                        <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                            <input type="text" class="form-control" name="setting[sms][tencent][appid]" value="{$config['setting']['sms']['tencent']['appid']}" placeholder="请输入APPID" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">短信签名</label>
+                        <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                            <input type="text" class="form-control" name="setting[sms][tencent][sign]" value="{$config['setting']['sms']['tencent']['sign']}" placeholder="请输入短信签名" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">模板ID</label>
+                        <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                            <input type="text" class="form-control" name="setting[sms][tencent][tpl_id]" value="{$config['setting']['sms']['tencent']['tpl_id']}" placeholder="请输入模板ID" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">appKey</label>
+                        <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                            <input type="text" class="form-control" name="setting[sms][tencent][appkey]" value="{$config['setting']['sms']['tencent']['appkey']}" placeholder="请输入appkey" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">接口地址</label>
+                        <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                            <input type="text" class="form-control" name="setting[sms][tencent][apiurl]" value="{$config['setting']['sms']['tencent']['apiurl']}" placeholder="请输入接口请求地址" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 短信配置 -->
+
+
+        <!-- 直播配置 -->
+        <div class="form-box live"  style="display: none">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    公用配置
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">功能开关</label>
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            <label class="radio-inline">
+                                <input {if $config['setting']['live']['status'] == 1}checked{/if} type="radio" name="setting[live][status]" value="1">
+                                开启
+                            </label>
+                            <label class="radio-inline">
+                                <input {if $config['setting']['live']['status'] != 1}checked{/if}  type="radio" name="setting[live][status]" value="0">
+                                关闭
+                            </label>
+                            <span class="help-block">关闭时，将不能使用直播</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">平台选择</label>
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            <label class="radio-inline">
+                                <input  {if $config['setting']['live']['type'] == '163'}checked{/if} type="radio" name="setting[live][type]" value="163">
+                                网易云IM
+                            </label>
+                            <span class="help-block">选择一个平台来发送短信</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    网易云IM配置
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">App Key</label>
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            <input type="text" class="form-control" name="setting[live][163][appkey]" value="{$config['setting']['live']['163']['appkey']}" placeholder="请输入App Key" />
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">App Secret</label>
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            <input type="text" class="form-control" name="setting[live][163][secret]" value="{$config['setting']['live']['163']['secret']}" placeholder="请输入App Secret" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 直播配置 -->
+
+
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label"></label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="hidden" name="token" value="{$_W['token']}">
+                <input name="submit" type="button" value="提交" class="btn btn-primary span2">
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    require([],function(){
+        /* tab切换 */
+        $('.platform-tab ul li').bind('click',function(){
+            var obj = $('.platform-tab ul li');
+            obj.removeClass('active');
+            $(this).addClass('active');
+            $('.form-box').hide();
+            $('.'+$(this).attr('data-type')).show();
+        });
+
+        $('input[name="submit"]').bind('click',function(){
+            $.post(
+                window.location.href,
+                $('#distribution-form').serialize(),
+                function(ret){
+                    util.message(ret.message,ret.redirect,ret.type);
+                },'json'
+            );
+        });
+    });
+</script>
+{template 'common/footer'}

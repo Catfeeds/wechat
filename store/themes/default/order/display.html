@@ -1,0 +1,377 @@
+{template 'common/header'}
+<div class="store-tab">
+    <ul>
+        <li {if $do == 'display'}class="active"{/if}>
+        <a href="{php echo url('order/display/display');}">核销订单</a>
+        </li>
+        <li {if $do == 'offline'}class="active"{/if}>
+        <a href="{php echo url('order/display/offline');}">线下订单</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    {if $do == 'display'}
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选
+            <span style="float: right">合计{$total}单 - 商品共计￥{$total_pay_price}元 - 支付金额共计￥{$total_pay_price}元</span>
+        </div>
+        <div class="panel-body">
+            <form method="post" class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入关键词，订单号、收货人、手机号" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">下单时间</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        {php echo tpl_form_field_daterange('createtime', array('starttime' => date('Y-m-d', $starttime), 'endtime' => date('Y-m-d', $endtime),));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">支付状态</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_status[]" {if in_array(PAY_YES,$pay_status)}checked{/if} value="{PAY_YES}"> 已支付
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_status[]" {if in_array(PAY_NO,$pay_status)}checked{/if} value="{PAY_NO}"> 未支付
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">支付方式</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_WECHAT,$pay_methods)}checked{/if} value="{PAY_METHOD_WECHAT}"> 微信支付
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_CREDIT,$pay_methods)}checked{/if} value="{PAY_METHOD_CREDIT}"> 余额支付
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_CASH,$pay_methods)}checked{/if} value="{PAY_METHOD_CASH}"> 货到付款
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_ALIPAY,$pay_methods)}checked{/if} value="{PAY_METHOD_ALIPAY}"> 支付宝
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">订单状态</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="order_status[]" value="{ORDER_STATUS_NOT_CONFIRM}" {if in_array(ORDER_STATUS_NOT_CONFIRM,$order_status)}checked{/if}> 待确认
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="order_status[]" value="{ORDER_STATUS_COMPLETE}" {if in_array(ORDER_STATUS_COMPLETE,$order_status)}checked{/if}> 已完成
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                        <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                        <button type="button" class="btn btn-success js-verify-show"><i class="fa fa-gavel"></i> 核销</button>
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                        <input class="btn btn-primary" type="submit" name="export_submit" id="export_submit" value="导出">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form method="post" class="form-horizontal">
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>序号</th>
+                        <th>会员ID</th>
+                        <th>订单号</th>
+                        <th>金额/元</th>
+                        <th>快递费</th>
+                        <th>收货人</th>
+                        <th>收货地址</th>
+                        <th>支付方式</th>
+                        <th>支付状态</th>
+                        <th>订单状态</th>
+                        <th>下单时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $li}
+                    <tr>
+                        <td>{$li['id']}</td>
+                        <td>{$li['uid']}</td>
+                        <td>{$li['order_no']}</td>
+                        <td>￥{$li['pay_total_price']}</td>
+                        <td>￥{$li['pay_postage_fee']}</td>
+                        <td>{$li['username']}</td>
+                        <td>{$li['province']}{$li['city']}{$li['district']}{$li['address']}</td>
+                        <td>{$payMethodArrSpan[$li['pay_method']]}</td>
+                        <td>
+                            {if $li['pay_status'] == PAY_YES}
+                            <span class="label label-success">已支付</span>
+                            {else}
+                            <span class="label label-default">未支付</span>
+                            {/if}
+                        </td>
+                        <td>{$orderStatusArrSpan[$li['order_status']]}</td>
+                        <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                        <td>
+                            {if $li['order_status'] == ORDER_STATUS_NOT_DELIVER && $li['pay_status'] == PAY_YES}
+                            <button type="button" data-json='{php echo json_encode($li);}' class="btn btn-sm btn-success js-open-deliver-modal">发货</button>
+                            {else}
+                            <button  type="button" class="btn btn-sm btn-primary">{$orderStatusArr[$li['order_status']]}</button>
+                            {/if}
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+
+    <!-- 核销 -->
+    <div class="modal fade in" id="verifyModal" tabindex="-1" role="dialog" aria-labelledby="verifyModalLabel" aria-hidden="false">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="verifyModalLabel">订单核销验证</h4></div>
+                <div class="modal-body">
+                    <form style="margin-top:5%" class="form-horizontal" role="form" id="verify_form">
+                        <input type="hidden" name="ac" value="verify">
+                        <div class="form-group">
+                            <label class=" col-sm-3  control-label">订单号</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" name="order_no" type="text" placeholder="请输入订单号">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">核销码</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" name="verify_code" type="text" placeholder="请输入核销码">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <input type="button" class="btn btn-primary" id="js-op-verify" value="保存">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade in" id="deliverModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <form  method="post" id="deliver_form">
+                    <input type="hidden" name="ac" value="deliver">
+                    <input type="hidden" name="order_id">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="myModalLabel"></h4></div>
+                    <div class="modal-body">
+                        <table class="table table-hover table-bordered">
+                            <tbody>
+                            <tr>
+                                <th>商品名称</th>
+                                <td id="goods_name"></td>
+                            </tr>
+                            <tr>
+                                <th>商品图片</th>
+                                <td>
+                                    <img style="with:100px;height:100px"  id="goods_thumb">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>收货人</th>
+                                <td id="username"></td>
+                            </tr>
+                            <tr>
+                                <th>收货地址</th>
+                                <td id="address"></td>
+                            </tr>
+                            <tr>
+                                <th>快递单号</th>
+                                <td>
+                                    <div class="form-group">
+                                        <input style="width: 100%" type="text" name="deliver_no" class="form-control" placeholder="请输入快递单号">
+                                        <div class="help-block">如需物流，请输入物流单号，若不需要物流可直接点击发货</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>确认快递单号</th>
+                                <td>
+                                    <div class="form-group">
+                                        <input style="width: 100%" type="text" name="re_deliver_no" class="form-control" placeholder="请再次确认快递单号">
+                                        <div class="help-block">如需物流，请输入物流单号，若不需要物流可直接点击发货</div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <input type="button" class="btn btn-primary" id="js-deliver" name="deliver" value="发货"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        require(['bootstrap'],function(){
+            /*  打开核销 */
+            $('.js-verify-show').bind('click',function(){
+                $('#verifyModal').modal('show');
+            });
+
+            /* 核销确认 */
+            $('#js-op-verify').bind('click',function(){
+                $.post(
+                        window.location.href,
+                        $('#verify_form').serialize(),
+                        function(ret){
+                            util.message(ret.message,ret.redirect,ret.type);
+                        },'json'
+                );
+            });
+
+            //打开发货modal
+            $('.js-open-deliver-modal').bind('click',function(){
+                var data = $.parseJSON($(this).attr('data-json'));
+                $('input[name="order_id"]').val(data['id']);
+                if(data['sku_desc'] == ''){
+                    $('#goods_name').html(data['goods_name']);
+                }else{
+                    $('#goods_name').html(data['goods_name']+'(规格：'+data['sku_desc']+')');
+                }
+
+                $('#goods_thumb').attr('src',data['thumb']);
+                $('#username').html(data['username']);
+                $('#address').html(data['province']+data['city']+data['district']+data['address']);
+                $('#myModalLabel').html('订单号：'+data['order_no']);
+                $('#deliverModal').modal('show');
+            });
+
+            //操作发货
+            $('#js-deliver').bind('click',function(){
+                $.post(
+                    window.location.href,
+                    $('#deliver_form').serialize(),
+                    function(ret){
+                        util.message(ret.message,ret.redirect,ret.type);
+                    },'json'
+                );
+            });
+        });
+    </script>
+    {elseif $do == 'offline'}
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选
+            <span style="float: right">合计{$total}单 - 商品共计￥{$total_pay_price}元 - 支付金额共计￥{$total_pay_price}元</span>
+        </div>
+        <div class="panel-body">
+            <form method="post" class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入会员ID、昵称、姓名、订单号" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">下单时间</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        {php echo tpl_form_field_daterange('createtime', array('starttime' => date('Y-m-d', $starttime), 'endtime' => date('Y-m-d', $endtime),));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">支付状态</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_status[]" {if in_array(PAY_YES,$pay_status)}checked{/if} value="{PAY_YES}"> 已支付
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_status[]" {if in_array(PAY_NO,$pay_status)}checked{/if} value="{PAY_NO}"> 未支付
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">支付方式</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_WECHAT,$pay_methods)}checked{/if} value="{PAY_METHOD_WECHAT}"> 微信支付
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_CREDIT,$pay_methods)}checked{/if} value="{PAY_METHOD_CREDIT}"> 余额支付
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_CASH,$pay_methods)}checked{/if} value="{PAY_METHOD_CASH}"> 货到付款
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_ALIPAY,$pay_methods)}checked{/if} value="{PAY_METHOD_ALIPAY}"> 支付宝
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                        <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                        <input class="btn btn-primary" type="submit" name="export_submit" id="export_submit" value="导出">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form method="post" class="form-horizontal">
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>序号</th>
+                        <th>会员ID</th>
+                        <th>昵称/姓名</th>
+                        <th>订单号</th>
+                        <th>备注信息</th>
+                        <th>支付方式</th>
+                        <th>付款金额</th>
+                        <th>付款时间</th>
+                        <th>状态</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $li}
+                    <tr>
+                        <td>{$li['id']}</td>
+                        <td>{$li['uid']}</td>
+                        <td>{$li['nickname']}/{$li['realname']}</td>
+                        <td>{$li['order_no']}</td>
+                        <td>{$li['note']}</td>
+                        <td>{$payMethodArrSpan[$li['pay_method']]}</td>
+                        <td>￥{$li['money']}</td>
+                        <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                        <td>
+                            {if $li['pay_status'] == PAY_YES}
+                            <label class="label label-success">已付款</label>
+                            {else}
+                            <label class="label label-default">未付款</label>
+                            {/if}
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+    {/if}
+</div>
+{template 'common/footer'}

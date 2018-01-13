@@ -1,0 +1,24 @@
+{template 'common/header'}
+<div class="platform-tab">
+    <ul>
+        <li {if $op == 'display'}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('commission',array('op'=>'display'));}">兑换记录</a>
+        </li>
+        <li {if $op == 'fangyuanbao_queue'}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('commission',array('op'=>'fangyuanbao_queue'));}">方圆宝队列</a>
+        </li>
+        <li {if $op == 'op_fangyuanbao_log'}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('commission',array('op'=>'op_fangyuanbao_log'));}">操作记录</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    {if $op == 'display'}
+        {template 'oto/fangyuanbao-display'}
+    {elseif $op == 'fangyuanbao_queue'}
+        {template 'oto/fangyuanbao-queue'}
+    {elseif $op == 'op_fangyuanbao_log'}
+        {template 'oto/fangyuanbao-op-log'}
+    {/if}
+</div>
+{template 'common/footer'}

@@ -1,0 +1,62 @@
+<div class="panel panel-info">
+    <div class="panel-heading">筛选<span style="float: right">合计{$total}个,总积分：{$total_credit1},总佣金：{$total_credit3}</span></div>
+    <div class="panel-body">
+        <form method="get" action="./index.php" class="form-horizontal" role="form">
+            <input type="hidden" name="c" value="site" />
+            <input type="hidden" name="a" value="entry" />
+            <input type="hidden" name="op" value="display" />
+            <input type="hidden" name="do" value="commission" />
+            <input type="hidden" name="m" value="oto" />
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                    <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入会员ID、昵称" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">返佣时间</label>
+                <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                    {php echo tpl_form_field_daterange('createtime', array('starttime' => date('Y-m-d', $starttime), 'endtime' => date('Y-m-d', $endtime),));}
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                    <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                    <input class="btn btn-primary" type="submit" name="export_submit" id="export_submit" value="导出">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<form method="post" class="form-horizontal" id="delete_goods_form">
+    <div class="panel panel-default ">
+        <div class="table-responsive panel-body">
+            <table class="table table-hover">
+                <thead class="navbar-inner">
+                <tr>
+                    <th>队列ID</th>
+                    <th>会员ID</th>
+                    <th>昵称/姓名</th>
+                    <th>佣金</th>
+                    <th>积分</th>
+                    <th>兑换时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $li}
+                <tr>
+                    <td>{$li['queue_id']}</td>
+                    <td>{$li['uid']}</td>
+                    <td>{$li['nickname']}/{$li['realname']}</td>
+                    <td>{$li['credit3']}</td>
+                    <td>{$li['credit1']}</td>
+                    <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {$pager}
+</form>

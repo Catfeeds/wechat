@@ -1,0 +1,99 @@
+<div class="panel panel-info">
+    <div class="panel-heading">筛选
+        <span style="float: right">合计{$total}个方圆宝</span>
+    </div>
+    <div class="panel-body">
+        <form method="get" action="./index.php" class="form-horizontal" role="form">
+            <input type="hidden" name="c" value="site" />
+            <input type="hidden" name="a" value="entry" />
+            <input type="hidden" name="op" value="fangyuanbao_queue" />
+            <input type="hidden" name="do" value="commission" />
+            <input type="hidden" name="m" value="oto" />
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                    <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入会员ID、昵称、姓名" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">形成时间</label>
+                <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                    {php echo tpl_form_field_daterange('createtime', array('starttime' => date('Y-m-d', $starttime), 'endtime' => date('Y-m-d', $endtime),));}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">地区</label>
+                <div class="col-sm-8 col-xs-12">
+                    {php echo tpl_form_field_district('area',array('province' => $province, 'city' => $city,'district' => $district));}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">兑换状态</label>
+                <div class="col-sm-9 col-xs-12">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="status[]" value="{IS_STATUS}" {if in_array(IS_STATUS,$status)}checked{/if}>
+                        已兑换
+                    </label>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="status[]" value="{NO_STATUS}" {if in_array(NO_STATUS,$status)}checked{/if}>
+                        未兑换
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                    <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                    <input class="btn btn-primary" type="submit" name="export_submit" id="export_submit" value="导出">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<form method="post" class="form-horizontal" id="delete_goods_form">
+    <div class="panel panel-default ">
+        <div class="table-responsive panel-body">
+            <table class="table table-hover">
+                <thead class="navbar-inner">
+                <tr>
+                    <th>队列ID</th>
+                    <th>会员ID</th>
+                    <th>昵称/姓名</th>
+                    <th>个数</th>
+                    <th>队列号</th>
+                    <th>地址</th>
+                    <th>兑换状态/购物抵扣</th>
+                    <th>会员标识</th>
+                    <th>形成时间</th>
+                    <th>兑换时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $li}
+                <tr>
+                    <td>{$li['id']}</td>
+                    <td>{$li['uid']}</td>
+                    <td>{$li['nickname']}/{$li['realname']}</td>
+                    <td>{$li['count']}</td>
+                    <td>{$li['queue_no']}</td>
+                    <td>{$li['province']}{$li['city']}{$li['district']}</td>
+                    <td>
+                        {if $li['status'] == IS_STATUS}<span class="label label-success">已兑换</span>{else}<span class="label label-default">未兑换</span>{/if}
+                        /
+                        {if $li['is_buy'] == IS_STATUS}<span class="label label-success">是</span>{else}<span class="label label-default">否</span>{/if}
+                    </td>
+                    <td>{if $li['is_used'] == IS_STATUS}<span class="label label-success">原会员已恢复</span>{else}<span class="label label-default">原会员未恢复</span>{/if}</td>
+                    <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                    <td>
+                        {if !empty($li['rebatetime'])}
+                        {php echo date('Y-m-d H:i',$li['rebatetime']);}
+                        {/if}
+                    </td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {$pager}
+</form>

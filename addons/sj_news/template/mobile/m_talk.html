@@ -1,0 +1,51 @@
+{template 'common/header-sj-news'}
+<link rel="stylesheet" href="{ASSETS_URL}/sj_news/css/m-text.css?v={STYLE_VERSION}">
+<div class="page-m-text">
+    <div class="m-text-header">
+        <span style="cursor: pointer;" onclick="history.back()">&lt;返回</span>
+        <span>我的评论</span>
+        <span style="cursor: pointer;right: 5px;" class="js-m-text" onclick="location.href='{php echo $this->createMobileUrl('index');}'">首页</span>
+    </div>
+    <div style="height: 45px"></div>
+    <div class="text-list">
+        {loop $list $li}
+        <div class="item">
+            <div class="top">
+                <ul>
+                    <li class="date">{php echo date('Y-m-d H:i',$li['createtime']);}</li>
+                </ul>
+            </div>
+            <div class="center">{$li['content']}</div>
+            {if $li['is_display'] != 0}
+            <div class="bottom">
+                <button data-id="{$li['id']}" type="button" class="btn btn-sm btn-danger js-delete">删除</button>
+            </div>
+            {/if}
+        </div>
+        {/loop}
+    </div>
+    {template 'common/nav-sj'}
+</div>
+<script type="text/javascript">
+    require(['util'],function(ret){
+        $('.js-delete').click(function(){
+            var obj = $(this);
+            var id = obj.attr('data-id');
+            $('.js-toast-loading').show();
+            util.loading();
+            obj.html('删除中').attr('disabled','disabled');
+            $.post(
+                    window.location.href,
+                    {id:id},
+                    function(ret){
+                        if(ret.type == 'error'){
+                            obj.html('删除').removeAttr('disabled');
+                        }
+                        $('.js-toast-loading').hide();
+                        util.toast(ret.message,ret.redirect,ret.type);
+                    },'json'
+            );
+        });
+    });
+</script>
+{template 'common/footer-sj-news'}

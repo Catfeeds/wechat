@@ -1,0 +1,62 @@
+<!-- begin 基本分销设置 -->
+<div class="js-distribution-box fangyuanbao" style="display: none">
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">开启方圆宝返佣</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <label class="radio-inline">
+                <input type="radio" name="setting[fangyuanbao][status]" {if $item['setting']['fangyuanbao']['status'] == OPEN_STATUS}checked{/if} value="{OPEN_STATUS}">开启
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="setting[fangyuanbao][status]" {if $item['setting']['fangyuanbao']['status'] != OPEN_STATUS}checked{/if}  value="{CLOSE_STATUS}">关闭
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">佣金比例设置</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <div class="input-group" data-item="1">
+                <input type="text" name="setting[fangyuanbao][rebate_rate]" class="form-control" value="{$item['setting']['fangyuanbao']['rebate_rate']}" placeholder="请输入佣金比例">
+                <span class="input-group-addon">%</span>
+            </div>
+            <span class="help-block">如设置10%，则方圆宝分配金额&nbsp;=&nbsp;营业额*10%</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">形成规则</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <div class="input-group" data-item="1">
+                <span class="input-group-addon">消费者消费累计每满</span>
+                <input type="text" name="setting[fangyuanbao][sum_pay_price]" class="form-control" value="{$item['setting']['fangyuanbao']['sum_pay_price']}">
+                <span class="input-group-addon">元，赠送</span>
+                <input type="text" name="setting[fangyuanbao][give_fyb_num]" class="form-control" value="{$item['setting']['fangyuanbao']['give_fyb_num']}">
+                <span class="input-group-addon">个方圆宝</span>
+            </div>
+            <span class="help-block">如设置1000元，超出1000元部分，将累计到下次计算金额中</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">兑换规则</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <div class="input-group">
+                <span class="input-group-addon">每个方圆宝可兑换</span>
+                <input type="text" name="setting[fangyuanbao][rebate_credit1]" value="{$item['setting']['fangyuanbao']['rebate_credit1']}" class="form-control">
+                <span class="input-group-addon">积分</span>
+            </div>
+            <span class="help-block">
+                积分只能在平台设定的店铺内消费，不可提现
+            </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">兑换上限</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <div class="input-group" data-item="1">
+                <span class="input-group-addon">每人每天最多兑换</span>
+                <input type="text" name="setting[fangyuanbao][user_max_send]" value="{$item['setting']['fangyuanbao']['user_max_send']}" class="form-control" placeholder="请输入个数">
+                <span class="input-group-addon">个方圆宝</span>
+            </div>
+            <span class="help-block">0或者不填，则不限制</span>
+        </div>
+    </div>
+</div>
+<!-- end 基本分校设置 -->

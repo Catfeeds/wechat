@@ -1,0 +1,86 @@
+body,body *{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+}
+.page-point {
+    position: relative;
+}
+.page-point .point-header{
+    padding: 0 10px;
+    position: fixed;
+    width: 100%;
+    height: 45px;
+    background: yellowgreen;
+    text-align: center;
+    line-height: 45px;
+    color: #ffffff;
+    z-index: 999999;
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.point-search{
+    width: 100%;
+    position: fixed;
+    padding: 5px;
+    background: #ffffff;
+    height: 50px;
+}
+.point-search i{
+    font-size: 21px;
+    position: absolute;
+    display: block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    left: 5px;
+    top: 5px;
+}
+.point-search input{
+    padding-left: 35px;
+    line-height: 30px;
+    height: 40px;
+}
+.point-now{
+    margin: 10px 0;
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+    background: #ffffff;
+}
+.address-list{
+    display: none;
+    margin-top: 10px;
+    background: #ffffff;
+    border-bottom: 1px solid #cccccc;
+    border-top: 1px solid #cccccc;
+}
+.address-list .address-item{
+    padding: 5px;
+    cursor: pointer;
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+.address-list .address-item:last-child{
+    border-bottom: 0;
+}
+.address-list .address-item ul{
+    margin-left: 10px;
+}
+.address-list .address-item ul li{
+    font-size: 12px;
+    color: #000000;
+    line-height: 20px;
+}
+.address-item i{
+    font-size: 21px;
+}
+.address-item i.active{
+    color: green;
+}

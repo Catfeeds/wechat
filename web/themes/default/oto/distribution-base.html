@@ -1,0 +1,350 @@
+<!-- begin 基本分销设置 -->
+<style type="text/css">
+    .select-goods-list{
+        border: 1px solid #ccc;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        height: 150px;
+        overflow-y: scroll;
+        padding: 0 10px 10px 0;
+    }
+    .select-goods-list .item{
+        cursor: pointer;
+        position: relative;
+        display: inline-block;
+        background: green;
+        color: #ffffff;
+        padding: 5px 5px 5px 10px;
+        margin: 10px 0 0 10px;
+    }
+    .select-goods-list .item i{
+        margin-left: 10px;
+    }
+    .select-goods-main{
+        display: none;
+    }
+    .goods-search-box{
+        padding-right: 60px;
+        position: relative;
+        border: 1px solid #ccc;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        height: 35px;
+        margin-bottom: 5px;
+    }
+    .goods-search-box input{
+        width: 100%;
+        height: 33px;
+        border: 0;
+        text-indent: 10px;
+        outline: none;
+        border-right: 1px solid #eee;
+    }
+    .goods-search-box span{
+        cursor: pointer;
+        position: absolute;
+        right: 10px;
+        top: 0;
+        display: block;
+        height: 35px;
+        line-height: 35px;
+    }
+    .goods-search-list{
+        border: 1px solid #ccc;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+        -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        max-height: 300px;
+        min-height: 30px;
+        overflow-y: scroll;
+        padding: 10px 10px 0 10px;
+        margin-bottom: 5px;
+    }
+    .goods-search-list .item{
+        margin-bottom: 10px;
+        position: relative;
+        height: 120px;
+        padding-left: 120px;
+        border-bottom: 1px solid #eee;
+    }
+    .goods-search-list .item:last-child{
+        border: 0;
+    }
+    .goods-search-list .item > img{
+        position: absolute;
+        width: 110px;
+        height: 110px;
+        left: 5px;
+        top: 5px;
+    }
+    .goods-search-list .item > ul{
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+    .goods-search-list .item > ul li:first-child{
+        font-size: 16px;
+        line-height: 25px;
+    }
+    .goods-search-list .item > ul li:last-child{
+        color: red;
+    }
+    .goods-search-list .item:hover{
+        background: #eee;
+    }
+    .goods-search-list .item > span{
+        position: absolute;
+        display: block;
+        right: 10px;
+        top: 47px;
+        height: 30px;
+        line-height: 30px;
+        background: #428bca;
+        padding: 0 10px;
+        color: #ffffff;
+        cursor: pointer;
+    }
+</style>
+<div class="js-distribution-box base">
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">开启三级返佣</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <label class="radio-inline">
+                <input type="radio" name="setting[level_distribution][status]" {if $item['setting']['level_distribution']['status'] == OPEN_STATUS}checked{/if} value="{OPEN_STATUS}">开启
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="setting[level_distribution][status]" {if $item['setting']['level_distribution']['status'] != OPEN_STATUS}checked{/if}  value="{CLOSE_STATUS}">关闭
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">返佣比例</label>
+        <div class="col-xs-12 col-sm-8 col-md-6" id="level-box">
+            {if !empty($item['setting']['level_distribution']['rebate']) && is_array($item['setting']['level_distribution']['rebate'])}
+                {loop $item['setting']['level_distribution']['rebate'] $level_key $level_value}
+                <div class="input-group" data-item="{php echo $level_key;}" {if $level_key!=1}style="margin-top:5px"{/if}>
+                    <span class="input-group-addon">第{php echo $level_key;}代</span>
+                    <input type="text" name="setting[level_distribution][rebate][{php echo $level_key;}]" value="{$level_value}" class="form-control">
+                    <span class="input-group-addon">%</span>
+                    <span class="input-group-addon {if $level_key!=1}js-level-remove{else}js-level-add{/if}"><i class="glyphicon glyphicon-{if $level_key!=1}minus{else}plus{/if}"></i></span>
+                </div>
+                {/loop}
+            {else}
+            <div class="input-group" data-item="1">
+                <span class="input-group-addon">第1代</span>
+                <input type="text" name="setting[level_distribution][rebate][1]" class="form-control">
+                <span class="input-group-addon">%</span>
+                <span class="input-group-addon js-level-add"><i class="glyphicon glyphicon-plus"></i></span>
+            </div>
+            {/if}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">扫码关注提示语</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <input type="text" name="focus_tips" value="{$uni_setting['focus_tips']}" class="form-control" placeholder="请输提示语">
+            <span class="help-block">用户微信扫码关注公众号，发送给用户的消息</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">成为分销商</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <label class="checkbox-inline">
+                <input type="checkbox" name="setting[distributor][condition][]" value="{DISTRIBUTOR_CONDITION_NO}" {if in_array(DISTRIBUTOR_CONDITION_NO,$item['setting']['distributor']['condition'])}checked{/if}>无条件
+            </label>
+            <label class="checkbox-inline">
+                <input type="checkbox" name="setting[distributor][condition][]" value="{DISTRIBUTOR_CONDITION_APPLY}" {if in_array(DISTRIBUTOR_CONDITION_APPLY,$item['setting']['distributor']['condition'])}checked{/if}>申请
+            </label>
+            <label class="checkbox-inline">
+                <input class="js-distribution-condition-goods" type="checkbox" name="setting[distributor][condition][]" value="{DISTRIBUTOR_CONDITION_GOODS}" {if in_array(DISTRIBUTOR_CONDITION_GOODS,$item['setting']['distributor']['condition'])}checked{/if}> 购买指定商品（可选多件）
+            </label>
+        </div>
+    </div>
+    <div class="form-group select-goods-main" {if in_array(DISTRIBUTOR_CONDITION_GOODS,$item['setting']['distributor']['condition'])}style="display:block"{/if}>
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">已选择商品</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <div class="js-select-goods-box" style="display: none">
+                {loop $item['setting']['distributor']['goods_id'] $goods_id}
+                    <input type="hidden" id="goods_id_{$goods_id}" name="setting[distributor][goods_id][]" value="{$goods_id}">
+                {/loop}
+            </div>
+            <div class="goods-search-box">
+                <input type="text" class="js-search-goods-keyword" placeholder="请输入商品名称关键字">
+                <span><i class="fa fa-search"></i>搜索</span>
+            </div>
+            <div class="goods-search-list"></div>
+            <span class="help-block">上面是搜索到的商品列表</span>
+            <div class="select-goods-list">
+                {loop $goods_list $goods}
+                <div class="item" data-id="{$goods['id']}">{$goods['title']}<i class="fa fa-times"></i></div>
+                {/loop}
+            </div>
+            <span class="help-block">上面是已选择的商品列表</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">自动确认收货时间</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <div class="input-group">
+                <input type="text" name="setting[order][auto_confirm_days]" value="{$item['setting']['order']['auto_confirm_days']}" class="form-control" placeholder="请输入天数">
+                <span class="input-group-addon">天</span>
+            </div>
+            <span class="help-block">设置天数后，自动确认收货</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">积分兑换比例</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <div class="input-group">
+                <input type="text" name="setting[credit1][exchange_rate]" value="{$item['setting']['credit1']['exchange_rate']}" class="form-control" placeholder="请输入积分兑换比例">
+                <span class="input-group-addon">%</span>
+            </div>
+            <span class="help-block">如设置90%，则1积分&nbsp;=&nbsp;1*90% = 0.9元</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">线下商家结算比例</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <div class="input-group">
+                <input type="text" name="setting[store][balance_rate]" value="{$item['setting']['store']['balance_rate']}" class="form-control" placeholder="请输入结算比例">
+                <span class="input-group-addon">%</span>
+            </div>
+            <span class="help-block">如设置90%，则结算商家的金额&nbsp;=&nbsp;营业额*90%</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">二手物品结算比例</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <div class="input-group">
+                <input type="text" name="setting[store][old_balance_rate]" value="{$item['setting']['store']['old_balance_rate']}" class="form-control" placeholder="请输入结算比例">
+                <span class="input-group-addon">%</span>
+            </div>
+            <span class="help-block">如设置90%，则结算的金额&nbsp;=&nbsp;营业额*90%</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">二维码收款结算比例</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <div class="input-group">
+                <input type="text" name="setting[person][balance_rate]" value="{$item['setting']['person']['balance_rate']}" class="form-control" placeholder="请输入结算比例">
+                <span class="input-group-addon">%</span>
+            </div>
+            <span class="help-block">如设置90%，则结算的金额&nbsp;=&nbsp;营业额*90%</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">佣金提现</label>
+        <div class="col-xs-12 col-sm-8">
+            <label class="radio-inline">
+                <input type="radio" name="setting[withdraw][is_apply]" {if $item['setting']['withdraw']['is_apply'] == IS_STATUS}checked{/if} value="{IS_STATUS}"> 需要审核
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="setting[withdraw][is_apply]" {if $item['setting']['withdraw']['is_apply'] != IS_STATUS}checked{/if} value="{NO_STATUS}"> 不需要审核
+            </label>
+            <span class="help-block">注:不需要审核时，微信红包企业付款将及时到账</span>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        require(['util'],function(util){
+
+            /* 搜索商品 */
+            searchGoods();
+            $('.goods-search-box input').bind('input propertychange',function(){
+                searchGoods();
+            });
+            $('.goods-search-box span').bind('click',function(){
+                searchGoods();
+            });
+
+
+            /* 添加商品 */
+            $(document).on('click','.goods-search-list .item span',function(){
+                var id = $(this).attr('data-id');
+                var title = $(this).attr('data-title');
+                if($('#goods_id_'+id).length == 0){
+                    $('.select-goods-list').append('<div class="item" data-id="'+id+'">'+title+'<i class="fa fa-times"></i></div>');
+                    $('.js-select-goods-box').append('<input type="hidden" id="goods_id_'+id+'" name="setting[distributor][goods_id][]" value="'+id+'">');
+                }
+            });
+
+            /* 搜索商品 */
+            function searchGoods(){
+                $.post(
+                     "{php echo $this->createWebUrl('distribution',array('op'=>'search_goods'));}",
+                        {
+                            keyword:$('.js-search-goods-keyword').val()
+                        },function(ret){
+                            if(ret.type == 'success'){
+                                var html = '';
+                                $.each(ret.message,function(index,item){
+                                    html += '<div class="item">' +
+                                            '<img src="'+item['thumb']+'">' +
+                                            '<ul>' +
+                                                '<li>'+item['title']+'</li>' +
+                                                '<li>￥'+item['sale_price']+'</li>' +
+                                            '</ul>' +
+                                            '<span data-id="'+item['id']+'" data-title="'+item['title']+'">选择</span>' +
+                                            '</div>';
+                                            $('.goods-search-list').html(html);
+                                });
+                                return true;
+                            }
+                        },'json'
+                );
+            }
+
+            /* 商品成为分销商 */
+            $('.js-distribution-condition-goods').bind('click',function(){
+                if($(this).is(':checked')){
+                    $('.select-goods-main').show();
+                }else{
+                    $('.select-goods-main').hide();
+                }
+            });
+
+            /* 删除分销商商品 */
+            $(document).on('click','.select-goods-list .item',function(){
+                var id = $(this).attr('data-id');
+                $(this).remove();
+                $('#goods_id_'+id).remove();
+            });
+
+            /* 增加代数 */
+            $(document).on('click','.js-level-add',function(){
+                var level_box = $('#level-box');
+                var last_item = parseInt(level_box.find('.input-group').last().attr('data-item'));
+                level_box.append('' +
+                    '<div class="input-group" data-item="'+(last_item+1)+'" style="margin-top:5px">' +
+                        '<span class="input-group-addon">第'+(last_item+1)+'代</span> ' +
+                        '<input type="text" name="setting[level_distribution][rebate]['+ (last_item+1) +']" class="form-control"> ' +
+                        '<span class="input-group-addon">%</span> ' +
+                        '<span class="input-group-addon js-level-remove">' +
+                            '<i class="glyphicon glyphicon-minus"></i>' +
+                        '</span> ' +
+                    '</div>');
+            });
+
+            /* 减少代数 */
+            $(document).on('click','.js-level-remove',function(){
+                var level_box = $('#level-box');
+                var last_item = parseInt(level_box.find('.input-group').last().attr('data-item'));
+                var active_item = $(this).parent().attr('data-item');
+                if(last_item != active_item){
+                    util.message('请从最后一个依次删除','','error');
+                    return false;
+                }
+                $(this).parent().remove();
+            });
+        });
+    </script>
+</div>
+<!-- end 基本分校设置 -->

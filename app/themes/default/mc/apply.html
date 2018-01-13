@@ -1,0 +1,181 @@
+{template 'common/header'}
+<link rel="stylesheet" href="{$_W['siteroot']}app/resource/css/apply.css">
+<div class="page-apply">
+    <div class="apply-header"><i class="icon iconfont icon-fanhui" onclick="history.go('-1')"></i>商家入驻申请</div>
+    <div style="width: 100%;height: 50px"></div>
+    <form method="post" enctype="multipart/form-data" id="apply_form">
+        <input type="hidden" name="lat" value="0">
+        <input type="hidden" name="lng" value="0">
+        <div class="apply-form-box">
+        <div class="apply-form-title">商户信息</div>
+        <div class="apply-form-info">
+            <div class="apply-form-input">
+                <label for="store-name-input"><span style="color: red">*</span>店铺名称</label>
+                <input name="store_name" id="store-name-input" autofocus type="text" placeholder="请输入店铺名称">
+            </div>
+            <div class="apply-form-input">
+                <label for="contacts-input"><span style="color: red">*</span>负责人</label>
+                <input name="contacts" id="contacts-input" autofocus type="text" placeholder="请输入负责人姓名">
+            </div>
+            <div class="apply-form-input">
+                <label for="tel-input"><span style="color: red">*</span>联系方式</label>
+                <input id="tel-input" name="tel" type="text" placeholder="请输入联系方式">
+            </div>
+            <div class="apply-form-input">
+                <label for="manage-content-input" class="manage-content"><span style="color: red">*</span>经营内容</label>
+                <textarea id="manage-content-input" name="manage_content" placeholder="请输入经营内容"></textarea>
+            </div>
+            <div class="apply-form-input">
+                <label for="tel-input"><span style="color: red">*</span>店铺地址</label>
+                {php echo tpl_app_form_field_district('area',array('province' => $province, 'city' => $city,'district' => $district));}
+            </div>
+            <div class="apply-form-input">
+                <label for="tel-input"><span style="color: red">*</span>详细地址</label>
+                <input name="address" type="text" placeholder="请输入详细地址">
+            </div>
+        </div>
+        <input type="hidden" name="store_type" value="{STORE_TYPE_OTO}">
+        <div class="apply-form-title">资料上传</div>
+        <div class="apply-form-info">
+            <div class="apply-form-input">
+                <label class="business-license"><i style="color: lime"  class="icon iconfont icon-qi"></i><span style="color: red">*</span>营业执照</label>
+                <div class="thumb-box">
+                    <div class="thumb-official">
+                        <input type="file" name="business_license" class="upload-file" accept="image/*">
+                        <div class="thumb-img">
+                            <img src="/assets/common/images/upload_tip.png">
+                        </div>
+                        <div class="thumb-title">点击上传</div>
+                    </div>
+                    <div class="thumb-example">
+                        <div class="thumb-img">
+                            <img src="./resource/images/business_license.jpg">
+                        </div>
+                        <div class="thumb-title">样例</div>
+                    </div>
+                </div>
+            </div>
+            <div class="apply-form-input">
+                <label class="business-license"><i style="color: lime"  class="icon iconfont icon-qi"></i><span style="color: red">*</span>店面照片</label>
+                <div class="thumb-box">
+                    <div class="thumb-official">
+                        <input type="file" name="store_thumb" class="upload-file" accept="image/*">
+                        <div class="thumb-img">
+                            <img src="/assets/common/images/upload_tip.png">
+                        </div>
+                        <div class="thumb-title">点击上传</div>
+                    </div>
+                    <div class="thumb-example">
+                        <div class="thumb-img">
+                            <img src="./resource/images/store.jpg">
+                        </div>
+                        <div class="thumb-title">样例</div>
+                    </div>
+                </div>
+            </div>
+            <div class="apply-form-input">
+                <label class="identity-card"><i style="color: darkturquoise" class="icon iconfont icon-profilefill"></i>身份证</label>
+                <div class="thumb-box">
+                    <div class="thumb-official">
+                        <input type="file" name="identity_card_01" class="upload-file" accept="image/*">
+                        <div class="thumb-img">
+                            <img src="/assets/common/images/upload_tip.png">
+                        </div>
+                        <div class="thumb-title">点击上传</div>
+                    </div>
+                    <div class="thumb-example">
+                        <div class="thumb-img">
+                            <img src="{$_W['siteroot']}app/resource/images/identity_card_02.jpg">
+                        </div>
+                        <div class="thumb-title">样例</div>
+                    </div>
+                </div>
+            </div>
+       </div>
+        <div class="apply-form-title">申请说明</div>
+        <div class="apply-produce">
+            1.请仔细阅读<a href="{php echo url('article/display/display',array('type'=>ARTICLE_STORE_APPLY));}">《平台商家申请协议》</a><br>
+            2.请完整填写需要提交的申请资料'<span style="color: red">*</span>'为必填项<br>
+            3.平台审核通过后，为您开通商家管理账号。<br>
+            4.审核通过后，将微信或短信的方式通知，请您注意查收！<br>
+            5.获得更多服务，点击查看详情<a style="text-decoration: underline;" href="{$_W['siteroot']}app/index.php?i={$_W['uniacid']}&c=old&a=display&do=fee">{$_W['siteroot']}app/index.php?i={$_W['uniacid']}&c=old&a=display&do=fee</a><br>
+            6.商家后台地址：<a style="text-decoration: underline;" href="{$_W['siteroot']}store">{$_W['siteroot']}store</a>
+        </div>
+        <div class="apply-footer">
+            <button type="button" class="apply-btn">提交申请</button>
+        </div>
+    </div>
+    </form>
+</div>
+<script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
+<script type="text/javascript">
+    require([],function(){
+        /* 定位 */
+        var geolocation = new qq.maps.Geolocation("{$tencent_js_key}", "web端定位服务");
+        var options = {timeout: 8000};
+        geolocation.getLocation(showPosition, showErr, options);
+        function showPosition(position) {
+            $('input[name="lng"]').val(position['lng']);
+            $('input[name="lat"]').val(position['lat']);
+        }
+        function showErr() {
+            util.toast('定位失败，请刷新重试','','error');
+            return false;
+        }
+        /* 店铺类型选择 */
+        $('.apply-shop-type-box span').bind('click',function(){
+            $('.apply-shop-type-box span i').removeClass('icon-xuanzhong1 active').addClass('icon-duoxuanbuxuan');
+            $(this).find('i').removeClass('icon-duoxuanbuxuan').addClass('icon-xuanzhong1 active');
+            var index = $('.apply-shop-type-box span').index(this);
+            $('input[name="store_type"]').val(index);
+        });
+
+        /* 选择图片 */
+        $('.upload-file').bind('change',function(){
+            $(this).next().find('img').attr('src',this.files.length > 0?getFileSrc(this.files[0]):'/assets/common/images/upload_tip.png');
+        });
+
+        /* 申请 */
+        $('.apply-btn').bind('click',function(){
+            var apply_btn = $(this);
+            $('.js-toast-loading').show();
+            util.loading();
+            var formData = new FormData($( "#apply_form" )[0]);
+            $.ajax({
+                url: window.location.href ,
+                type: 'POST',
+                data: formData,
+                dataType: "json",
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (ret) {
+                    $('.js-toast-loading').hide();
+                    util.toast(ret.message,ret.redirect,ret.type);
+                    return true;
+                },
+                error: function () {
+                    $('.js-toast-loading').hide();
+                    util.toast('网络连接错误！请重试！','','error');
+                    return false;
+                }
+            });
+        });
+
+
+        /* 获取元素路径 */
+        function getFileSrc(file){
+            var url = null;
+            if (window.createObjectURL != undefined) {
+                url = window.createObjectURL(file)
+            } else if (window.URL != undefined) {
+                url = window.URL.createObjectURL(file)
+            } else if (window.webkitURL != undefined) {
+                url = window.webkitURL.createObjectURL(file)
+            }
+            return url;
+        }
+    });
+</script>
+{template 'common/footer'}

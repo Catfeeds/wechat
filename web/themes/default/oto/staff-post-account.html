@@ -1,0 +1,42 @@
+<form class="form-horizontal form" method="post" id="post_form">
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label" for="username"><span class="text-danger">*</span>账号</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <input class="form-control" type="text" name="username" id="username" placeholder="请输客服登录账号" value="{$item['username']}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label" for="password"><span class="text-danger">*</span>密码</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <input class="form-control" type="password" name="password" id="password" placeholder="请输客服登录密码" value="{$item['uid']}">
+            <span class="help-block">修改信息时，不填写时，密码为原密码。如需修改密码，在这里填写新密码</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label" for="repassword"><span class="text-danger">*</span>确认密码</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <input class="form-control" type="password" name="repassword" id="repassword" placeholder="请输客服登录密码" value="{$item['uid']}">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-2 control-label"></label>
+        <div class="col-sm-9 col-xs-12">
+            <input type="hidden" name="id" value="{$item['id']}">
+            <input type="hidden" name="token" value="{$_W['token']}">
+            <input name="submit" type="button" value="提交" class="btn btn-primary">
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    require([],function(){
+        $('input[name="submit"]').bind('click',function(){
+            $.post(
+                    window.location.href,
+                    $('#post_form').serialize(),
+                    function(ret){
+                        util.message(ret.message,ret.redirect,ret.type);
+                    },'json'
+            );
+        });
+    });
+</script>

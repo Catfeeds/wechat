@@ -1,0 +1,60 @@
+<div class="panel panel-info">
+    <div class="panel-heading">筛选
+        <span style="float: right">合计{$total}单 - 支付金额共计￥{$total_pay_price}元</span>
+    </div>
+    <div class="panel-body">
+        <form method="get" action="./index.php" class="form-horizontal" role="form">
+            <input type="hidden" name="c" value="order" />
+            <input type="hidden" name="a" value="display" />
+            <input type="hidden" name="do" value="fee" />
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">交易时间</label>
+                <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                    {php echo tpl_form_field_daterange('createtime', array('starttime' => date('Y-m-d', $starttime), 'endtime' => date('Y-m-d', $endtime),));}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">所属地区</label>
+                <div class="col-sm-8 col-xs-12">
+                    {php echo tpl_form_field_district('area',array('province' => $province, 'city' => $city,'district' => $district));}
+                    <span class="help-block">系统将自动定位到您所管辖的区域，选择管辖外的区域将会无效</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">支付方式</label>
+                <div class="col-sm-9 col-xs-12">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_WECHAT,$_GPC['pay_methods'])}checked{/if} value="{PAY_METHOD_WECHAT}"> 微信支付
+                    </label>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_CREDIT,$_GPC['pay_methods'])}checked{/if} value="{PAY_METHOD_CREDIT}"> 余额支付
+                    </label>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_CASH,$_GPC['pay_methods'])}checked{/if} value="{PAY_METHOD_CASH}"> 货到付款
+                    </label>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_ALIPAY,$_GPC['pay_methods'])}checked{/if} value="{PAY_METHOD_ALIPAY}"> 支付宝
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">支付状态</label>
+                <div class="col-sm-9 col-xs-12">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="pay_status[]" {if in_array(PAY_YES,$_GPC['pay_status'])}checked{/if} value="{PAY_YES}"> 已支付
+                    </label>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="pay_status[]" {if in_array(PAY_NO,$_GPC['pay_status'])}checked{/if} value="{PAY_NO}"> 未支付
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                    <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                    <input class="btn btn-primary" type="submit" name="export_submit" id="export_submit" value="导出">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

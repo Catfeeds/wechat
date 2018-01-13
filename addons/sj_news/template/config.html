@@ -1,0 +1,53 @@
+{template 'common/header'}
+<div class="platform-tab">
+    <ul>
+        <li {if $op == 'display'}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('config',array('op'=>'display'));}">基本设置</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <form method="post" class="form-horizontal" role="form" id="post_config_form">
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">积分说明</label>
+            <div class="col-sm-9 col-xs-12">
+                {php echo tpl_ueditor('setting[credit_desc]',$item['setting']['credit_desc']);}
+                <span class="help-block">*积分规则说明</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">发布说明</label>
+            <div class="col-sm-8 col-xs-12">
+                {php echo tpl_ueditor('setting[push_introduce]', $item['setting']['push_introduce']);}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">广告说明</label>
+            <div class="col-sm-8 col-xs-12">
+                {php echo tpl_ueditor('setting[ad_introduce]', $item['setting']['ad_introduce']);}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-9 col-xs-12 col-md-offset-2">
+                <input type="hidden" name="token" value="{$_W['token']}"/>
+                <input type="button" name="submit" value="提交" class="btn btn-primary"/>
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+        require(['util'],function(util){
+            /* 提交 */
+            $('input[name="submit"]').bind('click',function(){
+                $.post(
+                        window.location.href,
+                        $('#post_config_form').serialize(),
+                        function(ret){
+                            util.message(ret.message,ret.redirect,ret.type);
+                            return false;
+                        },'json'
+                );
+            });
+        });
+    </script>
+</div>
+{template 'common/footer'}

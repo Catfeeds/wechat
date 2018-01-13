@@ -1,0 +1,32 @@
+{template 'common/header-base'}
+<div class="login">
+	<div class="page-login">
+		<div class="title">
+			<!--<img src="/assets/common/images/agent-logo.png">-->
+			<span>代理后台</span>
+		</div>
+		<div class="login-box">
+			<img src="{$img}">
+			<span>使用微信扫描登录</span>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	require(['util'],function(util){
+		var login = setInterval(function(){
+			$.post(
+				window.location.href,
+					{
+						code:"{$code}"
+					},function(ret){
+						if(ret.type != 'error'){
+							util.message(ret.message,ret.redirect,ret.type);
+							clearInterval(login);
+						}
+					},'json'
+			);
+		},5000);
+	});
+</script>
+</body>
+</html>

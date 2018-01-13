@@ -1,0 +1,127 @@
+{template 'common/header-sj-news'}
+<link rel="stylesheet" href="{ASSETS_URL}/sj_news/css/point.css?v={STYLE_VERSION}">
+<div class="page-point">
+    <div class="point-header">
+        <span style="cursor: pointer;" onclick="history.back()">&lt;返回</span>
+        <span>选择地址</span>
+        <span style="cursor: pointer;right: 5px;" onclick="location.href='{php echo $this->createMobileUrl('index');}'">首页</span>
+    </div>
+    <div style="width: 100%;height: 50px;"></div>
+    <div class="point-search">
+        <i class="iconfont icon-search"></i>
+        <input type="text" autofocus name="keywords" placeholder="请输入地点关键字">
+    </div>
+    <div style="width: 100%;height: 50px;"></div>
+    <div class="point-now">
+        <i class="iconfont icon-coordinates"></i>点击定位当前位置
+    </div>
+    <div class="address-list"></div>
+    {template 'common/nav-sj'}
+</div>
+<script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+        /* 定位当前位置 */
+        $('.point-now').bind('click',function(){
+            $('.js-toast-loading').show();
+            util.loading();
+            var geolocation = new qq.maps.Geolocation("4Y5BZ-LYMCU-5XWVY-2R2FI-4VYJH-YLB45", "web端定位服务");
+            var options = {timeout: 8000};
+            geolocation.getLocation(showPosition, showErr, options);
+            function showPosition(position) {
+                $.post(
+                        "{php echo url('utility/location/save');}",
+                        {
+                            address:position['addr'],
+                            city:position['city'],
+                            district:position['district'],
+                            province:position['province'],
+                            lng:position['lng'],
+                            lat:position['lat']
+                        } ,
+                        function(ret){
+                            $('.js-toast-loading').hide();
+                            var address = ret.message.address == ''?ret.message.city:ret.message.address;
+                            util.toast('您当前位于：'+address,ret.redirect,'success');
+                            return false;
+                        },'json'
+                );
+            }
+            function showErr() {
+                util.toast('定位失败，请刷新重试','','error');
+                return false;
+            }
+        });
+
+        /* 初始化地址库 */
+        var addressList = {};
+
+        /* 搜索地址 */
+        $('input[name="keywords"]').bind('input propertychange',function(){
+            $('.js-toast-loading').show();
+            util.loading();
+            var keywords = $(this).val();
+            if(keywords != ''){
+                $.post(
+                    window.location.href,
+                    {
+                        keywords:keywords
+                    },
+                    function(ret){
+                        $('.js-toast-loading').hide();
+                        if(ret.type == 'success'){
+                            //地址库赋值
+                            addressList = ret.message;
+                            var str = '';
+                            $.each(ret.message,function(index,item){
+                                str += '<div class="address-item" data-index="'+ index +'">' +
+                                            '<i class="iconfont icon-success"></i>' +
+                                            '<ul>' +
+                                                '<li class="province">省份：'+ item['province'] +'</li>' +
+                                                '<li class="city">城市：' + item['city'] +'</li>' +
+                                                '<li class="address">地址：' +item['address']+ '</li>' +
+                                            '</ul>' +
+                                        '</div>';
+                            });
+                            $('.no-data').hide();
+                            $('.address-list').html(str).show();
+                            return false;
+                        }else{
+                            $('.address-list').hide();
+                            $('.no-data').show();
+                            util.toast(ret.message,'','error');
+                            return false;
+                        }
+                    },'json'
+                );
+            }else{
+                $('.address-list').hide();
+                $('.no-data').show();
+            }
+        });
+
+        /* 点击地点 */
+        $(document).on('click','.address-item',function(){
+            var index = $(this).attr('data-index');
+            $('.address-list i').removeClass('icon-success_fill active').addClass('icon-success');
+            $(this).find('i').removeClass('icon-success').addClass('icon-success_fill active')
+            $.post(
+                    "{php echo url('utility/location/save');}",
+                    {
+                        address:addressList[index]['address'],
+                        city:addressList[index]['city'],
+                        district:addressList[index]['district'],
+                        province:addressList[index]['province'],
+                        lng:addressList[index]['location']['lng'],
+                        lat:addressList[index]['location']['lat']
+                    } ,
+                    function(ret){
+                        var address = ret.message.address == ''?ret.message.city:ret.message.address;
+                        util.toast('您当前位于：'+address,'','success');
+                        history.back();
+                    },'json'
+            );
+        });
+    });
+</script>
+{template 'common/footer-sj-news'}

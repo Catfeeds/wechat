@@ -1,0 +1,245 @@
+.page-location{}
+.page-location .location-header{
+    width: 100%;
+    position: fixed;
+    z-index: 999;
+}
+.page-location .location-header .location-menu{
+    height: 40px;
+    background: #ffffff;
+    border-bottom: solid 1px #d3d3d3;
+    position: relative;
+}
+.page-location .location-header .location-menu li{
+    cursor: pointer;
+}
+.page-location .location-header .location-menu .location-sub-menu{
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-around;
+}
+.page-location .location-header .location-menu .location-sub-menu li{
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-right: 1px solid #d3d3d3;
+    font-size: 14px;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+.page-location .location-header .location-menu .location-sub-menu li:last-child{
+    border-right: 0;
+}
+.page-location .location-header .location-search{
+    height: 50px;
+    color: #fff;
+    background: #06c1ae;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    width: 100%;
+}
+.page-location .location-header .location-search .address{
+    margin: 5px 0 0 5px;
+    height: 40px;
+    line-height: 40px;
+    display: block;
+    font-size: 14px;
+    max-width: 100px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    color: #ffffff;
+}
+.page-location .location-header .location-search .address i{
+    font-size: 14px;
+}
+.page-location .location-header .location-search .search-input{
+    overflow: hidden;
+    color: #333;
+    padding: 0 10px 0 15px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    display: block;
+    margin: 10px 10px 0 10px;
+    background: #ffffff;
+    border-radius: 30px;
+    -moz-border-radius: 30px;
+    -webkit-border-radius: 30px;
+    position: relative;
+}
+.page-location .location-header .location-search .search-input i{
+    position: absolute;
+    left: 10px;
+}
+.page-location .location-header .location-search .search-input input{
+    height: 28px;
+    line-height: 28px;
+    border: 0;
+    width: 100%;
+    outline: none;
+}
+
+.page-location .location-header .location-menu .show-box{
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 300px;
+    background: #ffffff;
+    top: 40px;
+    left: 0;
+    border-bottom: 1px solid #d3d3d3;
+    overflow-y: scroll;
+    z-index: 2;
+}
+.page-location .location-header .location-menu .show-box li{
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 1px solid #eee;
+    color: #333;
+    font-size: 14px;
+}
+.page-location .location-header .location-menu .show-box li span{
+    padding-left: 10px;
+    height: 40px;
+    display: block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.page-location .location-header .location-menu .show-box li:last-child{
+    border: 0;
+}
+.sub-fenlei-box li{
+    cursor: pointer;
+}
+
+.page-location .goods-list{}
+.page-location .goods-list .item{
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+    background: #ffffff;
+    border-top: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+}
+.page-location .goods-list .item .top-box{
+    padding: 5px 60px 10px 120px;
+    border-bottom: 1px solid #e5e5e5;
+    position: relative;
+    min-height: 100px;
+}
+.page-location .goods-list .item .top-box .like-percent{
+    position: absolute;
+    right: 5px;
+    font-size: 12px;
+    color: limegreen;
+}
+.page-location .goods-list .item .top-box ul li.store-name{
+    font-size: 16px;
+    color: #000000;
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.page-location .goods-list .item .top-box ul li.goods-name{
+    line-height: 16px;
+    font-size: 12px;
+    color: #000000;
+    height: 34px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.page-location .goods-list .item .top-box ul li.goods-like{
+    margin: 5px 0;
+    height: 5px;
+    background: #e2e2e2;
+}
+.page-location .goods-list .item .top-box ul li.goods-like .like-star{
+    height: 5px;
+    background: #fa952f;
+}
+.page-location .goods-list .item .top-box ul li.goods-shop{
+    line-height: 16px;
+    font-size: 12px;
+    color: #2f3440;
+    height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.page-location .goods-list .item .top-box ul li.goods-price{
+    line-height: 20px;
+    font-size: 14px;
+    color: red;
+}
+.page-location .goods-list .item .top-box ul li.goods-price del{
+    text-decoration: line-through;
+    color: #999!important;
+    font-size: 12px;
+}
+.page-location .goods-list .item .top-box img{
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    width: 110px;
+    height: auto;
+    max-height: 150px;
+}
+.page-location .goods-list .item .top-box .goods-address{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 60px;
+    height: 90px;
+    line-height: 90px;
+    font-size: 12px;
+    color: #999999;
+    text-align: center;
+}
+.page-location .goods-list .item .bottom-box{
+    display: flex;
+    display: -webkit-flex;
+    flex-wrap: wrap;
+}
+.page-location .goods-list .item .bottom-box .specail-box{
+    flex: 0 1 50%;
+    height: 30px;
+    display: inline-block;
+    position: relative;
+}
+.page-location .goods-list .item .bottom-box .specail-box .desc-icon{
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    display: inline-block;
+    position: absolute;
+    color: #ffffff;
+    left: 5px;
+    top: 5px;
+}
+.page-location .goods-list .item .bottom-box .specail-box .desc-content{
+    margin-left: 30px;
+    height: 30px;
+    font-size: 14px;
+    line-height: 30px;
+    display: block;
+    width: 100px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    color: #666666;
+}
+.ajax-more{
+    height: 40px;
+    margin-top: 10px;
+    background: #ffffff;
+    line-height: 40px;
+    text-align: center;
+}

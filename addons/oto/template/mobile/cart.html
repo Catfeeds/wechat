@@ -1,0 +1,222 @@
+{template 'common/header-oto'}
+<link rel="stylesheet" href="{ASSETS_URL}/oto/css/cart.css?v={STYLE_VERSION}">
+<form method="post" id="cartForm" action="{php echo $this->createMobileUrl('check');}">
+<div class="page-cart">
+    <div class="cart-header">
+        <i class="icon iconfont icon-fanhui back" onclick="history.go('-1')"></i>
+        我的购物车
+    </div>
+    <div style="width: 100%;height: 50px;"></div>
+    <div class="cart-list">
+        {if !empty($cartList) && is_array($cartList)}
+        {loop $cartList $item}
+        <div class="store-item">
+            <div class="store-header">
+                <i class="icon iconfont icon-duoxuanbuxuan"></i>
+                {$item['title']}
+                <a href="{php echo $this->createMobileUrl('store',array('id'=>$item['id']));}">进入店铺</a>
+            </div>
+            {if !empty($item['carts']) && is_array($item['carts'])}
+            <div class="store-cart">
+                {loop $item['carts'] $cart}
+                <div class="cart-item">
+                    <i class="icon iconfont icon-duoxuanbuxuan icon-xuanzhong1"></i>
+                    <input data-price="{$cart['sale_price']}" class="form-check-input" type="checkbox" name="id[]" value="{$cart['id']}">
+                    <img onclick="window.location.href='{php echo $this->createMobileUrl('detail',array('id'=>$cart['goods_id']));}'" src="{$cart['thumb']}">
+                    <ul>
+                        <li class="goods-name" onclick="window.location.href='{php echo $this->createMobileUrl('detail',array('id'=>$cart['goods_id']));}'">{$cart['goods_name']}</li>
+                        {if !empty($cart['sku_desc'])}
+                        <li class="sku-desc">{$cart['sku_desc']}</li>
+                        {/if}
+                        {if !empty($cart['sku_change'])}
+                        <li class="sku-change">{$cart['sku_change']}</li>
+                        {/if}
+                        <li class="set-buy-num" data-id="{$cart['id']}">
+                            <span class="reduce-btn">-</span>
+                            <input class="buy-num-input" type="text" name="buy_num" value="{$cart['buy_num']}">
+                            <span class="add-btn">+</span>
+                        </li>
+                    </ul>
+                    <div class="num-price">
+                        <span class="span-price">￥{$cart['sale_price']}</span>
+                    </div>
+                </div>
+                {/loop}
+            </div>
+            {/if}
+        </div>
+        {/loop}
+        {else}
+        <div class="no-data">
+            <div class="no-data-tips-box">
+                <i class="icon iconfont icon-ma"></i>
+            </div>
+            <div class="no-data-tips">购物车为空</div>
+            <a class="no-data-link" href="{php echo $this->createMobileUrl('search');}">点我去挑选</a>
+        </div>
+        {/if}
+    </div>
+</div>
+<div style="width: 100%;height: 50px;"></div>
+{if !empty($cartList) && is_array($cartList)}
+<div style="width: 100%;height: 60px;"></div>
+<div class="buy-box">
+    <span class="span-check"><i class="icon iconfont icon-duoxuanbuxuan"></i>&nbsp;全选</span>
+    <div class="sum-price">
+        <ul>
+            <!--<li>共计：<span class="show-num">0件</span>商品</li>-->
+            <li>合计:<span class="show-price">￥0元</span></li>
+        </ul>
+    </div>
+    <button type="button" class="delete-btn">删除</button>
+    <button name="submit" type="submit" class="buy-btn" value="提交">去结算(0)</button>
+    <input type="hidden" name="token" value="{$_W['token']}">
+</div>
+{/if}
+</form>
+{template 'common/nav-oto'}
+<script type="text/javascript">
+    /* ajax修改购买数目 */
+    function ajaxPostBuyNum(cart_id,buy_num){
+        getCartNumPrice();
+        $.post(
+             "{php echo $this->createMobileUrl('cart',array('op'=>'update_buy_num'));}",
+                {
+                    cart_id:cart_id,
+                    buy_num:buy_num
+                },
+                function(ret){
+                    console.log(ret.message);
+                    return false;
+                },'json'
+        );
+    }
+    /* 购买数量改变 */
+    $('input[name="buy_num"]').bind('input propertychange',function() {
+        $(this).val($(this).val().replace(/\D/g,''));
+        ajaxPostBuyNum($(this).parent().attr('data-id'),$(this).val());
+    });
+
+    /* 减少数目 */
+    $('.reduce-btn').bind('click',function(){
+        var num = parseInt(Math.floor($(this).next().val()));
+        if(num<2){
+            return false;
+        }
+        $(this).next().val(num-1);
+        ajaxPostBuyNum($(this).parent().attr('data-id'),$(this).next().val());
+    });
+
+    /* 增加数目 */
+    $('.add-btn').bind('click',function(){
+        var num = parseInt(Math.floor($(this).prev().val()));
+        $(this).prev().val(num+1);
+        ajaxPostBuyNum($(this).parent().attr('data-id'),$(this).prev().val());
+    });
+
+    /* 删除购物车 */
+    $('.delete-btn').bind('click',function(){
+        if(confirm('确定删除选中的商品吗？')){
+            getCartNumPrice();
+            $.post(
+                "{php echo $this->createMobileUrl('cart',array('op'=>'delete'));}",
+                $('#cartForm').serialize(),
+                function(ret){
+                    util.toast(ret.message,ret.redirect,ret.type);
+                    return false;
+                },'json'
+            );
+        }
+    });
+
+    /* 店铺选择 */
+    $('.store-header').find('i').bind('click',function(){
+        if($(this).hasClass('icon-duoxuanbuxuan')){
+            check($(this).parent().parent().find('i'));
+            $(this).parent().parent().find('.form-check-input').prop('checked','true');
+        }else{
+            notCheck($(this).parent().parent().find('i'));
+            $(this).parent().parent().find('.form-check-input').removeAttr('checked');
+        }
+        checkAll();
+    });
+
+    /* 每一项选择 */
+    $('.cart-item').find('i').bind('click',function(){
+        if($(this).hasClass('icon-duoxuanbuxuan')){
+            check($(this));
+            $(this).next().prop('checked','true');
+        }else{
+            notCheck($(this));
+            $(this).next().removeAttr('checked');
+        }
+        if($(this).parent().parent().find('.icon-duoxuanbuxuan').length == 0){
+            check($(this).parent().parent().prev('.store-header').find('i'));
+        }else{
+            notCheck($(this).parent().parent().prev('.store-header').find('i'));
+        }
+        checkAll();
+    });
+
+    /* 检测所有全选 */
+    function checkAll(){
+        if($('.cart-list').find('.icon-duoxuanbuxuan').length == 0){
+            check($('.span-check').find('i'));
+        }else{
+            notCheck($('.span-check').find('i'));
+        }
+        getCartNumPrice();
+    }
+
+    /* 全选 */
+    $('.span-check').bind('click',function(){
+        if($(this).find('i').hasClass('icon-duoxuanbuxuan')){//全选
+            check($(this).find('i'));
+            check($('.store-item').find('i'));
+            $('.cart-list').find('.form-check-input').prop('checked','true');
+        }else{
+            notCheck($(this).find('i'));
+            notCheck($('.store-item').find('i'));
+            $('.cart-list').find('.form-check-input').removeAttr('checked');
+        }
+        getCartNumPrice();
+    });
+
+    /* 不选中，选中 */
+    function check(obj){
+        obj.removeClass('icon-duoxuanbuxuan').addClass('icon-xuanzhong1 active')
+    }
+    function notCheck(obj){
+        obj.removeClass('icon-xuanzhong1 active').addClass('icon-duoxuanbuxuan');
+    }
+
+    /* 计算购物车的数目和价格 */
+    function getCartNumPrice(){
+        var num = 0;
+        var total_price = 0;
+        $.each($('.form-check-input'),function(index,item){
+            if($(item).is(':checked')){
+                num += 1;
+                var total = parseInt(Math.floor($(item).next().next().find('.buy-num-input').val()));
+                var price = parseFloat($(item).attr('data-price'));
+                total_price += total*price;
+            }
+        });
+        $('.buy-btn').html('去结算('+ num +')');
+        $('.show-price').html('￥'+total_price+'元');
+    }
+
+    /* 展开右侧菜单 */
+    $('.more').bind('click',function(){
+        var menu = $('.menu');
+        var display = menu.css('display');
+        if(display == 'none'){
+            menu.css({right:'0',width:'0'}).show().animate({
+                width:'80px'
+            });
+        }else{
+            menu.hide();
+        }
+    });
+</script>
+{template 'common/footer-oto'}

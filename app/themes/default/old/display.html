@@ -1,0 +1,24 @@
+{template 'common/header-oto'}
+<link rel="stylesheet" href="./resource/css/old.css?v={STYLE_VERSION}">
+<div class="page-old">
+    <div class="header">
+        <div class="top">
+            <i class="icon iconfont icon-fanhui" onclick="history.go(-1)"></i>
+            二手货信息发布
+        </div>
+        <ul class="bottom">
+            <li {if $do == 'display'}class="active"{/if}><a href="{php echo url('old/display/display');}">发布二手货</a></li>
+            <li {if $do == 'fee'}class="active"{/if}><a href="{php echo url('old/display/fee');}">服务费</a></li>
+            <li {if $do == 'goods'}class="active"{/if}><a href="{php echo url('old/display/goods');}">信息管理</a></li>
+        </ul>
+    </div>
+    <div style="width: 100%;height: 85px;"></div>
+    {if $do == 'display'}
+        {template 'old/push'}
+    {elseif $do == 'fee'}
+        {template 'old/fee'}
+    {elseif $do == 'goods'}
+        {template 'old/goods'}
+    {/if}
+</div>
+{template 'common/footer-oto'}

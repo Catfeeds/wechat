@@ -1,0 +1,225 @@
+body{
+    background: #f8f8f8;
+}
+.balance-header{
+    padding: 0 50px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    color: #000000;
+    background: #f9f9f9;
+    width: 100%;
+    z-index: 99999;
+    position: fixed;
+    border-bottom: 1px solid #b8b8b8;
+}
+.page-balance .balance-header i{
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 21px;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.user-nav{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 45px;
+    padding: 0 0 0 40px;
+    display: block;
+    position: relative;
+    height: 45px;
+    margin-top: 10px;
+    background: #ffffff;
+    color: #3F3F3F;
+    font-size: 16px;
+    border-top: 1px solid #e7e7e7;
+    border-bottom: 1px solid #e7e7e7;
+}
+.user-nav i{
+    font-size: 21px;
+}
+.user-nav i.icon-left{
+    position: absolute;
+    left: 15px;
+}
+.user-nav span.right{
+    position: absolute;
+    right: 5px;
+    color: #666;
+}
+.user-nav:hover,.user-nav:active,.user-nav:visited{
+    color: #666;
+    text-decoration: none;
+}
+/* 订单 */
+.page-balance .order-list{
+    padding: 30px 10px  0 10px;
+}
+.page-balance .order-list .item{
+    background: #ffffff;
+    padding: 10px;
+    position: relative;
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+}
+.page-balance .order-list .item .pay-status{
+    position: absolute;
+    top: -10px;
+    right: 5px;
+    padding: 5px 10px;
+}
+.page-balance .order-list .item .order-no{
+    height: 30px;
+    line-height: 30px;
+    color: #000000;
+    display: block;
+}
+.page-balance .order-list .item .pay-date{
+    font-size: 12px;
+    display: block;
+}
+.page-balance .order-list .item .pay-note{
+    font-size: 12px;
+    display: block;
+    line-height: 20px;
+    margin-top: 5px;
+}
+.page-balance .order-list .item .price{
+    color: red;
+    position: absolute;
+    right: 10px;
+    top: 25px;
+    font-size: 18px;
+}
+
+
+/* 提现记录 */
+.page-balance .withdraw-list{
+    padding: 30px 10px  0 10px;
+}
+.page-balance .withdraw-list .item{
+    background: #ffffff;
+    padding: 10px;
+    position: relative;
+    margin-bottom: 20px;
+    border: 1px solid #eee;
+}
+.page-balance .withdraw-list .item .balance-status{
+    position: absolute;
+    top: -10px;
+    right: 5px;
+    padding: 5px 10px;
+}
+.page-balance .withdraw-list .item .date{
+    height: 30px;
+    line-height: 30px;
+    color: #000000;
+    display: block;
+}
+.page-balance .withdraw-list .item .method{
+    font-size: 12px;
+    display: block;
+}
+
+.page-balance .withdraw-list .item .money{
+    color: red;
+    position: absolute;
+    right: 10px;
+    top: 25px;
+    font-size: 18px;
+}
+
+/* 提现界面 */
+.page-balance .withdraw-apply{
+    margin-top: 10px;
+    background: #ffffff;
+    border-bottom: 1px solid #eee;
+}
+.page-balance .withdraw-apply .desc{
+    padding:20px 10px 10px 80px;
+    border-top: 1px solid #eee;
+    line-height: 20px;
+    color: #000000;
+}
+.page-balance .username,.page-balance .tel,.page-balance .withdraw-apply .money{
+    padding: 5px 5px 5px 70px;
+    position: relative;
+    border-top: 1px solid #eee;
+}
+.page-balance .username span,.page-balance .tel span,.page-balance .withdraw-apply .money span{
+    position: absolute;
+    display: block;
+    width: 60px;
+    height: 45px;
+    line-height: 45px;
+    text-align: right;
+    left: 0;
+}
+.page-balance .username input,.page-balance .tel input,.page-balance .withdraw-apply .money input{
+    border: 0;
+    margin: 0;
+}
+.page-balance  .withdraw-apply .money label{
+    color: red;
+    font-weight: normal;
+    margin-top: 2px;
+}
+.page-balance .withdraw-apply .withdraw-btn{
+    padding: 10px;
+}
+.page-balance .withdraw-btn button{
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    background: limegreen;
+    color: #ffffff;
+    width: 100%;
+    padding: 10px 0;
+    border: 0;
+}
+
+
+
+
+/* 收入记录 */
+.page-balance .income-list{
+    display: flex;
+    display: -webkit-flex;
+    flex-flow: wrap;
+}
+.page-balance .income-list .item{
+    flex: 0 0 50%;
+    padding: 10px 5px 0 10px;
+    color: #ffffff;
+}
+.page-balance .income-list .item:nth-child(2n){
+    padding: 10px 10px 0 5px;
+}
+.page-balance .income-list .item a{
+    display: block;
+    height: 100%;
+    width: 100%;
+    text-align: left;
+    text-indent: 5px;
+    line-height: 60px;
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.ajax-more {
+    background: orangered;
+    height: 40px;
+    margin: 10px;
+    color: #ffffff;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}

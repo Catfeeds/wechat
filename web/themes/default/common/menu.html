@@ -1,0 +1,84 @@
+<!-- begin 左侧菜单 -->
+<div class="platform-menu">
+    <div class="platform-system">
+        <a style="color: #ffffff" href="{php echo url('account/display');}">
+            系统总后台
+        </a>
+    </div>
+    <div class="platform-nav-item">
+        <a class="platform-nav-title" style="display: block;" href="./?refresh">
+            <span class="icon"><i class="icon iconfont icon-homefill"></i></span>
+            <span class="desc">首页</span>
+        </a>
+    </div>
+    <div class="platform-nav-item">
+        <div class="platform-nav-title">
+            <span class="icon"><i class="icon iconfont icon-friendfill"></i></span>
+            <span class="desc">公众号管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="platform-menu-sub" {if in_array($_GPC['c'],array('account','article','user','utility','system','extension'))} style="display: block"{/if}>
+            <li><a {if $_GPC['c'] == 'user'}class='active'{/if} href="{url 'user/profile/profile'}"><span class="icon"><i class="icon iconfont icon-list"></i></span><span class="desc">我的账号</span></a></li>
+            <li><a {if $_GPC['c'] == 'account' && $_GPC['a'] == 'display'}class='active'{/if} href="{php echo url('account/display');}"><span class="icon"><i class="icon iconfont icon-list"></i></span><span class="desc">公众号列表</span></a></li>
+            <li><a {if $_GPC['c'] == 'article' && $_GPC['a'] == 'notice-show'}class='active'{/if} href="{php echo url('article/notice-show/list');}"><span class="icon"><i class="icon iconfont icon-notification"></i></span><span class="desc">系统公告</span></a></li>
+            <li><a {if $_GPC['c'] == 'utility'}class='active'{/if} href="{url 'utility/emulator'}"><span class="icon"><i class="icon iconfont icon-mobile"></i></span><span class="desc">模拟测试</span></a></li>
+            {if $_W['role'] == 'founder'}
+            <li><a {if $_GPC['c'] == 'system' && $_GPC['a'] != 'updatecache'}class='active'{/if} href="{url 'system/welcome'}"><span class="icon"><i class="icon iconfont icon-repair"></i></span><span class="desc">系统选项</span></a></li>
+            <li><a {if $_GPC['c'] == 'system' && $_GPC['a'] == 'updatecache'}class='active'{/if} href="{url 'system/updatecache'}"><span class="icon"><i class="icon iconfont icon-refresh"></i></span><span class="desc">更新缓存</span></a></li>
+            {/if}
+        </ul>
+    </div>
+
+    <!-- begin常用导航 -->
+    {php global $top_nav;}
+    {if !empty($top_nav) && is_array($top_nav)}
+    <div class="platform-nav-item">
+        <div class="platform-nav-title">
+            <span class="icon"><i class="icon iconfont icon-locationfill"></i></span>
+            <span class="desc">常用导航</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="platform-menu-sub" {if $_GPC['c'] == 'home'}style='display:block'{/if}>
+        {loop $top_nav $nav}
+            {if !empty($_W['isfounder']) || empty($_W['setting']['permurls']['sections']) || in_array($nav['name'], $_W['setting']['permurls']['sections'])}
+                <li><a {if FRAME == $nav['name']} class="active"{/if} href="{php echo url('home/welcome/' . $nav['name']);}"><span class="icon"><i class="icon iconfont icon-location"></i></span><span class="desc">{$nav['title']}</span></a></li>
+            {/if}
+        {/loop}
+        </ul>
+    </div>
+    {/if}
+    <!-- end常用导航-->
+
+    <!-- 左侧导航 -->
+    {php $frames = empty($frames) ? $GLOBALS['frames'] : $frames; _calc_current_frames($frames);}
+    {if !empty($frames)}
+        {loop $frames $k $frame}
+        <div class="platform-nav-item">
+            <div class="platform-nav-title">
+                <span class="icon"><i class="icon iconfont icon-tagfill"></i></span>
+                <span class="desc">{$frame['title']}</span>
+                <span class="direct"><i class="fa fa-angle-down"></i></span>
+            </div>
+            <ul class="platform-menu-sub" style="display: block;margin: 0!important;">
+            {loop $frame['items'] $link}
+                {if !empty($link['append'])}
+                    <li><a class="{$link['active']}"  href="{$link['append']['url']}"><span class="icon"><i class="icon iconfont icon-tag"></i></span><span class="desc">{if strpos($link['title'],'&nbsp;') == false}{$link['title']}{else}{php echo mb_substr($link['title'],strpos($link['title'],'&nbsp;')+12);}{/if}</a></li>
+                {else}
+                    <li><a class="{$link['active']}"  href="{$link['url']}"><span class="icon"><i class="icon iconfont icon-tag"></i></span><span class="desc">{if strpos($link['title'],'&nbsp;') == false}{$link['title']}{else}{php echo mb_substr($link['title'],strpos($link['title'],'&nbsp;')+12);}{/if}</span></a></li>
+                {/if}
+            {/loop}
+            </ul>
+        </div>
+        {/loop}
+    {/if}
+    <!-- 左侧导航 -->
+</div>
+<script type="text/javascript">
+    require([],function(){
+        $('.platform-nav-title').bind('click',function(){
+            $('.platform-menu-sub').not($(this).next('.platform-menu-sub')).slideUp();
+            $(this).next('.platform-menu-sub').slideToggle();
+        });
+    });
+</script>
+<!-- end 左侧菜单 -->

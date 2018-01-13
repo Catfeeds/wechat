@@ -1,0 +1,104 @@
+<div class="page-cashier">
+    <div class="header">
+        <span class="back">
+          <i class="icon iconfont icon-fanhui back" onclick="history.go('-1')"></i>
+        </span>
+        {$tip}
+    </div>
+    <div class="pay-log-box">
+        <div class="pay-list">
+            {if !empty($list) && is_array($list)}
+            {loop $list $item}
+            <div class="item">
+                <span class="pay-status label label-{$item['span_class']}">{$item['span_desc']}</span>
+                <span class="order-no">订单号：{$item['order_no']}</span>
+                <span class="pay-cashier">收款人：{if !empty($item['realname'])}{$item['realname']}{else}{$item['nickname']}{/if}</span>
+                <span class="pay-date">日期：{$item['createtime']}</span>
+                <span class="pay-note">备注：{$item['note']}</span>
+                <span class="price">￥{$item['money']}</span>
+                <div class="btns">
+                    <button data-id="{$item['id']}" type="button" class="js-delete">删除订单</button>
+                    {if $item['pay_status'] != PAY_YES}
+                    <a role="button" href="{php echo url('mc/cashier/push',array('id'=>$item['id']));}">立即支付</a>
+                    {/if}
+                </div>
+            </div>
+            {/loop}
+            {else}
+            <div class="no-data" style="margin-top: 10px">
+                <div class="no-data-tips-box">
+                    <i class="icon iconfont icon-ma"></i>
+                </div>
+                <div class="no-data-tips">没有转账记录</div>
+            </div>
+            {/if}
+        </div>
+        <div class="ajax-more">加载更多>></div>
+    </div>
+    <script type="text/javascript">
+        require([],function(){
+            /* 删除订单 */
+            $(document).on('click','.js-delete',function(){
+                if(confirm('确定要删除此订单吗？')){
+                    var parent = $(this).parent().parent();
+                    var id = $(this).attr('data-id');
+                    $('.js-toast-loading').show();
+                    util.loading();
+                    $.post(
+                            window.location.href,
+                            {ac:'delete',order_id:id},
+                            function(ret){
+                                $('.js-toast-loading').hide();
+                                if(ret.type == 'success'){
+                                    parent.remove();
+                                }
+                                util.toast(ret.message,ret.redirect,ret.type);
+                            },'json'
+                    );
+                }
+            });
+
+            /* 加载更多 */
+            var page = 2;
+            $('.ajax-more').bind('click',function(){
+                $('.js-toast-loading').show();
+                util.loading();
+                $.post(
+                        window.location.href,
+                        {page:page},
+                        function(ret){
+                            $('.js-toast-loading').hide();
+                            if(ret.type == 'success'){
+                                var html = '';
+                                $.each(ret.message,function(index,item){
+                                    html += '<div class="item">' +
+                                            '<div class="item-header">' +
+                                            '订单号：'+item['order_no']+
+                                            '<span class="label label-'+item['span_class']+'">' + item['span_desc']+'</span>'+
+                                            '</div>' +
+                                            '<div class="item-content">' +
+                                            '<span>日期：' + item['createtime'] +
+                                            '<br>' +
+                                            '备注：'+item['note']+
+                                            '</span>'+
+                                            '<span>￥'+ item['money']+'</span>'+
+                                            '</div>'+
+                                            '<div class="item-footer">'+
+                                            '<button data-id="'+ item['id']+'" type="button" class="js-delete">删除订单</button>';
+                                    if(item['pay_status'] != '{PAY_YES}'){
+                                        html += '<a role="button" href="{php echo url("mc/cashier/push");}&id='+item['id']+'&store_id='+item['store_id']+'">立即支付</a>';
+                                    }
+                                    html +='</div></div>';
+                                });
+                                page++;
+                                $('.pay-order-list').append(html);
+                                $('.no-data').remove();
+                            }else{
+                                util.toast(ret.message,ret.redirect,ret.type);
+                            }
+                        },'json'
+                );
+            });
+        });
+    </script>
+</div>

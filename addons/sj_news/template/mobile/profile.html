@@ -1,0 +1,12 @@
+{template 'common/header-sj-news'}
+<link rel="stylesheet" href="{ASSETS_URL}/sj_news/css/profile.css?v={STYLE_VERSION}">
+<div class="page-profile">
+    <div class="profile-header">
+        <span style="cursor: pointer;" onclick="history.back()">&lt;返回</span>
+        <span>资料设置</span>
+        <span style="cursor: pointer;right: 5px;" class="js-profile" onclick="location.href='{php echo $this->createMobileUrl('index');}'">首页</span>
+    </div>
+    <div style="height: 45px"></div>
+    {template 'common/nav-sj'}
+</div>
+{template 'common/footer-sj-news'}

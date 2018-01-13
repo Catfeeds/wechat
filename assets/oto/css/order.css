@@ -1,0 +1,155 @@
+.page-order{ }
+.page-order .order-header{
+    width: 100%;
+    position: fixed;
+    z-index: 999;
+}
+.page-order .order-header .order-title{
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    color: #000000;
+    background: #f9f9f9;
+    width: 100%;
+    position: relative;
+    border-bottom: 1px solid #b8b8b8;
+}
+.page-order .order-header .order-title i {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    font-size: 24px;
+}
+.page-order .order-header .order-type{
+    height: 50px;
+    background-color: #fff;
+    border-bottom: 1px solid #DDD8CD;
+}
+.page-order .order-header .order-type ul{
+    width: 100%;
+    height: 50px;
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.page-order .order-header .order-type ul li{
+    height: 50px;
+    font-size: 14px;
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+}
+.page-order .order-header .order-type ul li a{
+    display: block;
+    color: #000000;
+    padding: 0 5px;
+}
+.page-order .order-header .order-type ul li.active{
+    height: 48px;
+    line-height: 48px;
+    border-bottom: 2px solid #06C1AE;
+}
+.page-order .order-header .order-type ul li.active a{
+    color: #06C1AE!important;
+}
+.page-order .order-list .item{
+    margin-bottom:10px;
+    background: #ffffff;
+}
+.page-order .order-list .item .item-header{
+    height: 40px;
+    line-height: 40px;
+    border-bottom: 1px solid #DDD8CD;
+    font-size: 14px;
+    color: #666;
+    padding-left: 5px;
+    position: relative;
+}
+.page-order .order-list .item .item-header span{
+    position: absolute;
+    right: 5px;
+    top: 0;
+    color: red;
+}
+.page-order .order-list .item .order-center{
+    position: relative;
+    padding: 5px 80px 5px 120px;
+    display: block;
+    min-height: 110px;
+}
+.page-order .order-list .item .order-stat{
+    height: 40px;
+    line-height: 40px;
+    text-align: right;
+    padding-right: 10px;
+    border-bottom: 1px solid #e5e5e5;
+}
+.page-order .order-list .item .order-center .goods-name{
+    font-size: 14px;
+    font-weight: 400;
+    color: #414444;
+    height: 36px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 18px;
+}
+.page-order .order-list .item .order-center .goods-sku{
+    font-size: 14px;
+    font-weight: 400;
+    color: #c6c6c6;
+    height: 36px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 18px;
+}
+.goods-right-price-desc{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    text-align: center;
+    color: #333333;
+}
+
+.page-order .order-list .item .order-center .total-price{
+    font-size: 12px;
+    color: #666;
+    margin-top: 10px;
+}
+.page-order .order-list .item .order-center .total-price span{
+    color: red;
+    font-size: 12px;
+}
+.page-order .order-list .item .order-center img{
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    width: 110px;
+    max-height: 110px;
+}
+.page-order .order-list .item .order-bottom{
+    display: flex;
+    display: -webkit-flex;
+    justify-content: flex-end;
+    padding: 10px 5px;
+}
+.page-order .order-list .item .order-bottom a{
+    display: block;
+    margin-right: 5px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    padding: 0 10px;
+    background: #ffffff;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    color: #414142;
+    font-size: 14px;
+    border: 1px solid #b9b9b9;
+}

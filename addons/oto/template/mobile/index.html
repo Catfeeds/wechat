@@ -1,0 +1,627 @@
+{template 'common/header-oto'}
+<link rel="stylesheet" href="{ASSETS_URL}/oto/css/index.css?v={STYLE_VERSION}">
+<link rel="stylesheet" href="{$_W['siteroot']}app/resource/components/swiper/swiper.min.css">
+<div class="page-index" >
+    <a href="{$sj_news_index}" class="news-icon">
+        <i class="iconfont icon-shoucang1 "></i>
+    </a>
+    <div class="index-header">
+        <form id="search_form" method="get" action="./index.php">
+            <input type="hidden" name="i" value="{$_W['uniacid']}">
+            <input type="hidden" name="c" value="entry">
+            <input type="hidden" name="do" value="search">
+            <input type="hidden" name="m" value="oto">
+            <input type="hidden" name="search_type" value="{SEARCH_TYPE_STORE}">
+            <a class="address" href="{php echo $this->createMobileUrl('point');}">{if !empty($_W['location']['address'])}{$_W['location']['address']}{else}{$_W['location']['city']}{/if}<i class="icon iconfont icon-xiala"></i></a>
+            <div class="search">
+                <span class="type">搜店铺<i class="icon iconfont icon-xiala"></i></span>
+                <input name="keyword" type="text" placeholder="请输入商家名称关键字">
+                <span class="button"><i class="icon iconfont icon-sousuo"></i></span>
+                <div class="menu">
+                    <span class="up"></span>
+                    <ul>
+                        <li><i class="icon iconfont icon-dianpu"></i>店铺</li>
+                        <li><i class="icon iconfont icon-gouwuche1"></i>商品</li>
+                    </ul>
+                </div>
+            </div>
+        </form>
+    </div>
+    <!-- begin 宣传图 -->
+    {if !empty($slides) && is_array($slides)}
+    <div class="swiper-container swiper-container-1">
+        <div class="swiper-wrapper">
+            {loop $slides $slide}
+            <a class="swiper-slide" href="{$slide['link']}">
+                <img src="{$slide['thumb']}">
+            </a>
+            {/loop}
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination swiper-pagination-1"></div>
+    </div>
+    {else}
+    <div class="no-data" style="margin-top: 10px">
+        <div class="no-data-tips-box">
+            <i class="icon iconfont icon-ma"></i>
+        </div>
+        <div class="no-data-tips">没有设置轮播图</div>
+    </div>
+    {/if}
+    <!-- end 宣传图 -->
+
+    <div class="news-list" style="display: none">
+        <span onclick="location.href='{$sj_news_index}'">
+            <i class="iconfont icon-llmenuwmnotice2"></i>
+            新晋传媒：
+        </span>
+        <a id="news_link" href="#">你用我洞察社会 我用心求真品诚</a>
+    </div>
+
+    <!-- begin 分类 -->
+    {if !empty($category) && is_array($category)}
+    <div class="swiper-container swiper-container-2">
+        <div class="swiper-wrapper">
+            {loop $category $category_group}
+            <div class="swiper-slide">
+                <ul class="category-list">
+                    {loop $category_group $category_item}
+                    <li class="category-icon">
+                        <a href="{if $category_item['title'] == '魅力创业'}{php echo $this->createMobileUrl('store',array('id'=>'3959'));}{else}{php echo $this->createMobileUrl('search',array('op'=>'display','search_type'=>SEARCH_TYPE_STORE,'category_id'=>$category_item['id']));}{/if}">
+                            <span class="category-icon-circle">
+                                <img src="{$category_item['thumb']}">
+                            </span>
+                            <span class="category-icon-desc">{$category_item['title']}</span>
+                        </a>
+                    </li>
+                    {/loop}
+                </ul>
+            </div>
+            {/loop}
+        </div>
+        <!-- Add Pagination -->
+        <div class="swiper-pagination swiper-pagination-2"></div>
+    </div>
+    {else}
+    <div class="no-data" style="margin-top: 10px">
+        <div class="no-data-tips-box">
+            <i class="icon iconfont icon-ma"></i>
+        </div>
+        <div class="no-data-tips">没有设置商家分类</div>
+    </div>
+    {/if}
+    <!-- end 分类 -->
+
+    <!-- begin 推荐商品 -->
+    <div class="store-box">
+        <div class="store-header">
+            <span data-type="credit" class="active">积分店铺</span>
+            <span data-type="store">附近商家</span>
+            <span data-type="goods">二手货</span>
+        </div>
+        <div class="store-header-fixed"></div>
+        <div class="store-content">
+            <div class="store-list" style="display: none">
+                {loop $store_list $li}
+                <a class="item" href="{$li['link']}">
+                    <img class="store-thumb" onerror="this.src='/assets/oto/images/error.png'" src="{$li['logo']}">
+                    <ul>
+                        <li class="title">{$li['title']}</li>
+                        <li class="desc">
+                            <div class="star"><img src="/assets/common/images/star.png"></div>
+                            <span>{$li['distance']}</span>
+                        </li>
+                        <li class="address">
+                            <span>{$li['category']}</span>
+                            <span>{$li['district']}</span>
+                        </li>
+                    </ul>
+                </a>
+                {/loop}
+            </div>
+            <div class="credit-store-box">
+                <div class="credit-store-search">
+                    <div class="search2">
+                        <input type="hidden" name="search_type2" value="{SEARCH_CITY}">
+                        <span class="type2">本地<i class="icon iconfont icon-xiala"></i></span>
+                        <input name="keyword2" type="text" placeholder="请输入商品名称">
+                        <span class="button2"><i class="icon iconfont icon-sousuo"></i></span>
+                        <div class="menu2">
+                            <span class="up2"></span>
+                            <ul>
+                                <li><i class="icon iconfont icon-gouwuche1"></i>本地</li>
+                                <li><i class="icon iconfont icon-gouwuche1"></i>全国</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="store-list credit-store-list">
+                    {loop $credit_store_list $li}
+                    <a class="item" href="{$li['link']}">
+                        <img class="store-thumb"  onerror="this.src='/assets/oto/images/error.png'"  src="{$li['logo']}">
+                        <ul>
+                            <li class="title">{$li['title']}</li>
+                            <li class="desc">
+                                <div class="star">
+                                    <img src="/assets/common/images/star.png">
+                                </div>
+                                <span>{$li['distance']}</span>
+                            </li>
+                            <li class="address">
+                                <span>{$li['category']}</span>
+                                <span>{$li['district']}</span>
+                            </li>
+                        </ul>
+                    </a>
+                    {/loop}
+                </div>
+                <div class="credit-goods-list goods-list" style="display: none">
+                    {loop $credit_goods_list $li}
+                    <div class="item">
+                        <a href="{$li['link']}">
+                            <img  onerror="this.src='/assets/oto/images/error.png'"  src="{$li['thumb']}">
+                        </a>
+                        <div class="info">
+                            <a>
+                                <div class="title">{$li['title']}</div>
+                                <div class="footer">
+                                    <span class="sale-price">￥{$li['sale_price']}</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    {/loop}
+                </div>
+            </div>
+            <div class="goods-box" style="display: none">
+                <div class="goods-search">
+                    <div class="search3">
+                        <input type="hidden" name="search_type3" value="{SEARCH_CITY}">
+                        <span class="type3">本地<i class="icon iconfont icon-xiala"></i></span>
+                        <input name="keyword3" type="text" placeholder="请输入二手物品名称">
+                        <span class="button3"><i class="icon iconfont icon-sousuo"></i></span>
+                        <div class="menu3">
+                            <span class="up3"></span>
+                            <ul>
+                                <li><i class="icon iconfont icon-dianpu"></i>本地</li>
+                                <li><i class="icon iconfont icon-gouwuche1"></i>全国</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="old-goods-list goods-list">
+                    {loop $old_goods_list $li}
+                    <div class="item">
+                        <a href="{$li['link']}">
+                            <img  onerror="this.src='/assets/oto/images/error.png'"  src="{$li['thumb']}">
+                        </a>
+                        <div class="info">
+                            <a>
+                                <div class="title">{$li['title']}</div>
+                                <div class="footer">
+                                    <span class="sale-price">￥{$li['price']}</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                    {/loop}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ajax-more ajax-store"  style="display: none">加载更多店铺</div>
+    <div class="ajax-more ajax-credit-store">加载更多积分店铺</div>
+    <div class="ajax-more ajax-credit-goods" style="display: none">加载更多积分商品</div>
+    <div class="ajax-more ajax-goods" style="display: none">加载更多二手物品</div>
+</div>
+{template 'common/nav-oto'}
+<script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
+<script type="text/javascript">
+   require(['swiper'],function(){
+
+       //新闻
+       {if !empty($news_list)}
+       var news_list = {php echo json_encode($news_list);};
+       var news_length = news_list.length;
+       var news_index = 0;
+        setInterval(function(){
+            if(news_index+1 >= news_length){
+                news_index = 0;
+            }
+            $('#news_link').hide().html(news_list[news_index]['title']).slideDown('slow').attr('href',news_list[news_index++]['href']);
+        },5000);
+       {/if}
+
+
+       /* 控制定位 */
+       setFixed();
+       $(document).scroll(function(){
+           setFixed();
+       });
+       $(window).resize(function() {
+           setFixed();
+       });
+       function setFixed() {
+           var scrollTop = $(document).scrollTop();
+           if (scrollTop > 300) {
+                $('.store-header-fixed').show();
+               $('.store-header').css('position','fixed').css('top','70px').css('left','0');
+           }else{
+               $('.store-header-fixed').hide();
+               $('.store-header').css('position','relative').css('top','0');
+           }
+       }
+
+       /* 加载店铺 */
+       var store_page = 2;
+       $('.ajax-store').bind('click',function(){
+           $('.js-toast-loading').show();
+           util.loading();
+           $.post(
+                   "{php echo $this->createMobileUrl('index',array('op'=>'ajax_store'));}",
+                   {
+                        page:store_page
+                   },function(ret){
+                       $('.js-toast-loading').hide();
+                        if(ret.type == 'success'){
+                            var html = '';
+                            $.each(ret.message,function(index,item){
+                                html += '<a class="item" href="'+item['link']+'">'+
+                                '<img class="store-thumb" src="'+item['logo']+'">'+
+                                        '<ul>'+
+                                        '<li class="title">'+item['title']+'</li>'+
+                                        '<li class="desc">'+
+                                        '<div class="star"><img src="/assets/common/images/star.png"></div>'+
+                                        '<span>'+item['distance']+'</span>'+
+                                        '</li>'+
+                                        '<li class="address">'+
+                                        '<span>'+item['category']+'</span>'+
+                                        '<span>'+item['district']+'</span>'+
+                                        '</li>'+
+                                        '</ul>'+
+                                        '</a>';
+                            });
+                            store_page++;
+                            $('.store-list').append(html);
+                            //处理星星
+                        }else{
+                            util.toast(ret.message,ret.redirect,ret.type);
+                        }
+                   },'json'
+           );
+       });
+
+       /* 加载积分店铺 */
+       var credit_store_page = 2;
+       $('.ajax-credit-store').bind('click',function(){
+           $('.js-toast-loading').show();
+           util.loading();
+           $.post(
+                   "{php echo $this->createMobileUrl('index',array('op'=>'ajax_credit_store'));}",
+                   {
+                       page:credit_store_page
+                   },function(ret){
+                       $('.js-toast-loading').hide();
+                       if(ret.type == 'success'){
+                           var html = '';
+                           $.each(ret.message,function(index,item){
+                               html += '<a class="item" href="'+item['link']+'">'+
+                                       '<img class="store-thumb" src="'+item['logo']+'">'+
+                                       '<ul>'+
+                                       '<li class="title">'+item['title']+'</li>'+
+                                       '<li class="desc">'+
+                                       '<div class="star"><img src="/assets/common/images/star.png"></div>'+
+                                       '<span>'+item['distance']+'</span>'+
+                                       '</li>'+
+                                       '<li class="address">'+
+                                       '<span>'+item['category']+'</span>'+
+                                       '<span>'+item['district']+'</span>'+
+                                       '</li>'+
+                                       '</ul>'+
+                                       '</a>';
+                           });
+                           credit_store_page++;
+                           $('.credit-store-list').append(html);
+                           //处理星星
+                       }else{
+                           util.toast(ret.message,ret.redirect,ret.type);
+                       }
+                   },'json'
+           );
+       });
+
+       var credit_page = 2;
+       $('.button2').bind('click',function(){
+           search_credit_goods();
+       });
+       $('input[name="keyword2"]').keydown(function(e){
+           if(e.keyCode==13){
+               search_credit_goods();
+           }
+       });
+       function search_credit_goods(){
+           credit_page = 2;
+           $('.js-toast-loading').show();
+           util.loading();
+           $.post(
+                   "{php echo $this->createMobileUrl('index',array('op'=>'ajax_credit_goods'));}",
+                   {
+                       page:1,
+                       search_type:$('input[name="search_type2"]').val(),
+                       keyword:$('input[name=keyword2]').val()
+                   },function(ret){
+                       $('.js-toast-loading').hide();
+                       if(ret.type == 'success'){
+                           var html = '';
+                           $.each(ret.message,function(index,item){
+                               html += '<div class="item">' +
+                                       '<a href="'+item['link']+'">'+
+                                       '<img src="'+item['thumb']+'">'+
+                                       '</a>'+
+                                       '<div class="info">'+
+                                       '<a>'+
+                                       '<div class="title">'+item['title']+'</div>'+
+                                       '<div class="footer">'+
+                                       '<span class="sale-price">￥'+item['sale_price']+'</span>'+
+                                       '</div>'+
+                                       '</a>'+
+                                       '</div>'+
+                                       '</div>';
+                           });
+                           $('.credit-goods-list').html(html).show();
+                           $('.credit-store-list').hide();
+                           $('.ajax-credit-store').hide();
+                           $('.ajax-credit-goods').show();
+                           //处理星星
+                       }else{
+                           util.toast(ret.message,ret.redirect,ret.type);
+                       }
+                   },'json'
+           );
+       }
+       $('.ajax-credit-goods').bind('click',function(){
+           $('.js-toast-loading').show();
+           util.loading();
+           $.post(
+                   "{php echo $this->createMobileUrl('index',array('op'=>'ajax_credit_goods'));}",
+                   {
+                       page:credit_page,
+                       search_type:$('input[name="search_type2"]').val(),
+                       keyword:$('input[name=keyword2]').val()
+                   },function(ret){
+                       $('.js-toast-loading').hide();
+                       if(ret.type == 'success'){
+                           var html = '';
+                           $.each(ret.message,function(index,item){
+                               html += '<div class="item">' +
+                                       '<a href="'+item['link']+'">'+
+                                       '<img src="'+item['thumb']+'">'+
+                                       '</a>'+
+                                       '<div class="info">'+
+                                       '<a>'+
+                                       '<div class="title">'+item['title']+'</div>'+
+                                       '<div class="footer">'+
+                                       '<span class="sale-price">￥'+item['sale_price']+'</span>'+
+                                       '</div>'+
+                                       '</a>'+
+                                       '</div>'+
+                                       '</div>';
+                           });
+                           credit_page++;
+                           $('.credit-goods-list').append(html);
+                           //处理星星
+                       }else{
+                           util.toast(ret.message,ret.redirect,ret.type);
+                       }
+                   },'json'
+           );
+       });
+
+       /* 加载二手商品 */
+       var goods_page = 2;
+       $('.button3').bind('click',function(){
+           search_goods();
+       });
+       $('input[name="keyword3"]').keydown(function(e){
+           if(e.keyCode==13){
+               search_goods();
+           }
+       });
+       function search_goods(){
+           goods_page = 2;
+           $('.js-toast-loading').show();
+           util.loading();
+           $.post(
+                   "{php echo $this->createMobileUrl('index',array('op'=>'ajax_old_goods'));}",
+                   {
+                       page:1,
+                       search_type:$('input[name="search_type3"]').val(),
+                       keyword:$('input[name=keyword3]').val()
+                   },function(ret){
+                       $('.js-toast-loading').hide();
+                       if(ret.type == 'success'){
+                           var html = '';
+                           $.each(ret.message,function(index,item){
+                               html += '<div class="item">' +
+                                       '<a href="'+item['link']+'">'+
+                                       '<img src="'+item['thumbs'][0]+'">'+
+                                       '</a>'+
+                                       '<div class="info">'+
+                                       '<a>'+
+                                       '<div class="title">'+item['title']+'</div>'+
+                                       '<div class="footer">'+
+                                       '<span class="sale-price">￥'+item['price']+'</span>'+
+                                       '</div>'+
+                                       '</a>'+
+                                       '</div>'+
+                                       '</div>';
+                           });
+                           $('.old-goods-list').html(html);
+                       }else{
+                           util.toast(ret.message,ret.redirect,ret.type);
+                       }
+                   },'json'
+           );
+       }
+       $('.ajax-goods').bind('click',function(){
+           $('.js-toast-loading').show();
+           util.loading();
+           $.post(
+                   "{php echo $this->createMobileUrl('index',array('op'=>'ajax_old_goods'));}",
+                   {
+                       page:goods_page,
+                       search_type:$('input[name="search_type3"]').val(),
+                       keyword:$('input[name=keyword3]').val()
+                   },function(ret){
+                       $('.js-toast-loading').hide();
+                       if(ret.type == 'success'){
+                           var html = '';
+                           $.each(ret.message,function(index,item){
+                               html += '<div class="item">' +
+                                       '<a href="'+item['link']+'">'+
+                                       '<img src="'+item['thumb']+'">'+
+                                       '</a>'+
+                                       '<div class="info">'+
+                                       '<a>'+
+                                       '<div class="title">'+item['title']+'</div>'+
+                                       '<div class="footer">'+
+                                       '<span class="sale-price">￥'+item['sale_price']+'</span>'+
+                                '</div>'+
+                               '</a>'+
+                               '</div>'+
+                               '</div>';
+                           });
+                           goods_page++;
+                           $('.old-goods-list').append(html);
+                       }else{
+                           util.toast(ret.message,ret.redirect,ret.type);
+                       }
+                   },'json'
+           );
+       });
+
+
+
+       /* 显示二手货*/
+       $('.store-header span').bind('click',function(){
+           $('.store-header span').removeClass('active');
+           $(this).addClass('active');
+           var type = $(this).attr('data-type');
+           if(type == 'store'){
+               $('.store-list').show();
+               $('.credit-store-box').hide();
+               $('.goods-box').hide();
+               $('.ajax-more').hide();
+               $('.ajax-store').show();
+           }else if(type == 'credit'){
+               $('.credit-goods-list').hide();
+               $('.store-list').hide();
+               $('.credit-store-box').show();
+               $('.credit-store-list').show();
+               $('.goods-box').hide();
+               $('.ajax-more').hide();
+               $('.ajax-credit-store').show();
+               $('.ajax-credit-goods').hide();
+           }else{
+               $('.store-list').hide();
+               $('.credit-store-box').hide();
+               $('.credit-store-list').hide();
+               $('.goods-box').show();
+               $('.ajax-more').hide();
+               $('.ajax-goods').show();
+           }
+       });
+
+
+       /* 搜索 */
+       $('.button').bind('click',function(){
+           $('#search_form').submit();
+       });
+       $('.type').bind('click',function(){
+           $('.menu').toggle();
+       });
+       $('.type2').bind('click',function(){
+           $('.menu2').toggle();
+       });
+       $('.type3').bind('click',function(){
+           $('.menu3').toggle();
+       });
+       $('.menu ul li').bind('click',function(){
+           var index = $('.menu ul li').index(this);
+           if(index == 0){
+               $('.type').html('搜店铺<i class="icon iconfont icon-xiala"></i>');
+               $('input[name="search_type"]').val('{SEARCH_TYPE_STORE}');
+               $('input[name="keyword"]').attr('placeholder','请输入商家名称关键字');
+           }else{
+               $('.type').html('搜商品<i class="icon iconfont icon-xiala"></i>');
+               $('input[name="search_type"]').val('{SEARCH_TYPE_GOODS}');
+               $('input[name="keyword"]').attr('placeholder','请输入商品名称关键字');
+           }
+           $('.menu').hide();
+       });
+
+       $('.menu2 ul li').bind('click',function(){
+           var index = $('.menu2 ul li').index(this);
+           if(index == 0){
+               $('.type2').html('本地<i class="icon iconfont icon-xiala"></i>');
+               $('input[name="search_type2"]').val('{SEARCH_CITY}');
+           }else{
+               $('.type2').html('全国<i class="icon iconfont icon-xiala"></i>');
+               $('input[name="search_type2"]').val('{SEARCH_COUNTRY}');
+           }
+           $('.menu2').hide();
+       });
+       $('.menu3 ul li').bind('click',function(){
+           var index = $('.menu3 ul li').index(this);
+           if(index == 0){
+               $('.type3').html('本地<i class="icon iconfont icon-xiala"></i>');
+               $('input[name="search_type3"]').val('{SEARCH_CITY}');
+           }else{
+               $('.type3').html('全国<i class="icon iconfont icon-xiala"></i>');
+               $('input[name="search_type3"]').val('{SEARCH_COUNTRY}');
+           }
+           $('.menu3').hide();
+       });
+
+       var is_default = "{$_W['location']['is_default']}";
+       var swiper_1 = new Swiper('.swiper-container-1', {
+           pagination: '.swiper-pagination-1',
+           paginationClickable: true,
+           autoplay: 5000//可选选项，自动滑动
+       });
+       var swiper_2 = new Swiper('.swiper-container-2', {
+           pagination: '.swiper-pagination-2',
+           paginationClickable: true
+       });
+
+       /* 定位 */
+       if(is_default != 2){
+           var geolocation = new qq.maps.Geolocation("{$tencent_js_key}", "web端定位服务");
+           var options = {timeout: 8000};
+           geolocation.getLocation(showPosition, showErr, options);
+           function showPosition(position) {
+               $.post(
+                       "{php echo $this->createMobileUrl('location',array('op'=>'save'));}",
+                       {
+                           address:position['addr'],
+                           city:position['city'],
+                           district:position['district'],
+                           province:position['province'],
+                           lng:position['lng'],
+                           lat:position['lat']
+                       } ,
+                       function(ret){
+                           var address = ret.message.address == ''?ret.message.city:ret.message.address;
+                           util.toast('您当前位于：'+address,ret.redirect,'success');
+                           return false;
+                       },'json'
+               );
+           }
+           function showErr() {
+               util.toast('定位失败，请刷新重试','','error');
+               return false;
+           }
+       }
+   });
+</script>
+{template 'common/footer-oto'}

@@ -1,0 +1,169 @@
+<div class="push-box">
+    <form method="post" enctype="multipart/form-data" id="push_form">
+        <div class="push-item">
+            <span class="push-left"><font style="color: red">*</font>商品名称:</span>
+            <div class="push-right">
+                <textarea maxlength="255" class="form-control" name="title" placeholder="请输入商品名称"></textarea>
+            </div>
+        </div>
+        <div class="push-item">
+            <span class="push-left"><font style="color: red">*</font>商品图片:</span>
+            <div class="push-right thumb-list">
+                <div class="item">
+                    <input type="file" name="thumbs[]" accept="image/*">
+                    <span class="upload-tip">+</span>
+                    <img>
+                </div>
+                <div class="item">
+                    <input type="file" name="thumbs[]" accept="image/*">
+                    <span class="upload-tip">+</span>
+                    <img>
+                </div>
+                <div class="item">
+                    <input type="file" name="thumbs[]" accept="image/*">
+                    <span class="upload-tip">+</span>
+                    <img>
+                </div>
+            </div>
+            <p style="color: red">*最多可上传3张图片，图片比例1:1</p>
+        </div>
+        <div class="push-item">
+            <span class="push-left"><font style="color: red">*</font>出售价格:</span>
+            <div class="push-right" style="position: relative;padding-right: 50px">
+                <input type="text" class="form-control" name="price" placeholder="请输入出售价格">
+                <span style="position: absolute;display:block;width:40px;height:40px;line-height:40px;text-align:center;right: 5px;top: 0">元</span>
+            </div>
+        </div>
+        <div class="push-item">
+            <span class="push-left"><font style="color: red">*</font>商品数量:</span>
+            <div class="push-right">
+                <input type="text" class="form-control" name="total" placeholder="请输入商品数量">
+            </div>
+        </div>
+        <div class="push-item">
+            <span class="push-left"><font style="color: red">*</font>商品描述:</span>
+            <div class="push-right">
+                <textarea maxlength="255" class="form-control" name="desc" placeholder="请输入商品描述"></textarea>
+            </div>
+        </div>
+        <div class="push-item">
+            <span class="push-left"><font style="color: red">*</font>交易地点:</span>
+            <div class="push-right">
+                {php echo tpl_app_form_field_district('area',array('province' => $item['province'], 'city' => $item['city'],'district' => $item['district']));}
+            </div>
+        </div>
+        <div class="push-item">
+            <span class="push-left">详细地址:</span>
+            <div class="push-right">
+                <textarea maxlength="255" class="form-control" name="address" placeholder="请输入详细地址"></textarea>
+            </div>
+        </div>
+        <div class="push-item">
+            <span class="push-left"><font style="color: red">*</font>联系电话:</span>
+            <div class="push-right">
+                <input type="text" class="form-control" name="tel" placeholder="请输入联系电话">
+            </div>
+        </div>
+        <div class="push-item">
+            <span class="push-left"><font style="color: red">*</font>联系人:</span>
+            <div class="push-right">
+                <input type="text" class="form-control" name="username" placeholder="请输入联系人">
+            </div>
+        </div>
+        <div class="push-item">
+            <span class="push-left">QQ号:</span>
+            <div class="push-right">
+                <input type="text" class="form-control" name="qq" placeholder="请输入QQ号码">
+            </div>
+        </div>
+        <div class="push-item">
+            <span class="push-left">微信号:</span>
+            <div class="push-right">
+                <input type="text" class="form-control" name="wechat" placeholder="请输入微信号">
+            </div>
+        </div>
+        <div class="push-footer">
+            <input name="is_agree" type="hidden" value="{AGREE_NO}">
+            <div class="agree">
+                <span><i class="icon iconfont icon-duoxuanbuxuan"></i>同意</span>
+                <a href="{php echo url('article/display/display',array('type'=>ARTICLE_OLD_PUSH));}">《平台二手物品交易规则》</a>
+            </div>
+            <button class="js-push-btn"   {if empty($user['product_key'])}disabled{/if} type="button">立即发布</button>
+            <span style="color: red;line-height: 25px">*请先缴纳服务费<br>*如发布虚假信息，系统将取消会员资格<br>*二手物品的货款，在收款二维码中申请结算</span>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    $(function(){
+        {if empty($user['product_key'])}
+            $('input').attr('readonly','readonly');
+            $('button').attr('readonly','readonly');
+            $('textarea').attr('readonly','readonly');
+        {/if}
+
+
+        /* 同意协议 */
+        $('.agree span').bind('click',function(){
+            var i = $(this).find('i');
+            if(i.hasClass('active')){
+                i.removeClass('active icon-xuanzhong1').addClass('icon-duoxuanbuxuan');
+                $('input[name="is_agree"]').val("{AGREE_NO}");
+            }else{
+                i.addClass('active icon-xuanzhong1').removeClass('icon-duoxuanbuxuan');
+                $('input[name="is_agree"]').val("{AGREE_YES}");
+            }
+        });
+
+        /* 选择图片 */
+        $('input[name="thumbs[]"]').bind('change',function(){
+            if($(this).val() == ''){
+                $(this).next().show();
+                $(this).next().next().hide();
+            }else{
+                $(this).next().hide();
+                $(this).next().next().attr('src',getFileSrc(this.files[0])).show();
+            }
+        });
+
+        /* 发布商品 */
+        $('.js-push-btn').bind('click',function(){
+            var apply_btn = $(this);
+            $('.js-toast-loading').show();
+            util.loading();
+            var formData = new FormData($( "#push_form" )[0]);
+            $.ajax({
+                url: window.location.href ,
+                type: 'POST',
+                data: formData,
+                dataType: "json",
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (ret) {
+                    $('.js-toast-loading').hide();
+                    util.toast(ret.message,ret.redirect,ret.type);
+                    return true;
+                },
+                error: function () {
+                    $('.js-toast-loading').hide();
+                    util.toast('网络连接错误！请重试！','','error');
+                    return false;
+                }
+            });
+        });
+
+        /* 获取元素路径 */
+        function getFileSrc(file){
+            var url = null;
+            if (window.createObjectURL != undefined) {
+                url = window.createObjectURL(file)
+            } else if (window.URL != undefined) {
+                url = window.URL.createObjectURL(file)
+            } else if (window.webkitURL != undefined) {
+                url = window.webkitURL.createObjectURL(file)
+            }
+            return url;
+        }
+    });
+</script>

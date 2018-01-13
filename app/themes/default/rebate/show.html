@@ -1,0 +1,79 @@
+{template 'common/header-oto'}
+<link rel="stylesheet" href="{$_W['siteroot']}app/resource/css/rebate_show.css?v={IMS_VERSION}">
+{if $do == 'display'}
+<!-- begin 形成 -->
+<div class="page-display">
+    <div class="header">最新积分</div>
+    <div style="height: 60px"></div>
+    <div class="list">
+        {loop $list $li}
+        <div class="item" style="height: 110px;">
+            <img  onerror="this.src='/app/resource/images/default_friend.jpg'" src="{php echo tomedia($li['avatar']);}">
+            <ul>
+                <li class="nickname">昵称：{$li['nickname']}</li>
+                <li class="tip" style="position: relative;padding-left: 70px"><span style="position: absolute;left: 0;top: 0">积分形成：</span><span>1个方圆宝<br></span></li>
+                <li class="date">形成时间：{php echo date('Y年m月d日',$li['createtime']);}</li>
+            </ul>
+        </div>
+        {/loop}
+    </div>
+</div>
+<!-- end 形成-->
+{elseif $do == 'list'}
+<!-- begin 兑换 -->
+<div class="page-display">
+    <div class="header">积分兑换</div>
+    <div style="height: 60px"></div>
+    <div class="list">
+        {loop $list $li}
+        <div class="item" style="height: 100px;">
+            <img  onerror="this.src='/app/resource/images/default_friend.jpg'" src="{php echo tomedia($li['avatar']);}">
+            <ul>
+                <li class="nickname">昵称：{$li['nickname']}</li>
+                <li class="tip">1个方圆宝已获得兑换（{$li['city']}{$li['district']}）</li>
+                <li class="date">兑换时间：{php echo date('Y年m月d日',$li['createtime']);}</li>
+                {if !empty($li['birthtime'])}
+                <li style="display: none" class="date">形成时间：{php echo date('Y年m月d日',$li['birthtime']);}</li>
+                {/if}
+            </ul>
+        </div>
+        {/loop}
+    </div>
+</div>
+<!-- end 兑换 -->
+{elseif $do == 'shop'}
+<!-- begin 形成 -->
+<div class="page-display">
+    <div class="header">我要开店</div>
+    <div style="height: 60px"></div>
+    <div class="list">
+        {loop $list $li}
+        <div class="item">
+            <img  onerror="this.src='/app/resource/images/default_friend.jpg'" src="{php echo tomedia($li['avatar']);}">
+            <ul>
+                <li class="nickname">发起人：{$li['nickname']}</li>
+                <li class="tip">地址：{$li['city']}</li>
+                <li class="tip">申请编号：{php echo 'GD'.str_pad($li['id'],6,0,STR_PAD_LEFT);}</li>
+                <li class="date">申请时间：{php echo date('Y年m月d日',$li['createtime']);}</li>
+            </ul>
+        </div>
+        {/loop}
+    </div>
+</div>
+<!-- end 形成-->
+{/if}
+<script type="text/javascript">
+    var i  = 0;
+    var speed  = 1;
+    var d_height = document.body.clientHeight;
+    var v_height =  document.body.scrollHeight;
+    setInterval(function(){
+        if(i < (v_height-d_height)){
+            i+=speed;
+        }else {
+            i=0;
+        }
+        $(window).scrollTop(i);
+    },30)
+</script>
+{template 'common/footer-oto'}

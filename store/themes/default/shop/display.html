@@ -1,0 +1,153 @@
+{template 'common/header'}
+<div class="store-tab">
+    <ul>
+        <li class="active">
+            <a href="{php echo url('shop/display');}">基本资料</a>
+        </li>
+    </ul>
+</div>
+{if $do == 'display'}
+    <div class="page-content">
+    <form id="myForm" method="post" class="form-horizontal form" enctype="multipart/form-data">
+        <div class="panel">
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">商家账号</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <label class="control-label">{$item['username']}<span style="margin-left:20px;color: red">注意：登录账号不能修改</span></label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">商家类型</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <label class="control-label">{if $item['type'] == 0}BBC{else}OTO{/if}</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>店铺名称</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" name="title" value="{$item['title']}" placeholder="请输入店铺名称"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>店铺logo</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {php echo tpl_form_field_image('logo',$item['logo']);}
+                        <span class="help-block">建议尺寸：120*120</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>店铺描述</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <textarea class="form-control" name="desc">{$item['desc']}</textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 行业分类</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <select class="form-control" name="category_id">
+                            <option value="0">请选择分类</option>
+                            {if !empty($categoryList) && is_array($categoryList)}
+                            {loop $categoryList $category}
+                            <option {if $category['id'] == $item['category_id']}selected{/if} value="{$category['id']}">{$category['title']}</option>
+                            {/loop}
+                            {/if}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 地址</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {php echo tpl_form_field_district('area',array('province' => $item['province'], 'city' => $item['city'],'district' => $item['district']));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 详细地址</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="address"  class="form-control" placeholder="输入详细地址，请勿重复填写省市区信息" value="{$item['address']}"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 定位</label>
+                    <div class="col-sm-8 col-xs-12" id="map">
+                        {php echo tpl_form_field_coordinate('map', array('lng' => $item['lng'], 'lat' => $item['lat']));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 联系人</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" name="contacts" value="{$item['contacts']}" placeholder="请输入联系人姓名"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 联系电话</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" name="tel" value="{$item['tel']}" placeholder="请输入联系人电话"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">Email</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" name="email" value="{$item['email']}" placeholder="请输入负责人邮箱地址"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">预留客服QQ</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" name="qq" value="{$item['qq']}" placeholder="请输入客服QQ号码"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">微信号</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" name="weixin" value="{$item['weixin']}" placeholder="请输入微信号码"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 显示状态</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <label class="radio-inline">
+                            <input type="radio" name="is_display" value="1" {if $item['is_display'] == 1}checked{/if}>
+                            显示
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="is_display" value="0" {if $item['is_display'] != 1}checked{/if}>
+                            隐藏
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">客户须知</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {php echo tpl_ueditor('notice', $item['notice']);}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-8 col-md-8 col-xs-12 col-sm-offset-2 col-sm-offset-2">
+                        <input type="hidden" name="id" value="{$item['id']}"/>
+                        <button name="submit" type="button" class="btn btn-primary">保存</button>
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    require(['util'],function(util){
+        /* 提交表单 */
+        $('button[name="submit"]').bind('click',function(){
+            $.post(
+                 "{php echo url('store/display');}",
+                 $('#myForm').serialize(),
+                 function(ret){
+                     util.message(ret.message,ret.redirect,ret.type);
+                     return false;
+                 },'json'
+            );
+        });
+    });
+</script>
+{/if}
+{template 'common/footer'}

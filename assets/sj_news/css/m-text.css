@@ -1,0 +1,71 @@
+body{
+    background: #f3f6f6;
+}
+body,body *{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+}
+.page-m-text{}
+.page-m-text .m-text-header{
+    padding: 0 10px;
+    position: fixed;
+    width: 100%;
+    height: 45px;
+    background: yellowgreen;
+    text-align: center;
+    line-height: 45px;
+    color: #ffffff;
+    z-index: 999999;
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.text-list{
+    padding: 5px;
+}
+.text-list .item{
+    position: relative;
+    margin-bottom: 5px;
+    background: #ffffff;
+}
+.text-list .item .top{
+    border-bottom: 1px solid #eee;
+}
+.text-list .item .top ul{
+    padding-right: 70px;
+}
+.text-list .item .top ul li.title{
+    height: 30px;
+    line-height: 30px;
+    color: #000000;
+    font-size: 14px;
+}
+.text-list .item .top ul li.date{
+    height: 35px;
+    line-height: 35px;
+    color: #999999;
+    font-size: 12px;
+}
+.text-list .item .top .status{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    height: 25px;
+    padding: 0 5px;
+    margin: 0;
+    line-height: 25px;
+
+}
+.text-list .item .center{
+    padding: 10px;
+}
+.text-list .item .bottom{
+    border-top: 1px solid #eee;
+    padding: 5px;
+    display: flex;
+    display: -webkit-flex;
+    justify-content: flex-end;
+}

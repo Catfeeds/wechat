@@ -1,0 +1,54 @@
+<div class="clearfix">
+    <form action="" method="post" class="form-horizontal form" id="post_form">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                添加套餐会员
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">会员ID</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" name="uid" value="{$item['uid']}" placeholder="请输入会员ID"  />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">套餐选择</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <select name="product_key" class="form-control">
+                            <option value="0">请选择套餐</option>
+                            <option value="1" {if $item['product_key'] == 1}selected{/if}>A套餐</option>
+                            <option value="2" {if $item['product_key'] == 2}selected{/if}>B套餐</option>
+                            <option value="3" {if $item['product_key'] == 3}selected{/if}>C套餐</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-8 col-md-8 col-xs-12 col-sm-offset-2 col-sm-offset-2">
+                        <input type="hidden" name="id" value="{$item['id']}"/>
+                        <button type="button" name="submit" class="btn btn-primary">提交</button>
+                        <input type="hidden" name="token" value="{$_W['token']}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    require(['util'],function(util){
+        /* 保存分类 */
+        $('button[name="submit"]').bind('click',function(){
+            $.post(
+                    window.location.href,
+                    $('#post_form').serialize(),
+                    function(ret){
+                        if(ret.type == 'success'){
+                            util.message(ret.message,ret.redirect,'success');
+                            return true;
+                        }
+                        util.message(ret.message,'','error');
+                        return false;
+                    },'json'
+            );
+        });
+    });
+</script>

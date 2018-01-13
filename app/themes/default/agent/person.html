@@ -1,0 +1,183 @@
+<div class="page-balance">
+    <form method="post" id="post-form">
+        <input type="hidden" name="page" value="2">
+        <div class="balance-header">
+            <div class="title">{$_W['tips']}</div>
+            <div class="search">
+                <input type="hidden" name="is_check" value="{$is_check}">
+                <span class="type">未审核<i class="icon iconfont icon-xiala"></i></span>
+                <input name="keyword" type="text" placeholder="请输入会员ID、昵称、姓名">
+                <span class="button"><i class="icon iconfont icon-sousuo"></i></span>
+                <div class="menu" style="display: none;">
+                    <span class="up"></span>
+                    <ul>
+                        <li data-type="{CHECK_NOT_PASS}"><i class="icon iconfont icon-bianji"></i>未审核</li>
+                        <li data-type="{CHECK_PASS}"><i class="icon iconfont icon-xuanzhong1"></i>已审核</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div style="width: 100%;height: 75px"></div>
+        <div class="date-range">
+            <span>开始时间：</span>{php echo _tpl_form_field_date("createtime[start]",date('Y-m-d',$starttime));}
+        </div>
+        <div class="date-range">
+            <span>结束时间：</span>{php echo _tpl_form_field_date("createtime[end]",date('Y-m-d',$endtime));}
+        </div>
+    </form>
+    <div class="balance-list">
+        {loop $list $li}
+        <div class="item">
+            <div class="date">
+                日期：{$li['createtime']}
+                {if $li['is_check'] == CHECK_PASS}
+                <label class="label label-success">已审核</label>
+                {else}
+                <label class="label label-default">未审核</label>
+                {/if}
+            </div>
+            <div class="desc">
+                <img src="{$li['avatar']}">
+                <ul>
+                    <li class="store-name">{$li['nickname']}（会员ID:{$li['uid']}）</li>
+                    <li class="store-address">地址：{$li['province']}{$li['city']}{$li['district']}</li>
+                    <li class="store-tel">电话：<a href="tel:{$li['tel']}">{$li['tel']}</a></li>
+                    <li class="store-money">结算金额：<span style="color: red">￥{$li['money']}</span></li>
+                </ul>
+            </div>
+            <div class="op">
+                {if $li['is_check'] != CHECK_PASS}
+                <a data-id="{$li['id']}" role="button" class="btn btn-success btn-sm pull-right js-pass-btn" >通过审核</a>
+                {/if}
+            </div>
+        </div>
+        {/loop}
+    </div>
+    <div class="ajax-more">加载更多&gt;&gt;</div>
+</div>
+<script type="text/javascript">
+    require([],function(){
+        $(document).on('click','.js-pass-btn',function(){
+            var obj = $(this);
+            var id = obj.attr('data-id');
+            obj.html('审核中，请稍等').attr('disabled','disabled');
+            $.post(
+                    window.location.href,
+                    {id:id,ac:'balance'},
+                    function(ret){
+                        if(ret.type == 'success'){
+                            obj.parent().prev().prev().find('label').html('已审核').removeClass('label-default').addClass('label-success');
+                            obj.remove();
+                        }
+                        util.toast(ret.message,ret.redirect,ret.type);
+                        obj.html('通过审核').removeAttr('disabled');
+                    },'json'
+            );
+        });
+
+        /* ajax请求 */
+        $('.ajax-more').bind('click',function(){
+            var page = parseInt($('input[name="page"]').val());
+            util.loading();
+            $('.js-toast-loading').show();
+            $.post(
+                    window.location.href,
+                    $('#post-form').serialize(),
+                    function(ret){
+                        $('.js-toast-loading').hide();
+                        if(ret.type == 'success'){
+                            var html = '';
+                            $.each(ret.message,function(index,item){
+                                var label = '<label class="label label-success">已审核</label>';
+                                if(item['is_check'] != '{CHECK_PASS}'){
+                                    label = '<label class="label label-default">未审核</label>';
+                                }
+                                html+='<div class="item">' +
+                                        '<div class="date">' +
+                                        '日期：'+item['createtime']+label+
+                                        '</div>' +
+                                        '<div class="desc">' +
+                                        '<img src="'+item['avatar']+'">'+
+                                        '<ul>'+
+                                        '<li class="store-name">'+item['nickname']+'（会员ID：'+item['uid']+'）</li>'+
+                                        '<li class="store-address">地址：'+item['province']+item['city']+item['district']+'</li>'+
+                                        '<li class="store-tel">电话：<a href="tel:'+item['tel']+'">'+item['tel']+'</a></li>'+
+                                        '<li class="store-money">结算金额：<span style="color: red">￥'+item['money']+'</span></li>'+
+                                        '</ul>'+
+                                        '</div>'+
+                                        '<div class="op">';
+                                if(item['is_check'] != '{CHECK_PASS}'){
+                                    html += '<a data-id="'+item['id']+'" role="button" class="btn btn-success btn-sm pull-right js-pass-btn" >通过审核</a>';
+                                }
+                                html += '</div></div>';
+                            });
+                            $('.balance-list').append(html);
+                            $('input[name="page"]').val(page++);
+                        }else{
+                            util.toast(ret.message,ret.redirect,ret.type);
+                        }
+                    },'json'
+            );
+        });
+
+
+        /* 搜索 */
+        $('.button').bind('click',function(){
+            $('input[name="page"]').val('1');
+            util.loading();
+            $('.js-toast-loading').show();
+            $.post(
+                window.location.href,
+                $('#post-form').serialize(),
+                function(ret){
+                    $('.js-toast-loading').hide();
+                    if(ret.type == 'success'){
+                        var html = '';
+                        $.each(ret.message,function(index,item){
+                            var label = '<label class="label label-success">已审核</label>';
+                            if(item['is_check'] != '{CHECK_PASS}'){
+                                label = '<label class="label label-default">未审核</label>';
+                            }
+                            html+='<div class="item">' +
+                                    '<div class="date">' +
+                                    '日期：'+item['createtime']+label+
+                                    '</div>' +
+                                    '<div class="desc">' +
+                                    '<img src="'+item['avatar']+'">'+
+                                    '<ul>'+
+                                    '<li class="store-name">'+item['nickname']+'（会员ID：'+item['uid']+'）</li>'+
+                                    '<li class="store-address">地址：'+item['province']+item['city']+item['district']+'</li>'+
+                                    '<li class="store-tel">电话：<a href="tel:'+item['tel']+'">'+item['tel']+'</a></li>'+
+                                    '<li class="store-money">结算金额：<span style="color: red">￥'+item['money']+'</span></li>'+
+                                '</ul>'+
+                            '</div>'+
+                            '<div class="op">';
+                            if(item['is_check'] != '{CHECK_PASS}'){
+                                html += '<a data-id="'+item['id']+'" role="button" class="btn btn-success btn-sm pull-right js-pass-btn" >通过审核</a>';
+                            }
+                            html += '</div></div>';
+                        });
+                        $('.balance-list').html(html);
+                        $('input[name="page"]').val('2');
+                    }else{
+                        util.toast(ret.message,ret.redirect,ret.type);
+                    }
+                },'json'
+            );
+        });
+        $('.type').bind('click',function(){
+            $('.menu').toggle();
+        });
+
+        $('.menu ul li').bind('click',function(){
+            var type = $(this).attr('data-type');
+            $('input[name="is_check"]').val(type);
+            if(type == '{CHECK_PASS}'){
+                $('.type').html('已审核<i class="icon iconfont icon-xiala"></i>');
+            }else{
+                $('.type').html('未审核<i class="icon iconfont icon-xiala"></i>');
+            }
+            $('.menu').hide();
+        });
+    });
+</script>

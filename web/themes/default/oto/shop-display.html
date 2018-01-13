@@ -1,0 +1,120 @@
+<!-- begin 基本分销设置 -->
+<form class="form-horizontal form" method="post" id="shop-form">
+<div class="js-distribution-box base">
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">状态</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <label class="radio-inline">
+                <input type="radio" name="setting[status]" {if $item['setting']['status'] == OPEN_STATUS}checked{/if} value="{OPEN_STATUS}">开启
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="setting[status]" {if $item['setting']['status'] != OPEN_STATUS}checked{/if}  value="{CLOSE_STATUS}">关闭
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">开店费用</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <div class="input-group">
+                <input type="text" name="setting[develop_fee]" value="{$item['setting']['develop_fee']}" class="form-control" placeholder="请输入开店费用">
+                <span class="input-group-addon">元</span>
+            </div>
+            <span class="help-block">开店费用</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">推荐奖</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <div class="input-group">
+                <span class="input-group-addon">第1代</span>
+                <input type="text" name="setting[recommend_money][1]" value="{$item['setting']['recommend_money'][1]}" class="form-control" placeholder="请输入第1代奖励金额">
+                <span class="input-group-addon">元/人</span>
+            </div>
+            <div class="input-group" style="margin-top: 10px">
+                <span class="input-group-addon">第2代</span>
+                <input type="text" name="setting[recommend_money][2]" value="{$item['setting']['recommend_money'][2]}" class="form-control" placeholder="请输入第2代奖励金额">
+                <span class="input-group-addon">元/人</span>
+            </div>
+            <span class="help-block">
+                第1代表示，表示直推所得到的奖励；第2代表示直推的人直推的会员，您所获得奖励
+            </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">管理奖</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <div class="input-group">
+                <span class="input-group-addon">1级管理奖：直推</span>
+                <input type="text" name="setting[manage][1][up_num]" value="{$item['setting']['manage'][1]['up_num']}" class="form-control">
+                <span class="input-group-addon">人以上</span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">从第2代开始，每增加1个股东，奖励</span>
+                <input type="text" name="setting[manage][1][money]" value="{$item['setting']['manage'][1]['money']}" class="form-control">
+                <span class="input-group-addon">元</span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">可以拿到第</span>
+                <input type="text" name="setting[manage][1][layer]" value="{$item['setting']['manage'][1]['layer']}" class="form-control">
+                <span class="input-group-addon">代</span>
+            </div>
+
+            <div class="input-group" style="margin-top: 10px">
+                <span class="input-group-addon">2级管理奖：直推</span>
+                <input type="text" name="setting[manage][2][up_num]" value="{$item['setting']['manage'][2]['up_num']}" class="form-control">
+                <span class="input-group-addon">人以上</span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">从第2代开始，每增加1个股东，奖励</span>
+                <input type="text" name="setting[manage][2][money]" value="{$item['setting']['manage'][2]['money']}" class="form-control">
+                <span class="input-group-addon">元</span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">可以拿到第</span>
+                <input type="text" name="setting[manage][2][layer]" value="{$item['setting']['manage'][2]['layer']}" class="form-control">
+                <span class="input-group-addon">代</span>
+            </div>
+
+            <div class="input-group" style="margin-top: 10px">
+                <span class="input-group-addon">3级管理奖：直推</span>
+                <input type="text" name="setting[manage][3][up_num]" value="{$item['setting']['manage'][3]['up_num']}" class="form-control">
+                <span class="input-group-addon">人以上</span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">从第2代开始，每增加1个股东，奖励</span>
+                <input type="text" name="setting[manage][3][money]" value="{$item['setting']['manage'][3]['money']}" class="form-control">
+                <span class="input-group-addon">元</span>
+            </div>
+            <div class="input-group">
+                <span class="input-group-addon">可以拿到第</span>
+                <input type="text" name="setting[manage][3][layer]" value="{$item['setting']['manage'][3]['layer']}" class="form-control">
+                <span class="input-group-addon">代</span>
+            </div>
+            <span class="help-block">
+                等级越高，要求的条件越高，待遇越高
+            </span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-2 control-label"></label>
+        <div class="col-sm-9 col-xs-12">
+            <input type="hidden" name="token" value="{$_W['token']}">
+            <input name="submit" type="button" value="提交" class="btn btn-primary span2">
+        </div>
+    </div>
+</div>
+</form>
+<script type="text/javascript">
+    require(['util'],function(){
+        $('input[name="submit"]').bind('click',function(){
+            $.post(
+                 window.location.href,
+                $('#shop-form').serialize(),
+                function(ret){
+                    util.message(ret.message,ret.redirect,ret.type);
+                },'json'
+            );
+        });
+    });
+</script>
+<!-- end 基本分校设置 -->

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns="http://wx.51muma.com" versionCode="0.6">
+	<application setting="false">
+		<name><![CDATA[OTO商城]]></name>
+		<identifie><![CDATA[oto]]></identifie>
+		<version><![CDATA[1.2.0]]></version>
+		<type><![CDATA[business]]></type>
+		<ability><![CDATA[生活服务]]></ability>
+		<description><![CDATA[生活服务]]></description>
+		<author><![CDATA[慕马科技]]></author>
+		<url><![CDATA[http://wx.51muma.com/]]></url>
+	</application>
+	<platform>
+		<subscribes>
+		</subscribes>
+		<handles>
+		</handles>
+		<rule embed="false" />
+		<card embed="false" />
+	</platform>
+	<bindings>
+		<cover>
+			<entry title="商城首页" do="index" state="" direct="false" />
+		</cover>
+		<menu>
+			<entry title="商品管理" do="goods" state="" direct="false" />
+			<entry title="订单管理" do="order" state="" direct="false" />
+			<entry title="分销设置" do="distribution" state="" direct="false" />
+			<entry title="佣金管理" do="commission" state="" direct="false" />
+			<entry title="提现管理" do="balance" state="" direct="false" />
+			<entry title="商家管理" do="shoper" state="" direct="false" />
+			<entry title="职员管理" do="staff" state="" direct="false" />
+			<entry title="商城设置" do="config" state="" direct="false" />
+			<entry title="二手管理" do="old" state="" direct="false" />
+			<entry title="开店管理" do="shop" state="" direct="false" />
+			<entry title="申请管理" do="apply" state="" direct="false" />
+		</menu>
+	</bindings>
+	<permissions>
+	</permissions>
+	<install><![CDATA[]]></install>
+	<uninstall><![CDATA[]]></uninstall>
+	<upgrade><![CDATA[]]></upgrade>
+</manifest>

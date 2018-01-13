@@ -1,0 +1,310 @@
+body{
+    background: #e0b842;
+}
+.page-cashier{
+    padding: 15px;
+}
+.page-cashier .pay-log-link{
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+    color: #ffffff;
+    background: sienna;
+    position: absolute;
+    top: 10px;
+    right: -15px;
+    padding: 0 10px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+.page-cashier .header{
+    font-size: 16px;
+    position: relative;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    color: #ffffff;
+}
+.page-cashier .header .back{
+    position: absolute;
+    left: 0;
+    background: #ffffff;
+    display: block;
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+}
+.page-cashier .header .back i{
+    color: tomato;
+}
+.page-cashier .qrcode-box{
+    margin-top: 30px;
+    background: #ffffff;
+    overflow: hidden;
+}
+.page-cashier .qrcode-box .title{
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    margin-top: 30px;
+    color: #000000;
+}
+.page-cashier .qrcode-box .qrcode{
+    width: 230px;
+    height: 230px;
+    margin: 0 auto;
+    position: relative;
+}
+.page-cashier .qrcode-box .qrcode .qrcode-img{
+    width: 100%;
+    height: 100%;
+}
+.page-cashier .qrcode-box .qrcode .safe-img{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 122px;
+    top: 118px;
+    z-index: 3;
+}
+
+.page-cashier .qrcode-box .qrcode .avatar-img{
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    left: 95px;
+    top: 95px;
+}
+.qrcode-box .btns{
+    height: 30px;
+    line-height: 30px;
+    margin-bottom: 20px;
+    display: flex;
+    display: -webkit-flex;
+    justify-content: center;
+}
+.qrcode-box .btns span{
+    margin: 0 10px;
+}
+.qrcode-box .btns a{
+    color: #000000;
+}
+
+.pay-box{
+    position: relative;
+    overflow: hidden;
+}
+.pay-box .face{
+    display: flex;
+    display: -webkit-flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin: 80px auto 0 auto;
+}
+.pay-box .face img {
+    border: 1px solid #ffffff;
+    width: 80px;
+    height: 80px;
+    border-radius: 80px;
+    -webkit-border-radius: 80px;
+    -moz-border-radius: 80px;
+}
+.pay-box .face .nickname{
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    color: #ffffff;
+}
+.pay-box .pay-price {
+    position: relative;
+    margin: 15px 0;
+    height: 40px;
+}
+.pay-box .pay-desc {
+    position: relative;
+    margin: 15px 0;
+    height: 40px;
+}
+.pay-box .pay-button {
+    margin-top: 20px;
+    padding-top: 20px;
+}
+.pay-box .pay-button button {
+    width: 100%;
+    height: 40px;
+    color: #ffffff;
+    text-align: center;
+    line-height: 40px;
+    background: #4cc45e;
+}
+.pay-log-box .pay-list{
+    margin-top: 30px;
+}
+
+.pay-log-box .pay-list .item{
+    background: #ffffff;
+    padding: 10px;
+    position: relative;
+    margin-bottom: 20px;
+}
+.pay-log-box .pay-list .item .pay-status{
+    position: absolute;
+    top: -10px;
+    right: 5px;
+    padding: 5px 10px;
+}
+.pay-log-box .pay-list .item .order-no{
+    height: 30px;
+    line-height: 30px;
+    color: #000000;
+    display: block;
+}
+.pay-log-box .pay-cashier{
+    height: 30px;
+    line-height: 30px;
+    color: red;
+    display: block;
+    margin-bottom: 10px;
+}
+.pay-log-box .pay-list .item .pay-date{
+    font-size: 12px;
+    display: block;
+}
+.pay-log-box .pay-list .item .pay-note{
+    font-size: 12px;
+    display: block;
+    line-height: 20px;
+    margin-top: 5px;
+}
+.pay-log-box .pay-list .item .price{
+    color: red;
+    position: absolute;
+    right: 10px;
+    top: 25px;
+    font-size: 18px;
+}
+.pay-log-box .pay-list .item .btns{
+    display: flex;
+    margin-top: 10px;
+}
+.pay-log-box .ajax-more {
+    height: 40px;
+    color: #ffffff;
+    line-height: 40px;
+    text-align: center;
+    background: #4cc45e;
+    margin: 20px 0;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+.pay-log-box .pay-list .item .btns a,.pay-log-box .pay-list .item .btns button{
+    color: #000000;
+    width: 80px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,.2);
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.qrcode-log-btn{
+    height: 30px;
+    line-height: 30px;
+    font-size: 14px;
+    color: #ffffff;
+    background: yellowgreen;
+    position: absolute;
+    top: 15px;
+    right: -15px;
+    padding: 0 10px;
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+}
+.qrcode-log-btn:active,.qrcode-log-btn:hover,.qrcode-log-btn:visited{
+    color: #ffffff;
+}
+/* 提现界面 */
+.page-balance .withdraw-apply{
+    margin-top: 10px;
+    background: #ffffff;
+    border-bottom: 1px solid #eee;
+}
+.page-balance .withdraw-apply .desc{
+    padding:20px 10px 10px 80px;
+    border-top: 1px solid #eee;
+    line-height: 20px;
+    color: #000000;
+}
+.page-balance .username,.page-balance .tel,.page-balance .withdraw-apply .money{
+    padding: 5px 5px 5px 70px;
+    position: relative;
+    border-top: 1px solid #eee;
+}
+.page-balance .username span,.page-balance .tel span,.page-balance .withdraw-apply .money span{
+    position: absolute;
+    display: block;
+    width: 60px;
+    height: 45px;
+    line-height: 45px;
+    text-align: right;
+    left: 0;
+}
+.page-balance .username input,.page-balance .tel input,.page-balance .withdraw-apply .money input{
+    border: 0;
+    margin: 0;
+}
+.page-balance  .withdraw-apply .money label{
+    color: red;
+    font-weight: normal;
+    margin-top: 2px;
+}
+.page-balance .withdraw-apply .withdraw-btn{
+    padding: 10px;
+}
+.page-balance .withdraw-btn button{
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    background: limegreen;
+    color: #ffffff;
+    width: 100%;
+    padding: 10px 0;
+    border: 0;
+}
+
+/* 结算记录 */
+.balance-log{
+    padding-top: 10px;
+    margin: 5px;
+}
+.balance-log .log-list{
+    padding: 5px;
+    background: #ffffff;
+}
+.balance-log .log-list .item{
+    padding: 10px;
+    line-height: 25px;
+    border-bottom: 1px solid #eee;
+}
+.balance-log .log-list .item:last-child{
+    border: 0;
+}
+.ajax-more {
+    height: 40px;
+    color: #ffffff;
+    line-height: 40px;
+    text-align: center;
+    background: #4cc45e;
+    margin: 20px 0;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}

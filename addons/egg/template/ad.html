@@ -1,0 +1,251 @@
+{template 'common/header'}
+<div class="platform-tab">
+    <ul>
+        <li {if $op == 'display'}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('ad',array('op'=>'display'));}">推广列表</a>
+        </li>
+        <li {if $op == 'post' && empty($item)}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('ad',array('op'=>'post'));}">添加推广</a>
+        </li>
+        {if $op == 'post' && !empty($item)}
+        <li class="active">
+            <a href="{php echo $this->createWebUrl('ad',array('op'=>'post','id'=>$item['id']));}">修改推广</a>
+        </li>
+        {/if}
+    </ul>
+</div>
+<div class="page-content">
+    {if $op == 'display'}
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选</div>
+        <div class="panel-body">
+            <form method="get" action="./index.php" class="form-horizontal" role="form">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="op" value="display" />
+                <input type="hidden" name="do" value="ad" />
+                <input type="hidden" name="m" value="egg" />
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入关键词，标题" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">添加时间</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        {php echo tpl_form_field_daterange('createtime', array('starttime' => date('Y-m-d', $starttime), 'endtime' => date('Y-m-d', $endtime),));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">类型</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="type[]" value="0" {if in_array(0,$type)}checked{/if}>
+                            图文
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="type[]" value="1" {if in_array(1,$type)}checked{/if}>
+                            视频
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">状态</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="is_display[]" value="1" {if in_array(1,$is_display)}checked{/if}>
+                            显示
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="is_display[]" value="0" {if in_array(0,$is_display)}checked{/if}>
+                            隐藏
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                        <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form method="post" class="form-horizontal" id="post_delete_ad">
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>删?</th>
+                        <th>标题</th>
+                        <th>链接</th>
+                        <th>类型</th>
+                        <th>描述</th>
+                        <th>排序</th>
+                        <th>状态</th>
+                        <th>添加时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $li}
+                    <tr>
+                        <td><input type="checkbox" name="ids[]" value="{$li['id']}"></td>
+                        <td>{$li['title']}</td>
+                        <td>{$li['url']}</td>
+                        <td >
+                            {if $li['type']==1}<span class="label label-success">视频</span>{else}<span class="label label-default">图文</span>{/if}
+                        </td>
+                        <td><p  style="width: 200px;max-height: 100px;overflow: hidden;">{$li['desc']}</p></td>
+                        <td>{$li['order_by']}</td>
+                        <td >
+                            {if $li['is_display']==1}<span class="label label-success">显示</span>{else}<span class="label label-default">隐藏</span>{/if}
+                        </td>
+                        <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                        <td>
+                            <a href="{php echo $this->createWebUrl('ad',array('op'=>'post','id'=>$li['id']));}" title="编辑"><i class="fa fa-edit"></i>&nbsp;编辑</a>
+                        </td>
+                    </tr>
+                    {/loop}
+                    {if !empty($list) && is_array($list)}
+                    <tr>
+                        <td><input type="checkbox" onclick="var ck = this.checked;$('#post_delete_ad').find('input').each(function(){this.checked = ck});"></td>
+                        <input name="token" type="hidden" value="{$_W['token']}" />
+                        <td colspan="8">
+                            <button type="button" name="submit" class="btn btn-primary">删除</button>
+                        </td>
+                    </tr>
+                    {/if}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+    <script type="text/javascript">
+        require(['bootstrap'], function(){
+            $('button[name="submit"]').bind('click',function() {
+                if (confirm('删除后不可恢复，您确定删除吗？')) {
+                    if ($(":checkbox[name='ids[]']:checked").size() > 0) {
+                        $.post(
+                                window.location.href,
+                                $('#post_delete_ad').serialize(),
+                                function (ret) {
+                                    util.message(ret.message, ret.redirect, ret.type);
+                                }, 'json'
+                        );
+                    }
+                    util.message('没有选择要删除的推广信息！', '', 'error');
+                    return false;
+                }
+            });
+        });
+    </script>
+    {elseif $op == 'post'}
+    <div class="main">
+        <form method="post" class="form-horizontal form" id="post_ad_form">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    添加推广
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>标题</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" name="title" value="{$item['title']}" placeholder="请输入标题"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>缩略图</label>
+                        <div class="col-sm-8 col-xs-12">
+                            {php echo tpl_form_field_image('thumb',$item['thumb']);}
+                            <span class="help-block">建议尺寸：120*120(或比例：1:1)</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">链接</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" name="url" value="{$item['url']}" placeholder="请输入以http://或https://的完整网址"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">类型</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <label class="radio-inline">
+                                <input type="radio" name="type" value="0" {if $item['type'] != 1}checked{/if}>
+                                图文
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="type" value="1" {if $item['type'] == 1}checked{/if}>
+                                视频
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">描述</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <textarea style="height: 200px" class="form-control" name="desc">{$item['desc']}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>推广二维码</label>
+                        <div class="col-sm-8 col-xs-12">
+                            {php echo tpl_form_field_image('wx_code',$item['wx_code']);}
+                            <span class="help-block">建议尺寸：120*120(或比例：1:1)</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">详情</label>
+                        <div class="col-sm-8 col-xs-12">
+                            {php echo tpl_ueditor('detail', $item['detail']);}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">排序</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" name="order_by" value="{$item['order_by']}" placeholder="数字越大越靠前"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">状态</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <label class="radio-inline">
+                                <input type="radio" name="is_display" value="1" {if $item['is_display'] == 1}checked{/if}>
+                                显示
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="is_display" value="0" {if $item['is_display'] != 1}checked{/if}>
+                                隐藏
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-xs-12 col-sm-offset-2">
+                            <input type="hidden" name="id" value="{$item['id']}">
+                            <button type="button" name="submit" class="btn btn-primary js-push-ad">提交</button>
+                            <input type="hidden" name="token" value="$_W['token']">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        require(['util'],function(util){
+            //添加推广
+            $('.js-push-ad').click(function(){
+                $.post(
+                        window.location.href,
+                        $('#post_ad_form').serialize(),
+                        function(ret){
+                            util.message(ret.message,ret.redirect,ret.type);
+                        },'json'
+                );
+            });
+        });
+    </script>
+    {/if}
+</div>
+{template 'common/footer'}

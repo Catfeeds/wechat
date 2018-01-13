@@ -1,0 +1,46 @@
+{template 'common/header-sj-news'}
+<link rel="stylesheet" href="{ASSETS_URL}/sj_news/css/suggest.css?v={STYLE_VERSION}">
+<div class="page-suggest">
+    <div class="suggest-header">
+        <span style="cursor: pointer;" onclick="history.back()">&lt;返回</span>
+        <span>意见反馈</span>
+        <span style="cursor: pointer;right: 5px;" class="js-suggest" onclick="location.href='{php echo $this->createMobileUrl('index');}'">首页</span>
+    </div>
+    <div style="height: 45px"></div>
+    <form id="post_form">
+        <div class="suggest-box">
+            <span>姓名</span>
+            <input name="name" type="text" placeholder="请输入姓名">
+        </div>
+        <div class="suggest-box">
+            <span>手机号</span>
+            <input name="mobile" type="text" placeholder="请输入手机号">
+        </div>
+        <div class="suggest-box">
+            <span>意见反馈</span>
+            <textarea rows="5" maxlength="500" name="content" placeholder="感谢您对媒体平台的支持与关注，您的宝贵意见将帮助我们不断改进。一旦您的意见被采纳，平台将给予奖励。"></textarea>
+        </div>
+        <div class="push-box" style="margin-top: 10px;">
+            <button type="button" class="js-push">提交</button>
+        </div>
+    </form>
+    {template 'common/nav-sj'}
+</div>
+<script type="text/javascript">
+    require(['util'],function(util){
+        //提交
+        $('.js-push').click(function(){
+            var _this = $(this);
+            _this.html('提交中...').attr('disabled','disabled');
+            $.post(
+                  window.location.href,
+                    $('#post_form').serialize(),
+                    function(ret){
+                        _this.html('提交').removeAttr('disabled');
+                        util.toast(ret.message,ret.redirect,ret.type);
+                    },'json'
+            );
+        });
+    });
+</script>
+{template 'common/footer-sj-news'}

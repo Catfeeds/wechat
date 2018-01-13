@@ -1,0 +1,62 @@
+{template 'common/header'}
+<div class="store-tab">
+    <ul>
+        <li {if $do != 'stat'}class="active"{/if}>
+        <a href="{php echo url('talk/display/display');}">评价列表</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    {if $do == 'display'}
+    <form method="post" class="form-horizontal" id="delete_goods_form">
+        <input type="hidden" name="ac" value="delete" />
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>删?</th>
+                        <th>序号</th>
+                        <th>评论人</th>
+                        <th>订单号</th>
+                        <th>评论内容</th>
+                        <th>时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $li}
+                    <tr>
+                        <td><input type="checkbox" name="ids[]" value="{$li['id']}"></td>
+                        <td>{$li['title']}</td>
+                        <td>{$li['cost_price']}</td>
+                        <td><img style="width: 80px;height: 80px" src="{php echo tomedia($li['thumb']);}"></td>
+                        <td style="line-height: 25px;">
+                            审核状态:{if $li['is_check']==1}<span class="label label-success">通过</span>{else}<span class="label label-default">未通过</span>{/if}
+                            <br>
+                            显示状态:{if $li['is_display']==1}<span class="label label-success">显示</span>{else}<span class="label label-default">隐藏</span>{/if}
+                            <br>
+                            是否包邮:{if $li['is_free_post']==1}<span class="label label-success">包邮</span>{else}<span class="label label-default">不包邮</span>{/if}
+                        </td>
+                        <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                        <td>
+                            <a href="{php echo url('goods/display/post',array('id'=>$li['id']));}" title="编辑"><i class="fa fa-edit"></i>&nbsp;编辑</a>
+                        </td>
+                    </tr>
+                    {/loop}
+                    {if !empty($list) && is_array($list)}
+                    <tr>
+                        <td><input type="checkbox" name="" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});"></td>
+                        <input name="token" type="hidden" value="{$_W['token']}" />
+                        <td colspan="6"><button type="button" name="submit" class="btn btn-primary">删除</button></td>
+                    </tr>
+                    {/if}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+{/if}
+</div>
+{template 'common/footer'}

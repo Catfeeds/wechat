@@ -1,0 +1,59 @@
+<div class="page-cashier">
+    <div class="header">
+        <span class="back">
+          <i class="icon iconfont icon-fanhui back" onclick="history.go('-1')"></i>
+        </span>
+        {$tip}
+    </div>
+    <div class="balance-log">
+        <div class="log-list">
+            {loop $list $li}
+            <div class="item">
+                <ul>
+                    <li>申请时间：{$li['createtime']}</li>
+                    <li>提现金额：{$li['money']}</li>
+                    <li>状态：{if $li['status'] == IS_STATUS}已提现{elseif $li['status'] == 2}提现失败{else}审核中{/if}</li>
+                </ul>
+            </div>
+            {/loop}
+        </div>
+        <div class="ajax-more">加载更多>></div>
+    </div>
+    <script type="text/javascript">
+        require([],function(){
+            var page = 2;
+            $('.ajax-more').bind('click',function(){
+                $('.js-toast-loading').show();
+                util.loading();
+                $.post(
+                        window.location.href,
+                        {
+                            page:page
+                        },
+                        function(ret){
+                            $('.js-toast-loading').hide();
+                            if(ret.type == 'success'){
+                                var html = '';
+                                $.each(ret.message,function(index,item){
+                                    var span = "审核中";
+                                    if(item['status'] == '{IS_STATUS}'){
+                                        span = "已提现";
+                                    }
+                                    html += '<div class="item">' +
+                                            '<ul>' +
+                                            '<li>申请时间：'+item['createtime']+'</li>' +
+                                            '<li>提现金额：'+item['money']+'</li>' +
+                                            '<li>状态：'+span+'</li>' +
+                                            '</ul>' +
+                                            '</div>';
+                                    $('.log-list').append(html);
+                                });
+                            }else{
+                                util.toast(ret.message,ret.redirect,ret.type);
+                            }
+                        },'json'
+                );
+            });
+        });
+    </script>
+</div>

@@ -1,0 +1,405 @@
+{template 'common/header'}
+<div class="account-tab">
+    <ul>
+        <li {if $do == 'display'}class="active"{/if}>
+        <a href="{php echo url('account/ad');}">广告支付订单</a>
+        </li>
+        <li {if $do == 'renew'}class="active"{/if}>
+        <a href="{php echo url('account/ad/renew');}">广告续费订单</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    {if $do == 'display'}
+    <div class="page-content">
+        <div class="panel panel-info">
+            <div class="panel-heading">筛选</div>
+            <div class="panel-body">
+                <form method="get" action="./index.php" class="form-horizontal" role="form">
+                    <input type="hidden" name="c" value="account" />
+                    <input type="hidden" name="a" value="ad" />
+                    <input type="hidden" name="do" value="display" />
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                        <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                            <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入关键词，广告标题" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">地区</label>
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            {php echo tpl_form_field_district('area', array('province' => $province, 'city' => $city, 'district' => $district));}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                            <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                            <input type="hidden" name="token" value="{$_W['token']}"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <form method="post" class="form-horizontal" id="display_form">
+            <input type="hidden" name="ac" value="delete" />
+            <div class="panel panel-default ">
+                <div class="table-responsive panel-body">
+                    <table class="table table-hover">
+                        <thead class="navbar-inner">
+                        <tr>
+                            <th>标题</th>
+                            <th>套餐</th>
+                            <th>地区</th>
+                            <th>行业</th>
+                            <th>初级审核</th>
+                            <th>高级审核</th>
+                            <th>支付状态</th>
+                            <th>支付方式</th>
+                            <th>价格</th>
+                            <th>货价</th>
+                            <th>添加时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $li}
+                        <tr>
+                            <td>{$li['title']}</td>
+                            <td><span class="label label-success">{$li['package_name']}</span></td>
+                            <td>{$li['province']}{$li['city']}{$li['district']}</td>
+                            <td><span class="label label-primary">{$li['industry']}</span></td>
+                            <td>
+                                {if $li['is_check1'] == 1}
+                                <span class="label label-success">已审核</span>
+                                {else}
+                                <span class="label label-default">未审核</span>
+                                {/if}
+                            </td>
+                            <td>
+                                {if $li['is_check2'] == 1}
+                                <span class="label label-success">已审核</span>
+                                {else}
+                                <span class="label label-default">未审核</span>
+                                {/if}
+                            </td>
+                            <td>
+                                {if $li['pay_status'] == 1}
+                                <span class="label label-success">已支付</span>
+                                {else}
+                                <span class="label label-default">未支付</span>
+                                {/if}
+                            </td>
+                            <td>{$li['pay_method']}</td>
+                            <td>￥{$li['price']}</td>
+                            <td>
+                                {if empty(floor($li['pay_goods_price']))}
+                                 免抵货
+                                {else}
+                                ￥{$li['pay_goods_price']}
+                                {/if}
+                            </td>
+                            <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                            <td data-json='{php echo json_encode($li);}'>
+                                <button class="btn btn-sm btn-info js-look-detail" type="button">广告详情</button>
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {$pager}
+        </form>
+        <div class="modal fade in" id="checkModal" tabindex="-1" role="dialog" aria-labelledby="checkModalLabel" aria-hidden="false">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="checkModalLabel">广告信息</h4></div>
+                        <div class="modal-body">
+                            <form style="margin-top:5%" class="form-horizontal" role="form" id="checkModalForm">
+                                <div class="form-group">
+                                    <label class=" col-sm-3  control-label">标题</label>
+                                    <div class="col-sm-9">
+                                        <p class="form-control-static" id="checkModalTitle"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class=" col-sm-3  control-label">描述</label>
+                                    <div class="col-sm-9">
+                                        <p class="form-control-static" id="checkModalDesc"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">链接</label>
+                                    <div class="col-sm-9">
+                                        <p class="form-control-static" id="checkModalLink">
+                                            <a></a>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right">行业</label>
+                                    <div class="col-sm-9">
+                                        <p class="form-control-static" id="checkModalIndustry"></p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right">图片</label>
+                                    <div class="col-sm-9">
+                                        <p class="form-control-static" id="checkModalThumb">
+                                            <img style="width: 100%;height: auto;">
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right">资质</label>
+                                    <div class="col-sm-9">
+                                        <p class="form-control-static" id="checkModalQualifications">
+                                            <img style="width: 100%;height: auto;">
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label no-padding-right">联系电话</label>
+                                    <div class="col-sm-9">
+                                        <p class="form-control-static" id="checkModalContact"></p>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                    <button style="display: none" data-op="cancel" type="button" class="btn btn-info">取消审核</button>
+                                    <button data-op="pass" type="button" class="btn btn-success js-pass">通过审核</button>
+                                </div>
+                            </form>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            require(['bootstrap'], function(){
+                //查看详情
+                $('.js-look-detail').click(function(){
+                    var ad = $.parseJSON($(this).parent().attr('data-json'));
+                    $('#checkModal').modal('show');
+                    //设置信息
+                    $('#checkModalTitle').html(ad['title']);
+                    $('#checkModalDesc').html(ad['desc']);
+                    $('#checkModalLink').find('a').attr('href',ad['link']).html(ad['link']);
+                    $('#checkModalIndustry').html(ad['industry']);
+                    $('#checkModalThumb').find('img').attr('src',ad['thumb']);
+                    $('#checkModalQualifications').find('img').attr('src',ad['qualifications']);
+                    $('#checkModalContact').html(ad['contact']);
+
+                    //通过审核
+                    $('.js-pass').click(function(){
+                        var op = $(this).attr('data-op');
+                        $.post(
+                                window.location.href,
+                                {id:ad['order_id'],op:op},
+                                function(ret){
+                                    util.message(ret.message,ret.redirect,ret .type);
+                                },'json'
+                        );
+                    });
+                });
+            });
+        </script>
+    </div>
+    {elseif $do == 'renew'}
+    <div class="page-content">
+        <div class="panel panel-info">
+            <div class="panel-heading">筛选</div>
+            <div class="panel-body">
+                <form method="get" action="./index.php" class="form-horizontal" role="form">
+                    <input type="hidden" name="c" value="account" />
+                    <input type="hidden" name="a" value="ad" />
+                    <input type="hidden" name="do" value="renew" />
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                        <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                            <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入关键词，广告标题" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">地区</label>
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            {php echo tpl_form_field_district('area', array('province' => $province, 'city' => $city, 'district' => $district));}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                            <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                            <input type="hidden" name="token" value="{$_W['token']}"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <form method="post" class="form-horizontal" id="display_form">
+            <input type="hidden" name="ac" value="delete" />
+            <div class="panel panel-default ">
+                <div class="table-responsive panel-body">
+                    <table class="table table-hover">
+                        <thead class="navbar-inner">
+                        <tr>
+                            <th>标题</th>
+                            <th>套餐</th>
+                            <th>地区</th>
+                            <th>行业</th>
+                            <th>初级审核</th>
+                            <th>高级审核</th>
+                            <th>支付状态</th>
+                            <th>支付方式</th>
+                            <th>价格</th>
+                            <th>货价</th>
+                            <th>添加时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $li}
+                        <tr>
+                            <td>{$li['title']}</td>
+                            <td><span class="label label-success">{$li['package_name']}</span></td>
+                            <td>{$li['province']}{$li['city']}{$li['district']}</td>
+                            <td><span class="label label-primary">{$li['industry']}</span></td>
+                            <td>
+                                {if $li['is_check1'] == 1}
+                                <span class="label label-success">已审核</span>
+                                {else}
+                                <span class="label label-default">未审核</span>
+                                {/if}
+                            </td>
+                            <td>
+                                {if $li['is_check2'] == 1}
+                                <span class="label label-success">已审核</span>
+                                {else}
+                                <span class="label label-default">未审核</span>
+                                {/if}
+                            </td>
+                            <td>
+                                {if $li['pay_status'] == 1}
+                                <span class="label label-success">已支付</span>
+                                {else}
+                                <span class="label label-default">未支付</span>
+                                {/if}
+                            </td>
+                            <td>{$li['pay_method']}</td>
+                            <td>￥{$li['price']}</td>
+                            <td>
+                                {if empty(floor($li['pay_goods_price']))}
+                                免抵货
+                                {else}
+                                ￥{$li['pay_goods_price']}
+                                {/if}
+                            </td>
+                            <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                            <td data-json='{php echo json_encode($li);}'>
+                                <button class="btn btn-sm btn-info js-look-detail" type="button">广告详情</button>
+                            </td>
+                        </tr>
+                        {/loop}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {$pager}
+        </form>
+        <div class="modal fade in" id="checkModal" tabindex="-1" role="dialog" aria-labelledby="checkModalLabel" aria-hidden="false">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="checkModalLabel">广告信息</h4></div>
+                    <div class="modal-body">
+                        <form style="margin-top:5%" class="form-horizontal" role="form" id="checkModalForm">
+                            <div class="form-group">
+                                <label class=" col-sm-3  control-label">标题</label>
+                                <div class="col-sm-9">
+                                    <p class="form-control-static" id="checkModalTitle"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class=" col-sm-3  control-label">描述</label>
+                                <div class="col-sm-9">
+                                    <p class="form-control-static" id="checkModalDesc"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">链接</label>
+                                <div class="col-sm-9">
+                                    <p class="form-control-static" id="checkModalLink">
+                                        <a></a>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">行业</label>
+                                <div class="col-sm-9">
+                                    <p class="form-control-static" id="checkModalIndustry"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">图片</label>
+                                <div class="col-sm-9">
+                                    <p class="form-control-static" id="checkModalThumb">
+                                        <img style="width: 100%;height: auto;">
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">资质</label>
+                                <div class="col-sm-9">
+                                    <p class="form-control-static" id="checkModalQualifications">
+                                        <img style="width: 100%;height: auto;">
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label no-padding-right">联系电话</label>
+                                <div class="col-sm-9">
+                                    <p class="form-control-static" id="checkModalContact"></p>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                <button type="button" class="btn btn-success js-pass">通过审核</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            require(['bootstrap'], function(){
+                //查看详情
+                $('.js-look-detail').click(function(){
+                    var ad = $.parseJSON($(this).parent().attr('data-json'));
+                    $('#checkModal').modal('show');
+                    //设置信息
+                    $('#checkModalTitle').html(ad['title']);
+                    $('#checkModalDesc').html(ad['desc']);
+                    $('#checkModalLink').find('a').attr('href',ad['link']).html(ad['link']);
+                    $('#checkModalIndustry').html(ad['industry']);
+                    $('#checkModalThumb').find('img').attr('src',ad['thumb']);
+                    $('#checkModalQualifications').find('img').attr('src',ad['qualifications']);
+                    $('#checkModalContact').html(ad['contact']);
+
+                    //通过审核
+                    $('.js-pass').click(function(){
+                        $.post(
+                                window.location.href,
+                                {id:ad['order_id']},
+                                function(ret){
+                                    util.message(ret.message,ret.redirect,ret .type);
+                                },'json'
+                        );
+                    });
+                });
+            });
+        </script>
+    </div>
+    {/if}
+</div>
+{template 'common/footer'}

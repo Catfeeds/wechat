@@ -1,0 +1,67 @@
+<div class="panel panel-info">
+    <div class="panel-heading">筛选
+        <span style="float: right">新系统发放{$total_send_num}个，老系统发放：{$total_old_send_num}个</span></div>
+    <div class="panel-body">
+        <form method="get" action="./index.php" class="form-horizontal" role="form">
+            <input type="hidden" name="c" value="site" />
+            <input type="hidden" name="a" value="entry" />
+            <input type="hidden" name="op" value="op_fangyuanbao_log" />
+            <input type="hidden" name="do" value="commission" />
+            <input type="hidden" name="m" value="oto" />
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">发放时间</label>
+                <div class="col-sm-8 col-xs-12">
+                    {php echo tpl_form_field_daterange('createtime', array('starttime' => date('Y-m-d', $starttime), 'endtime' => date('Y-m-d', $endtime),));}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">地区</label>
+                <div class="col-sm-8 col-xs-12">
+                    {php echo tpl_form_field_district('area',array('province' => $province, 'city' => $city,'district' => $district));}
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                    <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                    <input class="btn btn-primary" type="submit" name="export_submit" id="export_submit" value="导出">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<form method="get" class="form-horizontal" id="update_no_form">
+    <input type="hidden" name="do" value="post" />
+    <input type="hidden" name="ac" value="delete" />
+    <div class="panel panel-default ">
+        <div class="table-responsive panel-body">
+            <table class="table table-hover">
+                <thead class="navbar-inner">
+                <tr>
+                    <th>序号</th>
+                    <th>省份</th>
+                    <th>城市</th>
+                    <th>区县</th>
+                    <th>老系统个数</th>
+                    <th>新系统个数</th>
+                    <th>时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $li}
+                <tr>
+                    <td>{$li['id']}</td>
+                    <td>{$li['province']}</td>
+                    <td>{$li['city']}</td>
+                    <td>{$li['district']}</td>
+                    <td>{$li['old_num']}</td>
+                    <td>{$li['num']}</td>
+                    <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {$pager}
+</form>

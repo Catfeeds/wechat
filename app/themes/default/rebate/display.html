@@ -1,0 +1,294 @@
+{template 'common/header-oto'}
+<link rel="stylesheet" href="{$_W['siteroot']}app/resource/css/rebate_display.css?v={STYLE_VERSION}">
+<div class="page-rebate">
+    <div class="header">
+        <i class="icon iconfont icon-fanhui back" onclick="history.go('-1')"></i>
+        {if $do =='display'}
+        方圆宝
+        {elseif $do == 'give'}
+        转让方圆宝
+        <i class="icon iconfont icon-androidmorevertical icon-menu"></i>
+        <div class="menu">
+            <span class="up"></span>
+            <ul>
+                <li><a style="color: #ffffff" href="{php echo url('rebate/display/give_log');}">转让记录</a></li>
+            </ul>
+        </div>
+        {elseif $do == 'give_log'}
+        转让记录
+        {elseif $do == 'withdraw'}
+        兑换申请
+        <i class="icon iconfont icon-androidmorevertical icon-menu"></i>
+        <div class="menu">
+            <span class="up"></span>
+            <ul>
+                <li><a style="color: #ffffff" href="{php echo url('rebate/display/withdraw_log');}">兑换记录</a></li>
+            </ul>
+        </div>
+        {elseif $do == 'withdraw_log'}
+        兑换记录
+        {/if}
+    </div>
+    {if $do =='display'}
+    <div class="header-box">
+        <a href="{php echo url('rebate/display/display');}">
+            <span>{$total_fangyuanbao}</span>
+            <span>方圆宝</span>
+        </a>
+        <a href="{php echo url('rebate/display/give');}">
+            <span style="height: 14px;display: block"></span>
+            <span>可转让</span>
+        </a>
+        <a>
+            <span>{$user['credit1']}</span>
+            <span>积分</span>
+        </a>
+        <a href="{php echo url('rebate/display/withdraw');}">
+            <span style="height: 14px;display: block"></span>
+            <span>可兑换</span>
+        </a>
+    </div>
+    <div class="queue-list">
+        {loop $list $li}
+        <div class="item">
+            <ul>
+                <li>形成时间：{$li['createtime']}</li>
+                <li>新增数量：<span style="color: red;padding: 0 5px">{$li['count']}</span>个</li>
+                {if $li['status'] == 1}
+                <li>状态：<span  style="color: red">已兑换</span></li>
+                {else}
+                <li>状态：<span {if in_array($li['status_tip'],array('排队中','已激活'))}style="color: red"{/if}>{$li['status_tip']}</span></li>
+                {/if}
+            </ul>
+        </div>
+        {/loop}
+    </div>
+    <div class="ajax-more">加载更多&gt;&gt;</div>
+    <script type="text/javascript">
+        require([],function(){
+            var page = 2;
+            $('.ajax-more').bind('click',function(){
+                $('.js-toast-loading').show();
+                util.loading();
+                $.post(
+                    window.location.href,
+                    {page:page},
+                    function(ret){
+                        $('.js-toast-loading').hide();
+                        if(ret.type == 'success'){
+                            var html = '';
+                            $.each(ret.message,function(index,item){
+                                var tip = '';
+                                if(item['status'] == 1){
+                                    tip = "style='color:red'";
+                                    item['status_tip'] = '已兑换';
+                                }else if(item['status_tip'] == '排队中' || item['status_tip'] == '已激活'){
+                                    tip = "style='color:red'";
+                                }
+
+                                html +=
+                                    '<div class="item">' +
+                                        '<ul>' +
+                                            '<li>形成时间：'+item['createtime']+'</li>' +
+                                            '<li>新增数量：<span style="color: red;padding: 0 5px;">'+item['count']+'</span>个（60积分）</li>' +
+                                            '<li>状态：<span '+tip+'>'+item['status_tip']+'</span></li>'+
+                                    '</ul>' +
+                                    '</div>';
+                            });
+                            page++;
+                            $('.queue-list').append(html);
+                        }else{
+                            util.toast(ret.message,ret.redirect,ret.type);
+                        }
+                    },'json'
+                );
+            });
+        });
+    </script>
+    {elseif $do == 'give'}
+    <div class="give-box">
+        <div class="give-confirm">
+            <form id="give_form">
+                <div class="username">
+                    <span>会员ID：</span>
+                    <input name="uid" type="text" placeholder="请输入对方会员ID">
+                </div>
+                <div class="tel">
+                    <span>转让数量：</span>
+                    <input name="count" type="text" placeholder="请输入转让个数">
+                </div>
+                <div class="desc">
+                    您当前拥有<span style="color: red">&nbsp;{$can_give_fangyuanbao}&nbsp;</span>个方圆宝
+                </div>
+                <div class="withdraw-btn">
+                    <button type="button" class="js-give-btn">确认转让</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript">
+        require([],function(){
+            $('.js-give-btn').bind('click',function(){
+                $.post(
+                    window.location.href,
+                    $('#give_form').serialize(),
+                    function(ret){
+                        util.toast(ret.message,ret.redirect,ret.type);
+                    },'json'
+                );
+            });
+        });
+    </script>
+    {elseif $do == 'give_log'}
+    <div class="give-log">
+        <div class="log-list">
+            {loop $list $li}
+            <div class="item">
+                <ul>
+                    <li>时间：{$li['createtime']}</li>
+                    <li>{if $li['uid'] == $_W['member']['uid']}转让{else}获得{/if}<span style="color: red;padding: 0 5px">{$li['count']}</span>个方圆宝</li>
+                </ul>
+            </div>
+            {/loop}
+        </div>
+    </div>
+    <div class="ajax-more">加载更多&gt;&gt;</div>
+    <script type="text/javascript">
+        require([],function(){
+            var page = 2;
+            $('.ajax-more').bind('click',function(){
+                $('.js-toast-loading').show();
+                util.loading();
+                $.post(
+                        window.location.href,
+                        {page:page},
+                        function(ret){
+                            $('.js-toast-loading').hide();
+                            if(ret.type == 'success'){
+                                var html = '';
+                                $.each(ret.message,function(index,item){
+                                    var str= "获得<span style='color: red;padding: 0 5px;'>";
+                                    if(item['uid'] == "{$_W['member']['uid']}"){
+                                        str = "转出<span style='color: red;padding: 0 5px;'>";
+                                    }
+                                    html +='<div class="item">' +
+                                            '<ul>' +
+                                            '<li>时间：'+item['createtime']+'</li>' +
+                                    '<li>'+str+item['count']+'</span>个方圆宝</li>'+
+                                            '</ul>'+
+                                    '</div>';
+                                });
+                                page++;
+                                $('.log-list').append(html);
+                            }else{
+                                util.toast(ret.message,ret.redirect,ret.type);
+                            }
+                        },'json'
+                );
+            });
+        });
+    </script>
+    {elseif $do == 'withdraw'}
+    <div class="withdraw-apply">
+        <form id="withdraw_apply_form">
+            <div class="username">
+                <span>姓名：</span>
+                <input name="username" type="text" placeholder="请输入真实姓名">
+            </div>
+            <div class="tel">
+                <span>电话：</span>
+                <input name="tel" type="text" placeholder="请输入电话">
+            </div>
+            <div class="money">
+                <span style="width: 80px;">数量：</span>
+                <input name="money" type="text" placeholder="请输入提兑换数量">
+            </div>
+            <div class="desc">
+                您当前可兑换<span style="color: red;padding:0 5px;">{$user['credit3']}</span>积分
+            </div>
+            <div class="withdraw-btn">
+                <button type="button" class="js-withdraw-btn">申请兑换</button>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        require([],function(){
+            $('.js-withdraw-btn').bind('click',function(){
+                var obj = $(this);
+                $('.js-toast-loading').show();
+                util.loading();
+                obj.attr('disabled','disabled');
+                $.post(
+                        window.location.href,
+                        $('#withdraw_apply_form').serialize(),
+                        function(ret){
+                            obj.removeAttr('disabled');
+                            $('.js-toast-loading').hide();
+                            util.toast(ret.message,ret.redirect,ret.type);
+                        },'json'
+                );
+            });
+        });
+    </script>
+    {elseif $do == 'withdraw_log'}
+    <div class="withdraw-log">
+        <div class="log-list">
+            {loop $list $li}
+            <div class="item">
+                <ul>
+                    <li>申请时间：{$li['createtime']}</li>
+                    <li>兑换数量：{$li['money']}</li>
+                    <li>状态：{if $li['status'] == IS_STATUS}已提现{elseif $li['status'] == 2}提现失败{else}审核中{/if}</li>
+                </ul>
+            </div>
+            {/loop}
+        </div>
+        <div class="ajax-more">加载更多>></div>
+    </div>
+    <script type="text/javascript">
+        require([],function(){
+            var page = 2;
+            $('.ajax-more').bind('click',function(){
+                $('.js-toast-loading').show();
+                util.loading();
+                $.post(
+                        window.location.href,
+                        {
+                            page:page
+                        },
+                        function(ret){
+                            $('.js-toast-loading').hide();
+                            if(ret.type == 'success'){
+                                var html = '';
+                                $.each(ret.message,function(index,item){
+                                    var span = "审核中";
+                                    if(item['status'] == '{IS_STATUS}'){
+                                        span = "已提现";
+                                    }
+                                    html += '<div class="item">' +
+                                    '<ul>' +
+                                    '<li>申请时间：'+item['createtime']+'</li>' +
+                                     '<li>提现金额：'+item['money']+'</li>' +
+                                    '<li>状态：'+span+'</li>' +
+                                    '</ul>' +
+                                    '</div>';
+                                    $('.log-list').append(html);
+                                });
+                            }else{
+                                util.toast(ret.message,ret.redirect,ret.type);
+                            }
+                        },'json'
+                );
+            });
+        });
+    </script>
+    {/if}
+</div>
+<script type="text/javascript">
+    require([],function(){
+        $('.icon-menu').bind('click',function(){
+            $('.menu').toggle();
+        });
+    });
+</script>
+{template 'common/footer-oto'}

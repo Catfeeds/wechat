@@ -1,0 +1,58 @@
+{template 'common/header-sj-news'}
+<link rel="stylesheet" href="{ASSETS_URL}/sj_news/css/m-text.css?v={STYLE_VERSION}">
+<div class="page-m-text">
+    <div class="m-text-header">
+        <span style="cursor: pointer;" onclick="history.back()">&lt;返回</span>
+        <span>我的文章</span>
+        <span style="cursor: pointer;right: 5px;" class="js-m-text" onclick="location.href='{php echo $this->createMobileUrl('index');}'">首页</span>
+    </div>
+    <div style="height: 45px"></div>
+    <div class="text-list">
+        {loop $list $li}
+        <div class="item">
+            <div class="top">
+                <ul>
+                    <li class="title">{$li['title']}</li>
+                    <li class="date">{php echo date('Y-m-d H:i',$li['createtime']);}</li>
+                </ul>
+                {if $li['is_display'] == 2}
+                <span class="status label label-success">已发布</span>
+                {else}
+                <span class="status label label-default">审核中</span>
+                {/if}
+            </div>
+            <div class="center">{$li['desc']}</div>
+            <div class="bottom">
+                <a style="margin-right: 10px" href="{php echo $this->createMobileUrl('detail',array('id'=>$li['id']));}" type="button" class="btn btn-sm btn-primary">预览</a>
+                {if $li['is_display'] == 0}
+                <button data-id="{$li['id']}" type="button" class="btn btn-sm btn-danger js-delete">删除</button>
+                {/if}
+            </div>
+        </div>
+        {/loop}
+    </div>
+    {template 'common/nav-sj'}
+</div>
+<script type="text/javascript">
+    require(['util'],function(ret){
+        $('.js-delete').click(function(){
+            var obj = $(this);
+            var id = obj.attr('data-id');
+            $('.js-toast-loading').show();
+            util.loading();
+            obj.html('删除中').attr('disabled','disabled');
+            $.post(
+                    window.location.href,
+                    {id:id},
+                    function(ret){
+                        if(ret.type == 'error'){
+                            obj.html('删除').removeAttr('disabled');
+                        }
+                        $('.js-toast-loading').hide();
+                        util.toast(ret.message,ret.redirect,ret.type);
+                    },'json'
+            );
+        });
+    });
+</script>
+{template 'common/footer-sj-news'}

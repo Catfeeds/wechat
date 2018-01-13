@@ -1,0 +1,351 @@
+{template 'common/header'}
+<div class="platform-tab">
+    <ul>
+        <li {if $op == 'display'}class="active"{/if}>
+            <a href="{php echo $this->createWebUrl('ad',array('op'=>'display'));}">广告列表</a>
+        </li>
+        <li {if $op == 'order'}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('ad',array('op'=>'order'));}">广告订单</a>
+        </li>
+        <li {if $op == 'config'}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('ad',array('op'=>'config'));}">广告设置</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    {if $op == 'display'}
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选</div>
+        <div class="panel-body">
+            <form  method="get" action="./index.php" class="form-horizontal" role="form">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="op" value="display" />
+                <input type="hidden" name="do" value="category" />
+                <input type="hidden" name="m" value="sj_news" />
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">分类名称</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入关键词,分类名称"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">显示状态</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox"  name="is_display[]" value="{DISPLAY_YES}" {if in_array(DISPLAY_YES,$is_display)}checked{/if}>
+                            显示
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox"  name="is_display[]" value="{DISPLAY_NO}" {if in_array(DISPLAY_NO,$is_display)}checked{/if}>
+                            隐藏
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-md-offset-2 col-lg-offset-2 col-sm-offset-4">
+                        <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                        <input class="btn btn-primary" type="submit" name="export_submit" value="导出">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form method="post" class="form-horizontal">
+        <input type="hidden" name="op" value="post_category" />
+        <input type="hidden" name="ac" value="delete" />
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th style="width: 45px">删?</th>
+                        <th>分类名称</th>
+                        <th>显示状态</th>
+                        <th>排序</th>
+                        <th>添加时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $item}
+                    <tr>
+                        <td><input type="checkbox" name="ids[]" value="{$item['id']}"></td>
+                        <td>{$item['title']}</td>
+                        <td>
+                            {if $item['is_display'] == 1}
+                            <span class="label label-success">显示</span>
+                            {else}
+                            <span class="label label-default">隐藏</span>
+                            {/if}
+                        </td>
+                        <td>{$item['order_by']}</td>
+                        <td>{php echo date('Y-m-d H:i:s',$item['createtime']);}</td>
+                        <td>
+                            <a href="{php echo $this->createWebUrl('category',array('op'=>'post','id'=>$item['id']));}"><i class="fa fa-edit"></i>&nbsp;编辑</a>
+                        </td>
+                    </tr>
+                    {/loop}
+                    {if !empty($list) && is_array($list)}
+                    <tr>
+                        <td><input type="checkbox" name="" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});"></td>
+                        <input name="token" type="hidden" value="{$_W['token']}" />
+                        <td colspan="5"><input type="submit" name="submit" class="btn btn-primary" value="删除"></td>
+                    </tr>
+                    {/if}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+    <script>
+        require(['bootstrap'], function(){
+            $('#store_category_form').submit(function(){
+                if($(":checkbox[name='ids[]']:checked").size() > 0){
+                    return confirm('删除后不可恢复，您确定删除吗？');
+                }
+                util.message('没有选择类别！', '', 'error');
+                return false;
+            });
+        });
+    </script>
+    {elseif $op == 'order'}
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选</div>
+        <div class="panel-body">
+            <form  method="get" action="./index.php" class="form-horizontal" role="form">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="op" value="display" />
+                <input type="hidden" name="do" value="category" />
+                <input type="hidden" name="m" value="sj_news" />
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">分类名称</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入关键词,分类名称"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">显示状态</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox"  name="is_display[]" value="{DISPLAY_YES}" {if in_array(DISPLAY_YES,$is_display)}checked{/if}>
+                            显示
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox"  name="is_display[]" value="{DISPLAY_NO}" {if in_array(DISPLAY_NO,$is_display)}checked{/if}>
+                            隐藏
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-md-offset-2 col-lg-offset-2 col-sm-offset-4">
+                        <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                        <input class="btn btn-primary" type="submit" name="export_submit" value="导出">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form method="post" class="form-horizontal">
+        <input type="hidden" name="op" value="post_category" />
+        <input type="hidden" name="ac" value="delete" />
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th style="width: 45px">删?</th>
+                        <th>分类名称</th>
+                        <th>显示状态</th>
+                        <th>排序</th>
+                        <th>添加时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $item}
+                    <tr>
+                        <td><input type="checkbox" name="ids[]" value="{$item['id']}"></td>
+                        <td>{$item['title']}</td>
+                        <td>
+                            {if $item['is_display'] == 1}
+                            <span class="label label-success">显示</span>
+                            {else}
+                            <span class="label label-default">隐藏</span>
+                            {/if}
+                        </td>
+                        <td>{$item['order_by']}</td>
+                        <td>{php echo date('Y-m-d H:i:s',$item['createtime']);}</td>
+                        <td>
+                            <a href="{php echo $this->createWebUrl('category',array('op'=>'post','id'=>$item['id']));}"><i class="fa fa-edit"></i>&nbsp;编辑</a>
+                        </td>
+                    </tr>
+                    {/loop}
+                    {if !empty($list) && is_array($list)}
+                    <tr>
+                        <td><input type="checkbox" name="" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});"></td>
+                        <input name="token" type="hidden" value="{$_W['token']}" />
+                        <td colspan="5"><input type="submit" name="submit" class="btn btn-primary" value="删除"></td>
+                    </tr>
+                    {/if}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+    <script>
+        require(['bootstrap'], function(){
+            $('#store_category_form').submit(function(){
+                if($(":checkbox[name='ids[]']:checked").size() > 0){
+                    return confirm('删除后不可恢复，您确定删除吗？');
+                }
+                util.message('没有选择类别！', '', 'error');
+                return false;
+            });
+        });
+    </script>
+    {elseif $op == 'config'}
+    <form class="form-horizontal form" method="post" id="ad_form">
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">套餐A-1</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                <div class="input-group">
+                    <span class="input-group-addon">套餐名</span>
+                    <input type="text" name="setting[1][name]" value="{$item['setting'][1]['name']}" class="form-control">
+                    <span class="input-group-addon">单价</span>
+                    <input type="text" name="setting[1][price]" value="{$item['setting'][1]['price']}" class="form-control">
+                    <span class="input-group-addon">天数</span>
+                    <input type="text" name="setting[1][day]" value="{$item['setting'][1]['day']}" class="form-control">
+                </div>
+                <textarea class="form-control" style="margin-top: 10px;"  placeholder="套餐说明" name="setting[1][introduce]">{$item['setting'][1]['introduce']}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">套餐A-2</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                <div class="input-group">
+                    <span class="input-group-addon">套餐名</span>
+                    <input type="text" name="setting[2][name]" value="{$item['setting'][2]['name']}" class="form-control">
+                    <span class="input-group-addon">单价</span>
+                    <input type="text" name="setting[2][price]" value="{$item['setting'][2]['price']}" class="form-control">
+                    <span class="input-group-addon">天数</span>
+                    <input type="text" name="setting[2][day]" value="{$item['setting'][2]['day']}" class="form-control">
+                </div>
+                <textarea class="form-control"  style="margin-top: 10px;" placeholder="套餐说明" name="setting[2][introduce]">{$item['setting'][2]['introduce']}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">套餐B-1</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                <div class="input-group">
+                    <span class="input-group-addon">套餐名</span>
+                    <input type="text" name="setting[3][name]" value="{$item['setting'][3]['name']}" class="form-control">
+                    <span class="input-group-addon">单价</span>
+                    <input type="text" name="setting[3][price]" value="{$item['setting'][3]['price']}" class="form-control">
+                    <span class="input-group-addon">天数</span>
+                    <input type="text" name="setting[3][day]" value="{$item['setting'][3]['day']}" class="form-control">
+                </div>
+                <textarea style="margin-top: 10px;" class="form-control" placeholder="套餐说明" name="setting[3][introduce]">{$item['setting'][3]['introduce']}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">套餐B-2</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                <div class="input-group">
+                    <span class="input-group-addon">套餐名</span>
+                    <input type="text" name="setting[4][name]" value="{$item['setting'][4]['name']}" class="form-control">
+                    <span class="input-group-addon">单价</span>
+                    <input type="text" name="setting[4][price]" value="{$item['setting'][4]['price']}" class="form-control">
+                    <span class="input-group-addon">天数</span>
+                    <input type="text" name="setting[4][day]" value="{$item['setting'][4]['day']}" class="form-control">
+                </div>
+                <textarea style="margin-top: 10px;" class="form-control" placeholder="套餐说明" name="setting[4][introduce]">{$item['setting'][4]['introduce']}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">套餐C-1</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                <div class="input-group">
+                    <span class="input-group-addon">套餐名</span>
+                    <input type="text" name="setting[5][name]" value="{$item['setting'][5]['name']}" class="form-control">
+                    <span class="input-group-addon">单价</span>
+                    <input type="text" name="setting[5][price]" value="{$item['setting'][5]['price']}" class="form-control">
+                    <span class="input-group-addon">天数</span>
+                    <input type="text" name="setting[5][day]" value="{$item['setting'][5]['day']}" class="form-control">
+                </div>
+                <textarea style="margin-top: 10px;" class="form-control" placeholder="套餐说明" name="setting[5][introduce]">{$item['setting'][5]['introduce']}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">套餐C-2</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                <div class="input-group">
+                    <span class="input-group-addon">套餐名</span>
+                    <input type="text" name="setting[6][name]" value="{$item['setting'][6]['name']}" class="form-control">
+                    <span class="input-group-addon">单价</span>
+                    <input type="text" name="setting[6][price]" value="{$item['setting'][6]['price']}" class="form-control">
+                    <span class="input-group-addon">天数</span>
+                    <input type="text" name="setting[6][day]" value="{$item['setting'][6]['day']}" class="form-control">
+                </div>
+                <textarea style="margin-top: 10px;" class="form-control" placeholder="套餐说明" name="setting[6][introduce]">{$item['setting'][6]['introduce']}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">套餐D-1</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                <div class="input-group">
+                    <span class="input-group-addon">套餐名</span>
+                    <input type="text" name="setting[7][name]" value="{$item['setting'][7]['name']}" class="form-control">
+                    <span class="input-group-addon">单价</span>
+                    <input type="text" name="setting[7][price]" value="{$item['setting'][7]['price']}" class="form-control">
+                    <span class="input-group-addon">天数</span>
+                    <input type="text" name="setting[7][day]" value="{$item['setting'][7]['day']}" class="form-control">
+                </div>
+                <textarea style="margin-top: 10px;" class="form-control" placeholder="套餐说明" name="setting[7][introduce]">{$item['setting'][7]['introduce']}</textarea>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">套餐D-2</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                <div class="input-group">
+                    <span class="input-group-addon">套餐名</span>
+                    <input type="text" name="setting[8][name]" value="{$item['setting'][8]['name']}" class="form-control">
+                    <span class="input-group-addon">单价</span>
+                    <input type="text" name="setting[8][price]" value="{$item['setting'][8]['price']}" class="form-control">
+                    <span class="input-group-addon">天数</span>
+                    <input type="text" name="setting[8][day]" value="{$item['setting'][8]['day']}" class="form-control">
+                </div>
+                <textarea style="margin-top: 10px;" class="form-control" placeholder="套餐说明" name="setting[8][introduce]">{$item['setting'][8]['introduce']}</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label"></label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="hidden" name="token" value="{$_W['token']}">
+                <input name="submit" type="button" value="提交" class="btn btn-primary js-push">
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+        require([],function(){
+            //提交设置
+            $('.js-push').click(function(){
+                $.post(
+                        window.location.href,
+                        $('#ad_form').serialize(),
+                        function(ret){
+                            util.message(ret.message,ret.redirect,ret.type);
+                        },'json'
+                );
+            });
+        });
+    </script>
+    {/if}
+</div>
+{template 'common/footer'}

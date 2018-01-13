@@ -1,0 +1,174 @@
+{template 'common/header'}
+<div class="account-tab">
+    <ul>
+        <li {if $do == 'display'}class="active"{/if}>
+        <a href="{php echo url('fyb/display/display');}">发放方圆宝</a>
+        </li>
+        <li {if $do == 'log'}class="active"{/if}>
+        <a href="{php echo url('fyb/display/log');}">操作记录</a>
+        </li>
+    </ul>
+</div>
+{if $do == 'display'}
+<div class="page-content">
+    <form class="form-horizontal form" method="post" id="send_form">
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">昨日总交易额</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                <input id="j_yes" readonly type="text" class="form-control" value="￥{$yesterday_total_pay_price}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">地区上周交易额</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                <input id="j_week" readonly type="text" class="form-control" value="￥{$total_pay_price}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">建议发放个数</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                <input id="j_num" readonly type="text" class="form-control" value="{$send_num}">
+            </div>
+        </div>
+        <div class="form-group js-money">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">本次发放地区</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                {php echo tpl_form_field_district('area', array('province' => $province, 'city' => $city ,'district' => $district ));}
+                <span class="help-block">大城市，请选择区县；小城市，选择区县无效</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">发放新系统方圆宝个数</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                <div class="input-group" data-item="1">
+                    <input type="text" name="num" class="form-control" placeholder="请输入发放个数">
+                    <span class="input-group-addon">个</span>
+                </div>
+                <span class="help-block">时间从6月24日开始</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">发放老系统方圆宝个数</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                <div class="input-group" data-item="1">
+                    <input type="text" name="old_num" class="form-control" placeholder="请输入发放个数">
+                    <span class="input-group-addon">个</span>
+                </div>
+                <span class="help-block">时间从6月5日 - 6月23日</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label"></label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="hidden" name="token" value="{$_W['token']}">
+                <input name="submit" type="button" value="提交" class="btn btn-primary js-send">
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    require(['util'],function(){
+        $('.js-send').click(function(){
+            var obj = $(this);
+            obj.val('发放中').attr('disabled','disabled');
+            $.post(
+                    window.location.href,
+                    $('#send_form').serialize(),
+                    function(ret){
+                        obj.val('提交').removeAttr('disabled');
+                        util.message(ret.message,ret.redirect,ret.type);
+                    },'json'
+            );
+        });
+
+        $('.js-money').find('select').change(function(){
+            var province = $('select[name="area[province]"]').val();
+            var city = $('select[name="area[city]"]').val();
+            var district = $('select[name="area[district]"]').val();
+            $.post(
+                    window.location.href,
+                    {
+                        'ac':'money',
+                        'province':province,
+                        'city':city,
+                        'district':district
+                    },
+                    function(ret){
+                        if(ret.type == 'success'){
+                            $('#j_week').val('￥'+ret.message['total']);
+                            $('#j_yes').val('￥'+ret.message['yesterday_total']);
+                            $('#j_num').val(ret.message['num']);
+                        }
+                    },'json'
+            );
+        });
+    });
+</script>
+{elseif $do == 'log' }
+<div class="panel panel-info">
+    <div class="panel-heading">筛选
+        <span style="float: right">新系统发放{$total_send_num}个，老系统发放：{$total_old_send_num}个</span></div>
+    <div class="panel-body">
+        <form method="get" action="./index.php" class="form-horizontal" role="form">
+            <input type="hidden" name="c" value="fyb" />
+            <input type="hidden" name="a" value="display" />
+            <input type="hidden" name="do" value="log" />
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">发放时间</label>
+                <div class="col-sm-8 col-xs-12">
+                    {php echo tpl_form_field_daterange('createtime', array('starttime' => date('Y-m-d', $starttime), 'endtime' => date('Y-m-d', $endtime),));}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">地区</label>
+                <div class="col-sm-8 col-xs-12">
+                    {php echo tpl_form_field_district('area',array('province' => $province, 'city' => $city,'district' => $district));}
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                    <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                    <input class="btn btn-primary" type="submit" name="export_submit" id="export_submit" value="导出">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<form method="get" class="form-horizontal" id="update_no_form">
+    <input type="hidden" name="do" value="post" />
+    <input type="hidden" name="ac" value="delete" />
+    <div class="panel panel-default ">
+        <div class="table-responsive panel-body">
+            <table class="table table-hover">
+                <thead class="navbar-inner">
+                <tr>
+                    <th>序号</th>
+                    <th>省份</th>
+                    <th>城市</th>
+                    <th>区县</th>
+                    <th>老系统个数</th>
+                    <th>新系统个数</th>
+                    <th>时间</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $li}
+                <tr>
+                    <td>{$li['id']}</td>
+                    <td>{$li['province']}</td>
+                    <td>{$li['city']}</td>
+                    <td>{$li['district']}</td>
+                    <td>{$li['old_num']}</td>
+                    <td>{$li['num']}</td>
+                    <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {$pager}
+</form>
+{/if}
+{template 'common/footer'}

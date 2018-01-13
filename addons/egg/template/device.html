@@ -1,0 +1,216 @@
+{template 'common/header'}
+<div class="platform-tab">
+    <ul>
+        <li {if $op == 'display'}class="active"{/if}>
+            <a href="{php echo $this->createWebUrl('device',array('op'=>'display'));}">设备列表</a>
+        </li>
+        <li {if $op == 'post' && empty($item)}class="active"{/if}>
+            <a href="{php echo $this->createWebUrl('device',array('op'=>'post'));}">添加设备</a>
+        </li>
+        {if $op == 'post' && !empty($item)}
+            <li class="active">
+                <a href="{php echo $this->createWebUrl('device',array('op'=>'post','id'=>$item['id']));}">修改设备</a>
+            </li>
+        {/if}
+</ul>
+</div>
+<div class="page-content">
+{if $op == 'display'}
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选</div>
+        <div class="panel-body">
+            <form method="get" action="./index.php" class="form-horizontal" role="form">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="op" value="display" />
+                <input type="hidden" name="do" value="device" />
+                <input type="hidden" name="m" value="egg" />
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">设备号</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="device_no" value="{$_GPC['device_no']}" placeholder="请输入设备号" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">代理微信号</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="agent_wx" value="{$_GPC['agent_wx']}" placeholder="请输入代理微信号" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">代理姓名</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="agent_name" value="{$_GPC['agent_name']}" placeholder="请输入代理姓名" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">添加时间</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        {php echo tpl_form_field_daterange('createtime', array('starttime' => date('Y-m-d', $starttime), 'endtime' => date('Y-m-d', $endtime),));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">激活状态</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="is_active[]" value="1" {if in_array(1,$is_active)}checked{/if}>
+                            已激活
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="is_active[]" value="0" {if in_array(0,$is_active)}checked{/if}>
+                            未激活
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                        <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form method="post" class="form-horizontal" id="post_delete_device">
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>删?</th>
+                        <th>设备号</th>
+                        <th>代理微信号</th>
+                        <th>代理姓名</th>
+                        <th>激活状态</th>
+                        <th>激活价格</th>
+                        <th>添加时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $li}
+                    <tr>
+                        <td><input type="checkbox" name="ids[]" value="{$li['id']}"></td>
+                        <td>{$li['device_no']}</td>
+                        <td>{$li['agent_wx']}</td>
+                        <td>{$li['agent_name']}</td>
+                        <td >
+                            {if $li['is_active']==1}<span class="label label-success">已激活</span>{else}<span class="label label-default">未激活</span>{/if}
+                        </td>
+                        <td style="color: red">￥{$li['price']}</td>
+                        <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                        <td>
+                            <a href="{php echo $this->createWebUrl('device',array('op'=>'post','id'=>$li['id']));}" title="编辑"><i class="fa fa-edit"></i>&nbsp;编辑</a>
+                        </td>
+                    </tr>
+                    {/loop}
+                    {if !empty($list) && is_array($list)}
+                    <tr>
+                        <td><input type="checkbox" onclick="var ck = this.checked;$('#post_delete_device').find('input').each(function(){this.checked = ck});"></td>
+                        <input name="token" type="hidden" value="{$_W['token']}" />
+                        <td colspan="7">
+                            <button type="button" name="submit" class="btn btn-primary">删除</button>
+                        </td>
+                    </tr>
+                    {/if}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+    <script type="text/javascript">
+        require(['bootstrap'], function(){
+            $('button[name="submit"]').bind('click',function() {
+                if (confirm('删除后不可恢复，您确定删除吗？')) {
+                    if ($(":checkbox[name='ids[]']:checked").size() > 0) {
+                        $.post(
+                                window.location.href,
+                                $('#post_delete_device').serialize(),
+                                function (ret) {
+                                    util.message(ret.message, ret.redirect, ret.type);
+                                }, 'json'
+                        );
+                    }
+                    util.message('没有选择要删除的设备信息！', '', 'error');
+                    return false;
+                }
+            });
+        });
+    </script>
+{elseif $op == 'post'}
+    <div class="main">
+        <form method="post" class="form-horizontal form" id="post_device_form">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    添加设备
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>设备号</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" name="device_no" value="{$item['device_no']}" placeholder="请输入设备号"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">代理微信</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" name="agent_wx" value="{$item['agent_wx']}" placeholder="请输代理微信号"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">代理姓名</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" name="agent_name" value="{$item['agent_name']}" placeholder="请输入代理姓名"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">激活价格</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <div class="input-group" >
+                                <input type="text" name="price" class="form-control" value="{$item['price']}" placeholder="请输入激活价格">
+                                <span class="input-group-addon">元</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 激活状态</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <label class="radio-inline">
+                                <input type="radio" name="is_active" value="1" {if $item['is_active'] == 1}checked{/if}>
+                                激活
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="is_active" value="0" {if $item['is_active'] != 1}checked{/if}>
+                                未激活
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-xs-12 col-sm-offset-2">
+                            <input type="hidden" name="id" value="{$item['id']}">
+                            <button type="button" name="submit" class="btn btn-primary js-push-device">提交</button>
+                            <input type="hidden" name="token" value="$_W['token']">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        require(['util'],function(util){
+            //添加设备
+            $('.js-push-device').click(function(){
+                $.post(
+                        window.location.href,
+                        $('#post_device_form').serialize(),
+                        function(ret){
+                            util.message(ret.message,ret.redirect,ret.type);
+                        },'json'
+                );
+            });
+        });
+    </script>
+{/if}
+</div>
+{template 'common/footer'}

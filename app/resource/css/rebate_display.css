@@ -1,0 +1,359 @@
+.page-rebate .queue-list{
+    background: #ffffff;
+    padding: 0 5px;
+}
+.page-rebate .queue-list .item{
+    padding: 5px;
+    background: #ffffff;
+    border-bottom: 1px solid #eee;
+}
+.page-rebate .queue-list .item:last-child{
+    border: 0;
+}
+.page-rebate .queue-list .item ul{
+    margin: 0;
+    padding: 0;
+}
+.page-rebate .queue-list .item ul li{
+    height: 25px;
+    line-height: 25px;
+}
+
+.page-rebate .rebate-nav{
+    width: 100%;
+    height: 45px;
+    line-height: 45px;
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 14px;
+    background: whitesmoke;
+    padding-bottom: 1px;
+    border-bottom: 1px solid #eee;
+}
+.page-rebate .header{
+    height: 45px;
+    line-height: 45px;
+    border-bottom: 1px solid #B8B8B8;
+    background: #f9f9f9;
+    position: relative;
+    text-align: center;
+}
+.page-rebate .header i.back{
+    color: #000000;
+    font-size: 21px;
+    width: 45px;
+    height: 45px;
+    text-align: center;
+    line-height: 45px;
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.page-rebate .header i.icon-menu{
+    color: #000000;
+    font-size: 21px;
+    width: 45px;
+    height: 45px;
+    text-align: center;
+    line-height: 45px;
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.header-box{
+   display: flex;
+   display: -webkit-flex;
+   justify-content: space-around;
+    align-items: center;
+    background: #ffffff;
+    border-bottom: 1px solid #e7e7e7;
+}
+.header-box a{
+    width: 100%;
+    padding: 10px 0;
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    text-align: center;
+    border-right: 1px solid #e7e7e7;
+    color: #000000;
+}
+.header-box a span:first-child{
+    font-size: 14px;
+    color: red;
+}
+.header-box a:last-child{
+    border: 0;
+}
+.header-box a span:last-child{
+    margin-top: 5px;
+}
+
+/* 展开菜单 */
+.menu{
+    position: absolute;
+    top: 43px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    border-radius: 4px;
+    display: none;
+}
+.menu ul li{
+    padding: 0 10px;
+    line-height: 35px;
+    color: #fff;
+    border-bottom: 1px solid #fff;
+}
+.menu ul li:last-child{
+    border: none;
+}
+.menu ul li i{
+    font-size: 16px;
+    padding-right: 5px;
+    float: left;
+}
+.menu .up {
+    position: absolute;
+    top: -5px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid rgba(0, 0, 0, 0.7);
+}
+
+/* 提现界面 */
+.page-rebate .withdraw-apply{
+    margin-top: 10px;
+    background: #ffffff;
+    border-bottom: 1px solid #eee;
+}
+.page-rebate .username,.page-rebate .tel,.page-rebate .withdraw-apply .money{
+    padding: 5px 5px 5px 70px;
+    position: relative;
+    border-top: 1px solid #eee;
+}
+.page-rebate .withdraw-apply .desc{
+    padding:20px 10px 10px 80px;
+    border-top: 1px solid #eee;
+    line-height: 20px;
+    color: #000000;
+}
+.page-rebate .username span,.page-rebate .tel span,.page-rebate .withdraw-apply .money span{
+    position: absolute;
+    display: block;
+    width: 60px;
+    height: 45px;
+    line-height: 45px;
+    text-align: right;
+    left: 0;
+}
+.page-rebate .username input,.page-rebate .tel input,.page-rebate .withdraw-apply .money input{
+    border: 0;
+    margin: 0;
+}
+.page-rebate  .withdraw-apply .money label{
+    color: red;
+    font-weight: normal;
+    margin-top: 2px;
+    line-height: 20px;
+}
+.page-rebate .withdraw-apply .withdraw-btn{
+    padding: 10px;
+}
+.page-rebate .withdraw-btn button{
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    background: limegreen;
+    color: #ffffff;
+    width: 100%;
+    padding: 10px 0;
+    border: 0;
+}
+
+.page-rebate .give-confirm{
+    margin-top: 10px;
+    background: #ffffff;
+    border-bottom: 1px solid #eee;
+}
+.page-rebate .username,.page-rebate .tel,.page-rebate .give-confirm .money{
+    padding: 5px 5px 5px 80px;
+    position: relative;
+    border-top: 1px solid #eee;
+}
+.page-rebate .give-confirm .desc{
+    padding:20px 10px 10px 80px;
+    border-top: 1px solid #eee;
+    line-height: 20px;
+    color: #000000;
+}
+.page-rebate .username span,.page-rebate .tel span,.page-rebate .give-confirm .money span{
+    position: absolute;
+    display: block;
+    width: 80px;
+    height: 45px;
+    line-height: 45px;
+    text-align: right;
+    left: 0;
+}
+.page-rebate .username input,.page-rebate .tel input,.page-rebate .give-confirm .money input{
+    border: 0;
+    margin: 0;
+}
+.page-rebate  .give-confirm .money label{
+    color: red;
+    font-weight: normal;
+    margin-top: 2px;
+    line-height: 20px;
+}
+.page-rebate .give-confirm .withdraw-btn{
+    padding: 10px;
+}
+.page-rebate .withdraw-btn button{
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    background: limegreen;
+    color: #ffffff;
+    width: 100%;
+    padding: 10px 0;
+    border: 0;
+}
+
+.page-rebate .fangyuanbao-list{}
+.page-rebate .fangyuanbao-list .item{
+    background: #ffffff;
+    margin-top: 10px;
+}
+.page-rebate .fangyuanbao-list .item .date{
+    height: 40px;
+    line-height: 40px;
+    padding-left: 10px;
+    border-bottom: 1px solid #eee;
+}
+.page-rebate .fangyuanbao-list .item .status{
+    height: 40px;
+    line-height: 40px;
+    position: relative;
+}
+.page-rebate .fangyuanbao-list .item .status span{
+    font-size: 16px;
+    color: red;
+    padding-left: 10px;
+}
+.page-rebate .fangyuanbao-list .item .status label{
+    position: absolute;
+    right: 5px;
+    top: 12px;
+}
+
+.page-rebate .give-list{}
+.page-rebate .give-list .item{
+    background: #ffffff;
+    margin-top: 10px;
+}
+.page-rebate .give-list .item .date{
+    height: 40px;
+    line-height: 40px;
+    padding-left: 10px;
+    border-bottom: 1px solid #eee;
+}
+.page-rebate .give-list .item .status{
+    height: 40px;
+    line-height: 40px;
+    position: relative;
+}
+.page-rebate .give-list .item .status span{
+    font-size: 16px;
+    color: red;
+    padding-left: 10px;
+}
+.page-rebate .give-list .item .status label{
+    position: absolute;
+    right: 5px;
+    top: 0;
+    font-weight: normal;
+    padding-left: 30px;
+}
+
+
+.ajax-more {
+    height: 40px;
+    margin-top: 10px;
+    background: #ffffff;
+    line-height: 40px;
+    text-align: center;
+}
+
+.give-box{}
+.give-box .header{
+    position: relative;
+    background: #ffffff;
+}
+.give-box .header input{
+    height: 40px;
+    margin: 0;
+    padding:0 0 0 15px;
+    border: 0;
+}
+.give-box .header button{
+    position: absolute;
+    top: 7px;
+    width: 80px;
+    height: 30px;
+    right: 5px;
+    background: yellowgreen;
+    color: #ffffff;
+}
+.give-box .give-tip{
+    color: red;
+    height: 30px;
+    line-height: 30px;
+    padding-left: 15px;
+}
+
+/* 提现记录 */
+.page-rebate .withdraw-log{}
+.page-rebate .withdraw-log .log-list{}
+.page-rebate .withdraw-log .log-list .item{
+    padding: 5px;
+    background: #ffffff;
+    border-bottom: 1px solid #eee;
+}
+.page-rebate .withdraw-log .log-list .item:last-child{
+    border: 0;
+}
+.page-rebate .withdraw-log .log-list .item ul{
+    margin: 0;
+    padding: 0;
+}
+.page-rebate .withdraw-log .log-list .item ul li{
+    height: 25px;
+    line-height: 25px;
+}
+
+/* 转让记录 */
+.give-log{ }
+.give-log .log-list{
+    background: #ffffff;
+    margin-top: 10px;
+}
+.give-log .log-list .item{
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+}
+.give-log .log-list .item ul{
+    margin: 0;
+    padding: 0;
+}
+.give-log .log-list .item ul li{
+    height: 25px;
+    line-height: 25px;
+}

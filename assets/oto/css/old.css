@@ -1,0 +1,116 @@
+.page-old{position: relative}
+.page-old .back{
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    background: rgba(0,0,0,0.5);
+    padding: 5px;
+    position: fixed;
+    left: 10px;
+    top: 10px;
+    z-index: 3;
+    color: #ffffff;
+    font-size: 21px;
+}
+
+/* swiper */
+.swiper-container {
+    width: 100%;
+    height: 100%;
+}
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
+
+    /* Center slide text vertically */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    height: auto;
+    max-height: 240px;
+}
+.swiper-container .swiper-slide img{
+    width: 100%;
+    height: auto;
+    max-height: 240px;
+}
+/* end swiper*/
+.buy-box,.buy-box:active,.buy-box:visited,.buy-box:hover{
+    height: 50px;
+    background: #dd2727;
+    border-top: 1px solid #eee;
+    position: fixed;
+    bottom: 0;
+    z-index: 999;
+    width: 100%;
+    color: #ffffff;
+    line-height: 50px;
+    text-align: center;
+}
+.goods-detail{
+    padding: 5px;
+    line-height: 25px;
+    font-size: 14px;
+    background: #ffffff;
+    border-top: 1px solid #eee;
+}
+.tel{
+    display: block;
+    position: absolute;
+    right: 5px;
+    top: -100px;
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    border-radius: 50px;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    background: rgba(46,139,87,0.8);
+    color: #ffffff;
+}
+.tel:active,.tel:visited,.tel:hover{
+    color: #ffffff;
+}
+.tel i{
+    font-size: 21px;
+}
+.shop-address-show{
+    padding: 5px;
+    line-height: 25px;
+    margin: 10px 0;
+    background: #ffffff;
+    display: block;
+    font-size: 14px;
+    color: #000000;
+}
+
+.goods-title{
+    background: #ffffff;
+    padding: 5px;
+    line-height: 20px;
+    position: relative;
+    padding-right: 80px;
+    height: 45px;
+    overflow: hidden;
+}
+.goods-title .goods-price{
+    position: absolute;
+    right: 5px;
+    color: red;
+    top: 0;
+    line-height: 50px;
+    font-size: 16px;
+}

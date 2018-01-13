@@ -1,0 +1,19 @@
+{template 'common/header-sj-news'}
+<link rel="stylesheet" href="{ASSETS_URL}/sj_news/css/notice_detail.css?v={STYLE_VERSION}">
+<div class="page-notice">
+    <div class="notice-header">
+        <span style="cursor: pointer;" onclick="history.back()">&lt;返回</span>
+        <span>公告详情</span>
+        <span style="cursor: pointer;right: 5px;" class="js-notice" onclick="location.href='{php echo $this->createMobileUrl('index');}'">首页</span>
+    </div>
+    <div style="height: 45px"></div>
+    <div class="notice-detail">
+        <p class="title">{$item['title']}</p>
+        <p class="date">{php echo date('Y-m-d',$item['createtime']);}</p>
+        <div class="detail">
+            {php echo htmlspecialchars_decode($item['detail']);}
+        </div>
+    </div>
+    {template 'common/nav-sj'}
+</div>
+{template 'common/footer-sj-news'}

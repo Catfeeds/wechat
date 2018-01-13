@@ -1,0 +1,247 @@
+.weui-switch:checked{
+    border-color: #04BE02;
+    background-color: #04BE02;
+}
+.weui-switch{
+    position: relative;
+    width: 52px;
+    height: 32px;
+    border: 1px solid #DFDFDF;
+    outline: 0;
+    border-radius: 16px;
+    box-sizing: border-box;
+    background-color: #DFDFDF;
+    -webkit-transition: background-color 0.1s, border 0.1s;
+    transition: background-color 0.1s, border 0.1s;
+}
+.weui-switch {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.weui-switch:checked:before{
+    -webkit-transform: scale(0);
+    transform: scale(0);
+}
+.weui-switch:before{
+    content: " ";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50px;
+    height: 30px;
+    border-radius: 15px;
+    background-color: #FDFDFD;
+    -webkit-transition: -webkit-transform 0.35s cubic-bezier(0.45, 1, 0.4, 1);
+    transition: -webkit-transform 0.35s cubic-bezier(0.45, 1, 0.4, 1);
+    transition: transform 0.35s cubic-bezier(0.45, 1, 0.4, 1);
+    transition: transform 0.35s cubic-bezier(0.45, 1, 0.4, 1), -webkit-transform 0.35s cubic-bezier(0.45, 1, 0.4, 1);
+}
+
+.weui-switch:checked:after{
+    -webkit-transform: translateX(20px);
+    transform: translateX(20px);
+}
+
+.weui-switch:after{
+    content: " ";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    background-color: #FFFFFF;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+    -webkit-transition: -webkit-transform 0.35s cubic-bezier(0.4, 0.4, 0.25, 1.35);
+    transition: -webkit-transform 0.35s cubic-bezier(0.4, 0.4, 0.25, 1.35);
+    transition: transform 0.35s cubic-bezier(0.4, 0.4, 0.25, 1.35);
+    transition: transform 0.35s cubic-bezier(0.4, 0.4, 0.25, 1.35), -webkit-transform 0.35s cubic-bezier(0.4, 0.4, 0.25, 1.35);
+}
+body{
+    background: url("/assets/oto/images/pay.jpg") 0 0 no-repeat fixed;
+    background-size: cover;
+}
+.page-pay{
+    position: relative;
+    overflow: hidden;
+}
+.page-pay .back{
+    z-index: 3;
+    color: black;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    display: block;
+    width: 30px;
+    height: 30px;
+    background: #ffffff;
+    border-radius: 30px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    text-align: center;
+    line-height: 30px;
+}
+.page-pay .log{
+    position: absolute;
+    right: 5px;
+    height: 30px;
+    line-height: 30px;
+    top: 10px;
+    color: #ffffff;
+}
+.page-pay .logo-box{
+    display: flex;
+    display: -webkit-flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    margin: 80px auto 0 auto;
+}
+.page-pay .logo-box .title{
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.page-pay .logo-box img{
+    width: 80px;
+    height: 80px;
+    border-radius: 80px;
+    -webkit-border-radius: 80px;
+    -moz-border-radius: 80px;
+}
+.page-pay .pay-price{
+    position: relative;
+    margin: 15px;
+    height: 40px;
+}
+.page-pay .pay-credit{
+    position: relative;
+    margin: 15px;
+    height: 40px;
+    line-height: 40px;
+    background: #ffffff;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    outline: 0;
+}
+.page-pay .pay-credit span{
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    text-indent: 10px;
+}
+.page-pay .pay-credit input{
+    position: absolute;
+    right: 5px;
+    top: 0;
+}
+
+.weui-switch:before {
+    background-color: slategrey;
+}
+
+.page-pay .pay-desc{
+    position: relative;
+    margin: 15px;
+    height: 40px;
+}
+.pay-button{
+    margin-top: 20px;
+    padding: 15px;
+}
+.pay-button button{
+    width: 100%;
+    height: 40px;
+    color: #ffffff;
+    text-align: center;
+    line-height: 40px;
+    background:#4cc45e;
+}
+.ajax-more {
+    height: 40px;
+    color: #ffffff;
+    line-height: 40px;
+    text-align: center;
+    background: #4cc45e;
+    margin: 10px 15px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+.pay-list{
+    margin-top: 50px;
+    padding: 15px;
+}
+.page-pay .list{
+    position: absolute;
+    top: 10px;
+    height: 30px;
+    width: 100%;
+    text-align: center;
+    line-height: 30px;
+    color: #ffffff;
+    z-index: 2;
+}
+.page-pay .pay-list .item{
+    background: #ffffff;
+    padding: 10px;
+    position: relative;
+    margin-bottom: 20px;
+}
+.page-pay .pay-list .item .pay-status{
+    position: absolute;
+    top: -10px;
+    right: 5px;
+    padding: 5px 10px;
+}
+.page-pay .pay-list .item .order-no{
+    height: 30px;
+    line-height: 30px;
+    color: #000000;
+    display: block;
+}
+.pay-store{
+    height: 30px;
+    line-height: 30px;
+    color: red;
+    display: block;
+    margin-bottom: 10px;
+}
+.page-pay .pay-list .item .pay-date{
+    font-size: 12px;
+    display: block;
+}
+.page-pay .pay-list .item .pay-note{
+    font-size: 12px;
+    display: block;
+    line-height: 20px;
+    margin-top: 5px;
+}
+.page-pay .pay-list .item .price{
+    color: red;
+    position: absolute;
+    right: 10px;
+    top: 25px;
+    font-size: 18px;
+}
+.page-pay .pay-list .item .btns{
+    display: flex;
+    margin-top: 10px;
+}
+.page-pay .pay-list .item .btns a,.page-pay .pay-list .item .btns button{
+    color: #000000;
+    width: 80px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background-color: #fff;
+    border: 1px solid rgba(0,0,0,.2);
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    margin-right: 10px;
+}

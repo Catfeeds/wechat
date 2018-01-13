@@ -1,0 +1,85 @@
+<!-- begin 左侧菜单 -->
+<div class="store-menu">
+    <div class="store-system">
+        <a href="{php echo url('account/display');}">
+            <img src="./resource/images/gw-store-logo.png">
+        </a>
+    </div>
+    <div class="store-nav-item">
+        <div class="store-nav-title">
+            <span class="icon"><i class="icon iconfont icon-shopfill"></i></span>
+            <span class="desc">店铺设置</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="store-menu-sub" {if $controller == 'shop'} style="display: block"{/if}>
+            <li><a href="{php echo url('shop/display');}" {if $controller == 'shop' && $action == 'display'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-settings"></i></span><span class="desc">基本资料</span></a></li>
+            <li><a href="{php echo url('shop/password');}" {if $controller == 'shop' && $action == 'password'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-lock"></i></span><span class="desc">密码设置</span></a></li>
+            <li><a href="{php echo url('shop/config');}" {if $controller == 'shop' && $action == 'config'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-shop"></i></span><span class="desc">店铺设置</span></a></li>
+        </ul>
+    </div>
+    <div class="store-nav-item">
+        <div class="store-nav-title">
+            <span class="icon"><i class="icon iconfont icon-goodsnewfill"></i></span>
+            <span class="desc">商品管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="store-menu-sub" {if $controller == 'goods'} style="display: block"{/if}>
+            <li><a href="{php echo url('goods/display');}" {if $controller == 'goods' && $action == 'display'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-goodsfavor"></i></span><span class="desc">商品管理</span></a></li>
+            <li><a href="{php echo url('goods/category');}" {if $controller == 'goods' && $action == 'category'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-list"></i></span><span class="desc">商品分类</span></a></li>
+            <li><a href="{php echo url('goods/deliver');}" {if $controller == 'goods' && $action == 'deliver'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-deliver"></i></span><span class="desc">运费设置</span></a></li>
+            <!--<li><a href="{php echo url('goods/return');}" {if $controller == 'goods' && $action == 'return'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-refund"></i></span><span class="desc">退货设置</span></a></li>-->
+        </ul>
+    </div>
+    <div class="store-nav-item">
+        <div class="store-nav-title">
+            <span class="icon"><i class="icon iconfont icon-tagfill"></i></span>
+            <span class="desc">订单管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="store-menu-sub" {if $controller == 'order'} style="display: block"{/if}>
+            <li><a href="{php echo url('order/display/display');}" {if $controller == 'order' && $action == 'display'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-form"></i></span><span class="desc">全部订单</span></a></li>
+            <li><a href="{php echo url('order/stat/display');}" {if $controller == 'order' && $action == 'stat'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-form"></i></span><span class="desc">订单统计</span></a></li>
+        </ul>
+    </div>
+    <div class="store-nav-item">
+        <div class="store-nav-title">
+            <span class="icon"><i class="icon iconfont icon-tagfill"></i></span>
+            <span class="desc">评价管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="store-menu-sub" {if $controller == 'talk'} style="display: block"{/if}>
+        <li><a href="{php echo url('talk/display/display');}" {if $controller == 'talk' && $action == 'display'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-form"></i></span><span class="desc">商品评价</span></a></li>
+        </ul>
+    </div>
+    <div class="store-nav-item">
+        <div class="store-nav-title">
+            <span class="icon"><i class="icon iconfont icon-moneybagfill"></i></span>
+            <span class="desc">商家中心</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="store-menu-sub" {if $controller == 'balance'} style="display: block"{/if}>
+            <li><a href="{php echo url('balance/display/display');}" {if $controller == 'balance' && $action == 'display'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-edit"></i></span><span class="desc">商家结算</span></a></li>
+            <li><a href="{php echo url('balance/account/display');}" {if $controller == 'balance' && $action == 'account'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-text"></i></span><span class="desc">结算账号</span></a></li>
+            <li><a href="{php echo url('balance/code');}" {if $controller == 'balance' && $action == 'code'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-text"></i></span><span class="desc">收款二维码</span></a></li>
+        </ul>
+    </div>
+    <div class="store-nav-item">
+        <div class="store-nav-title">
+            <span class="icon"><i class="icon iconfont icon-repairfill"></i></span>
+            <span class="desc">系统设置</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="store-menu-sub" {if $controller == 'system'} style="display: block"{/if}>
+            <li><a href="{php echo url('system/display');}" {if $controller == 'system' && $action == 'display'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-notification"></i></span><span class="desc">提示设置</span></a></li>
+        </ul>
+    </div>
+</div>
+<script type="text/javascript">
+    require([],function(){
+        $('.store-nav-title').bind('click',function(){
+            $('.store-menu-sub').not($(this).next('.store-menu-sub')).slideUp();
+            $(this).next('.store-menu-sub').slideToggle();
+        });
+    });
+</script>
+<!-- end 左侧菜单 -->

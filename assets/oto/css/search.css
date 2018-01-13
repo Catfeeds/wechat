@@ -1,0 +1,203 @@
+ul{padding: 0;margin: 0}
+.page-search{}
+.page-search .search-header{
+    background: #ffffff;
+    height: 85px;
+    z-index: 3;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+.page-search .search-sort{
+    overflow: hidden;
+    height: 40px;
+    border-bottom: 1px solid #e5e5e5;
+}
+.page-search .search-sort ul{
+    margin-top: 5px;
+    height: 30px;
+    display: flex;
+    display: -webkit-flex;
+}
+.page-search .search-sort ul li{
+    color: #5b5b5b;
+    flex: 0 0 25%;
+    line-height: 30px;
+    text-align: center;
+    border-right: 1px solid #e4e4e4;
+}
+.page-search .search-sort ul li span{
+    position: relative;
+    padding-right: 25px;
+}
+.page-search .search-sort ul li span i.icon-shangla{
+    position: absolute;
+    right: 5px;
+    top: -7px;
+    font-size: 21px;
+    color: #a6a6a3;
+}
+.page-search .search-sort ul li span i.icon-xiala1{
+    position: absolute;
+    right: 5px;
+    top: -3px;
+    font-size: 21px;
+    color: #a6a6a3;
+}
+.page-search .search-sort ul li:last-child{
+    border: 0;
+}
+.page-search .search-keyword{
+    padding-left: 45px;
+    padding-right: 5px;
+    width: 100%;
+    height: 45px;
+    background: #06c1ae;
+    line-height: 45px;
+    text-align: center;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 400;
+    border-bottom: 1px solid #d7d7d7;
+}
+.page-search .search-keyword i.icon-fanhui {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    width: 45px;
+    height: 45px;
+    text-align: center;
+    line-height: 50px;
+    font-size: 24px;
+}
+.page-search .search-keyword input {
+    height: 30px;
+    line-height: 30px;
+    padding-right: 40px;
+    border: 0;
+    color: #333333;
+}
+.page-search .search-keyword i.icon-sousuo {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    display: block;
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    font-size: 21px;
+    color: #333333!important;
+}
+.page-search .store-list{
+    margin-top: 10px;
+    background: #ffffff;
+    padding: 5px;
+}
+.page-search .store-list .item{
+    padding-left: 100px;
+    padding-right: 70px;
+    position: relative;
+    height: 100px;
+    display: block;
+    border-bottom: 1px solid #eee;
+}
+.page-search .store-list .item img{
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+.page-search .store-list .item ul{
+    margin: 10px 0;
+}
+.page-search .store-list .item ul li.title{
+    width: 100%;
+    height: 40px;
+    line-height: 20px;
+    font-size: 1.5rem;
+    color: #000000;
+    overflow: hidden;
+}
+.page-search .store-list .item ul li.address{
+    width: 100%;
+    line-height: 20px;
+    font-size: 14px;
+    height:20px;
+    overflow:hidden;
+    color: #333333;
+}
+.page-search .store-list .item ul li.distance{
+    width: 100%;
+    font-size: 14px;
+    height:20px;
+    overflow:hidden;
+    color: #333333;
+    margin-top: 10px;
+}
+/* 商品 */
+.goods-list{
+    margin-top: 5px;
+    display: flex;
+    display: -webkit-flex;
+    flex-wrap: wrap;
+}
+.goods-list .item{
+    flex: 0 0 50%;
+}
+.goods-list .item > a{
+    width: 100%;
+    height: 50vw;
+    max-height: 350px;
+    display: block;
+}
+.goods-list .item > a img{
+    width: 100%;
+    height: 100%;
+}
+.goods-list .item{
+    padding: 4px 2px 4px 4px;
+}
+.goods-list .item:nth-child(2n){
+    padding: 4px 4px 4px 2px;
+}
+.goods-list .item .info{
+    padding: 5px;
+    background: #ffffff;
+}
+.goods-list .item .info .footer{
+    height: 25px;
+    line-height: 25px;
+}
+.goods-list .item .info .footer .sale-price{
+    font-size: 16px;
+    color: #ff6600;
+}
+.goods-list .item .info .footer .market-price{
+    font-size: 12px;
+    color: #666;
+    text-decoration: line-through;
+}
+.goods-list .item .info .title{
+    line-height: 20px;
+    font-size: 1.5rem;
+    color: #333;
+    height: 40px;
+    overflow: hidden;
+    white-space: normal;
+    text-overflow: ellipsis;
+}
+
+.active{
+    color: #06c1ae!important;
+}
+.ajax-more {
+    height: 40px;
+    margin-top: 10px;
+    background: #ffffff;
+    line-height: 40px;
+    text-align: center;
+}

@@ -1,0 +1,80 @@
+<form class="form-horizontal form" method="post" id="exchange_log_add_form">
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">类型</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <label class="radio-inline">
+                <input type="radio" name="type" checked value="{FANGYUANBAO_CREDIT_EXCHANGE}">积分兑换
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="type" value="{FANGYUANBAO_RED_BAG_SEND}">红包发放
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label" for="date">日期</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <input id="date" maxlength="16" name="date" type="text" value="{php echo date('Y-m-d',strtotime('-1day'));}" class="form-control" placeholder="日期格式：2017-05-01">
+            <span class="help-block">如果是红包发放，最好精确到时分秒，例如：2017-05-10 18:00，输入时系统会自动加上'-'和':'</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">发放地区</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            {php echo tpl_form_field_district('area', array('province' => $province, 'city' => $city ,'district' => $district ));}
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label" for="nickname">微信昵称</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <textarea id="nickname" name="nickname" class="form-control" style="height: 300px;"></textarea>
+            <span class="help-block">每一个昵称，占一行。多人请按回车键</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-2 control-label"></label>
+        <div class="col-sm-9 col-xs-12">
+            <input type="hidden" name="token" value="{$_W['token']}">
+            <input name="submit" type="button" value="提交" class="btn btn-primary">
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    require(['jquery'],function($){
+        /* 提交 */
+        $('input[name="submit"]').bind('click',function(){
+            var obj = $(this);
+            obj.prop('disabled','disabled');
+            $.post(
+                 window.location.href,
+                 $('#exchange_log_add_form').serialize(),
+                 function(ret){
+                     obj.prop('disabled',false);
+                    if(ret.type == 'success'){
+                        $('#exchange_log_add_form')[0].reset();
+                    }
+                     util.message(ret.message,ret.redirect,ret.type);
+                 },'json'
+            );
+        });
+
+        /* 日期输入 */
+        $('#date').keydown(function(evt){
+            var str = $(this).val();
+            var length = str.length;
+            if(evt.keyCode != 8){
+                if(length == 4 || length == 7){
+                    $(this).val(str+'-');
+                    return true;
+                }
+                if(length == 10){
+                    $(this).val(str+' ');
+                    return true;
+                }
+                if(length == 13){
+                    $(this).val(str+':');
+                    return true;
+                }
+            }
+        });
+    });
+</script>

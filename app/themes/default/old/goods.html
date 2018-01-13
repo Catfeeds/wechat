@@ -1,0 +1,34 @@
+<div class="goods-box">
+    <div class="goods-list">
+        {loop $list $li}
+        <div class="item">
+            <div class="top">
+                <img src="{$li['thumb']}">
+                <ul>
+                    <li>{$li['title']}</li>
+                    <li>价格：{$li['price']}</li>
+                    <li>数量：{$li['total']}</li>
+                    <li>审核状态：{if $li['is_check'] == CHECK_PASS}已审核{else}审核中{/if}</li>
+                </ul>
+            </div>
+            <div class="bottom">
+                <button class="js-delete" type="button" data-id="{$li['id']}">删除</button>
+            </div>
+        </div>
+        {/loop}
+    </div>
+</div>
+<script type="text/javascript">
+    require([],function(){
+        $('.js-delete').bind('click',function(){
+            var id = $(this).attr('data-id');
+            $.post(
+                 window.location.href,
+                 {id:id,ac:'delete'},
+                 function(ret){
+                    util.message(ret.message,ret.redirect,ret.type);
+                 },'json'
+            );
+        });
+    });
+</script>

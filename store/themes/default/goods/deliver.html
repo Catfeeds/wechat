@@ -1,0 +1,241 @@
+{template 'common/header'}
+<div class="store-tab">
+    <ul>
+        <li {if $do == 'display'}class="active"{/if}>
+            <a href="{php echo url('goods/deliver');}">运费模板</a>
+        </li>
+        <li {if $do == 'post' && empty($item)}class="active"{/if}>
+            <a href="{php echo url('goods/deliver/post');}">添加模板</a>
+        </li>
+        {if $do == 'post' && !empty($item)}
+        <li class="active">
+        <a href="{php echo url('goods/deliver/post',array('id'=>$item['id']));}">修改模板</a>
+        </li>
+        {/if}
+    </ul>
+</div>
+<div class="page-content">
+{if $do == 'display'}
+    <form method="post" class="form-horizontal" id="delete_seliver_form">
+        <input type="hidden" name="ac" value="delete" />
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>删?</th>
+                        <th>模板名称</th>
+                        <th>计费方式</th>
+                        <th>计费规则</th>
+                        <th>是否默认</th>
+                        <th>是否显示</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $li}
+                    <tr>
+                        <td><input type="checkbox" name="ids[]" value="{$li['id']}"></td>
+                        <td>{$li['title']}</td>
+                        <td>{if $li['calc_type'] == CALC_BY_NUM}按购买数量{else}按重量{/if}</td>
+                        <td>
+                            {if $li['calc_type'] == CALC_BY_NUM}
+                            首件个数：{$li['first_num']}<br>
+                            首件运费：{$li['first_num_fee']}<br>
+                            续件个数：{$li['sequel_num']}<br>
+                            续件累加运费：{$li['sequel_num_fee']}
+                            {else}
+                            首重：{$li['first_weight']}kg<br>
+                            首重运费：{$li['first_weight_fee']}<br>
+                            续重：{$li['sequel_weight']}kg<br>
+                            续重累加运费：{$li['sequel_weight_fee']}<br>
+                            {/if}
+                        </td>
+                        <td>{if $li['is_default'] == IS_DEFAULT}是{else}否{/if}</td>
+                        <td>{if $li['is_display'] == DISPLAY_YES}是{else}否{/if}</td>
+                        <td>
+                            <a href="{php echo url('goods/deliver/post',array('id'=>$li['id']));}" title="编辑"><i class="fa fa-edit"></i>&nbsp;编辑</a>
+                        </td>
+                    </tr>
+                    {/loop}
+                    {if !empty($list) && is_array($list)}
+                    <tr>
+                        <td><input type="checkbox" name="" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});"></td>
+                        <input name="token" type="hidden" value="{$_W['token']}" />
+                        <td colspan="6"><button type="button" name="submit" class="btn btn-primary">删除</button></td>
+                    </tr>
+                    {/if}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+    <script type="text/javascript">
+        require(['bootstrap'], function(){
+            $('button[name="submit"]').bind('click',function() {
+                if (confirm('删除后不可恢复，您确定删除吗？')) {
+                    if ($(":checkbox[name='ids[]']:checked").size() > 0) {
+                        $.post(
+                                "{php echo url('goods/deliver/post');}",
+                                $('#delete_seliver_form').serialize(),
+                                function (ret) {
+                                    util.message(ret.message, ret.redirect, ret.type);
+                                    return false;
+                                }, 'json'
+                        );
+                    }
+                    util.message('没有选择要删除的商品！', '', 'error');
+                    return false;
+                }
+            });
+        });
+    </script>
+{elseif $do == 'post'}
+    <div class="main">
+        <form method="post" class="form-horizontal form" id="post_deliver_form">
+            <div class="panel panel-info">
+            <div class="panel-heading">
+                运费模板基本信息
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>模板名称</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" name="title" value="{$item['title']}" placeholder="请输入模板名称"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">计费方式</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <label class="radio-inline">
+                            <input type="radio" name="calc_type" value="{CALC_BY_WEIGHT}" {if $item['calc_type'] != CALC_BY_NUM}checked{/if}>
+                            按重量计费
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="calc_type" value="{CALC_BY_NUM}" {if $item['calc_type'] == CALC_BY_NUM}checked{/if}>
+                            按件计费
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group js-calc-weight" {if $item['calc_type']== CALC_BY_NUM}style='display:none'{/if}>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">首重重量</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="first_weight"  class="form-control" placeholder="请输入首重重量，单位：kg" value="{$item['first_weight']}"/>
+                    </div>
+                </div>
+                <div class="form-group js-calc-weight" {if $item['calc_type']== CALC_BY_NUM}style='display:none'{/if}>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">首重运费</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="first_weight_fee"  class="form-control" placeholder="请输入首重价格，单位：元" value="{$item['first_weight_fee']}"/>
+                    </div>
+                </div>
+                <div class="form-group js-calc-weight" {if $item['calc_type']== CALC_BY_NUM}style='display:none'{/if}>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">续重重量</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="sequel_weight"  class="form-control" placeholder="请输入续重重量，单位：kg" value="{$item['sequel_weight']}"/>
+                    </div>
+                </div>
+                <div class="form-group js-calc-weight" {if $item['calc_type']== CALC_BY_NUM}style='display:none'{/if}>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">续重累计运费</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="sequel_weight_fee"  class="form-control" placeholder="请输入续重运费，单位：元" value="{$item['sequel_weight_fee']}"/>
+                        <span class="help-block">续重运费，即表示在首重的基础上，每增加一次续重重量，需要累计的金额</span>
+                    </div>
+                </div>
+                <div class="form-group js-calc-num" {if $item['calc_type']!= CALC_BY_NUM}style='display:none'{/if}>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">首件个数</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="first_num"  class="form-control" placeholder="请输入个数" value="{$item['first_num']}"/>
+                    </div>
+                </div>
+                <div class="form-group js-calc-num" {if $item['calc_type']!= CALC_BY_NUM}style='display:none'{/if}>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">首件运费</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="first_num_fee"  class="form-control" placeholder="请输入首件运费，单位：元" value="{$item['first_num_fee']}"/>
+                    </div>
+                </div>
+                <div class="form-group js-calc-num" {if $item['calc_type']!= CALC_BY_NUM}style='display:none'{/if}>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">续件个数</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="sequel_num"  class="form-control" placeholder="请输入续件个数" value="{$item['sequel_num']}"/>
+                    </div>
+                </div>
+                <div class="form-group js-calc-num" {if $item['calc_type']!= CALC_BY_NUM}style='display:none'{/if}>
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">续件累计运费</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" name="sequel_num_fee"  class="form-control" placeholder="请输入续件累计运费，单位：元" value="{$item['sequel_num_fee']}"/>
+                        <span class="help-block">续件运费，即表示在首件个数的基础上，每增加一次续件个数，需要累计的金额</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">显示状态</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <label class="radio-inline">
+                            <input type="radio" name="is_display" value="1" {if $item['is_display'] == 1}checked{/if}>
+                            显示
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="is_display" value="0" {if $item['is_display'] != 1}checked{/if}>
+                            隐藏
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">设为默认使用模板</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <label class="radio-inline">
+                            <input type="radio" name="is_default" value="1" {if $item['is_default'] == IS_DEFAULT}checked{/if}>
+                            是
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="is_default" value="0" {if $item['is_default'] != IS_DEFAULT}checked{/if}>
+                            否
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">排序</label>
+                    <div class="col-sm-8 col-xs-12">
+                        <input type="text" class="form-control" name="order_by" value="{$item['order_by']}" placeholder="请输入数字，越大排序越靠前"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-8 col-xs-12 col-sm-offset-2">
+                        <input type="hidden" name="id" value="{$item['id']}">
+                        <button type="button" name="submit" class="btn btn-primary">提交</button>
+                        <input type="hidden" name="token" value="$_W['token']">
+                    </div>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        require(['util'],function(util){
+            /* 提交 */
+            $('button[name="submit"]').bind('click',function(){
+                $.post(
+                     window.location.href,
+                    $('#post_deliver_form').serialize(),
+                    function(ret){
+                        util.message(ret.message,ret.redirect,ret.type);
+                        return false;
+                    },'json'
+                );
+            });
+
+            $('input[name="calc_type"]').bind('click',function(){
+                if($(this).val() == '{CALC_BY_NUM}'){
+                    $('.js-calc-weight').hide();
+                    $('.js-calc-num').show();
+                }else{
+                    $('.js-calc-num').hide();
+                    $('.js-calc-weight').show();
+                }
+            });
+        });
+    </script>
+{/if}
+</div>
+{template 'common/footer'}

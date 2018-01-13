@@ -1,0 +1,55 @@
+{template 'common/header'}
+<div class="platform-tab">
+    <ul>
+        <li {if $op == 'display'}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('staff',array('op'=>'display'));}">代理列表</a>
+        </li>
+        {if $op == 'post' && !empty($item)}
+        <li class="active">
+        <a href="{php echo $this->createWebUrl('staff',array('op'=>'post','id'=>$item['id']));}">修改代理</a>
+        </li>
+        {/if}
+        <li {if $op == 'post' && empty($item)}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('staff',array('op'=>'post'));}">添加代理</a>
+        </li>
+        <li {if $op == 'servicer'}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('staff',array('op'=>'servicer'));}">客服列表</a>
+        </li>
+        {if $op == 'post_servicer' && !empty($item)}
+        <li class="active">
+            <a href="{php echo $this->createWebUrl('staff',array('op'=>'post_servicer','id'=>$item['id']));}">修改客服</a>
+        </li>
+        {/if}
+        <li {if $op == 'post_servicer' && empty($item)}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('staff',array('op'=>'post_servicer'));}">添加客服</a>
+        </li>
+        <li {if $op == 'account'}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('staff',array('op'=>'account'));}">会计列表</a>
+        </li>
+        {if $op == 'post_account' && !empty($item)}
+        <li class="active">
+            <a href="{php echo $this->createWebUrl('staff',array('op'=>'post_account','id'=>$item['id']));}">修改会计</a>
+        </li>
+        {/if}
+        <li {if $op == 'post_account' && empty($item)}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('staff',array('op'=>'post_account'));}">添加会计</a>
+        </li>
+    </ul>
+</ul>
+</div>
+<div class="page-content">
+{if $op == 'display'}
+    {template 'oto/staff-display'}
+{elseif $op == 'post'}
+    {template 'oto/staff-post'}
+{elseif $op == 'account'}
+    {template 'oto/staff-account'}
+{elseif $op == 'post_account'}
+    {template 'oto/staff-post-account'}
+{elseif $op == 'servicer'}
+    {template 'oto/staff-servicer'}
+{elseif $op == 'post_servicer'}
+    {template 'oto/staff-post-servicer'}
+{/if}
+</div>
+{template 'common/footer'}

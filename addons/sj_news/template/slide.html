@@ -1,0 +1,153 @@
+{template 'common/header'}
+<div class="platform-tab">
+    <ul>
+        <li {if $op == 'display'}class="active"{/if}>
+            <a href="{php echo $this->createWebUrl('slide',array('op'=>'display'));}">轮播列表</a>
+        </li>
+        <li {if $op == 'post' && empty($item)}class="active"{/if}>
+            <a href="{php echo $this->createWebUrl('slide',array('op'=>'post'));}">添加轮播</a>
+        </li>
+        {if $op == 'post' && !empty($item)}
+            <li class="active">
+                <a href="{php echo $this->createWebUrl('slide',array('op'=>'post'));}">修改轮播</a>
+            </li>
+        {/if}
+    </ul>
+</div>
+<div class="page-content">
+    {if $op == 'display'}
+    <form method="post" class="form-horizontal" id="delete_slide_form">
+        <input type="hidden" name="ac" value="delete" />
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th style="width: 45px">删?</th>
+                        <th>标题</th>
+                        <th>缩略图</th>
+                        <th>链接</th>
+                        <th>显示状态</th>
+                        <th>排序</th>
+                        <th>添加时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $item}
+                    <tr>
+                        <td><input type="checkbox" name="ids[]" value="{$item['id']}"></td>
+                        <td>{$item['title']}</td>
+                        <td><img style="width: 50px;height: 50px" src="{php echo tomedia($item['thumb']);}"></td>
+                        <td><a target="_blank" href="{$item['link']}">{$item['link']}</a></td>
+                        <td>
+                            {if $item['is_display'] == 1}
+                            <span class="label label-success">显示</span>
+                            {else}
+                            <span class="label label-default">隐藏</span>
+                            {/if}
+                        </td>
+                        <td>{$item['order_by']}</td>
+                        <td>{php echo date('Y-m-d H:i:s',$item['createtime']);}</td>
+                        <td>
+                            <a href="{php echo $this->createWebUrl('slide',array('op'=>'post','id'=>$item['id']));}"><i class="fa fa-edit"></i>&nbsp;编辑</a>
+                        </td>
+                    </tr>
+                    {/loop}
+                    <tr>
+                        <td><input type="checkbox" name="" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});"></td>
+                        <input name="token" type="hidden" value="{$_W['token']}" />
+                        <td colspan="7"><input type="button" name="submit" class="btn btn-primary" value="删除"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+        require(['util'],function(util){
+            $('input[name="submit"]').bind('click',function() {
+                if (confirm('删除后不可恢复，您确定删除吗？')) {
+                    $.post(
+                            window.location.href,
+                            $('#delete_slide_form').serialize(),
+                            function (ret) {
+                                util.message(ret.message, ret.redirect, ret.type);
+                                return false;
+                            }, 'json'
+                    );
+                }
+            });
+        });
+    </script>
+    {elseif $op == 'post'}
+    <form method="post" class="form-horizontal" role="form" id="post_slide_form">
+        <div class="panel panel-info">
+            <div class="panel-heading">添加轮播</div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">标题</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="title" value="{$item['title']}" class="form-control" placeholder="请输入轮播标题"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">显示状态</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="radio-inline">
+                            <input type="radio" name="is_display" value="1" {if $item['is_display'] == 1 || empty($item)}checked{/if}>
+                            显示
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="is_display" value="0" {if $item['is_display'] != 1 && !empty($item)}checked{/if}>
+                            隐藏
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">链接</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input class="form-control" type="text" name="link" value="{$item['link']}" placeholder="http://或https://开头">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">缩略图</label>
+                    <div class="col-sm-9 col-xs-12">
+                        {php echo tpl_form_field_image('thumb',$item['thumb']);}
+                        <span class="help-block">建议尺寸：300*100</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">排序</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <input type="text" name="order_by" value="{$item['order_by']}" placeholder="请输入数字，越大排序越靠前" class="form-control"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-9 col-xs-12 col-md-offset-2">
+                <input type="hidden" name="id" value="{$item['id']}"/>
+                <input type="button" name="submit" value="提交" class="btn btn-primary col-lg-1" />
+                <input type="hidden" name="token" value="{$_W['token']}" />
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+        require(['util'],function(util){
+            /* 提交 */
+            $('input[name="submit"]').bind('click',function(){
+                $.post(
+                        window.location.href,
+                        $('#post_slide_form').serialize(),
+                        function(ret){
+                            util.message(ret.message,ret.redirect,ret.type);
+                            return false;
+                        },'json'
+                );
+            });
+        });
+    </script>
+    {/if}
+</div>
+{template 'common/footer'}

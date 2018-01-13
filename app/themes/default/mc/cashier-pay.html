@@ -1,0 +1,53 @@
+<div class="page-cashier">
+    <div class="header">
+        <span class="back">
+          <i class="icon iconfont icon-fanhui back" onclick="history.go('-1')"></i>
+        </span>
+        {$tip}
+        <a class="pay-log-link" href="{php echo url('mc/cashier/pay_log');}">转账记录</a>
+    </div>
+    <div class="pay-box">
+        <form id="pay-form">
+            {if empty($goods_id)}
+            <div class="face">
+                <img src="{php echo tomedia($cashier['avatar']);}">
+                <div class="nickname">{if !empty($cashier['nickname'])}{$cashier['nickname']}{else}{$cashier['realname']}{/if}</div>
+            </div>
+            {else}
+            <div class="face">
+                <img src="{php echo tomedia($goods['thumbs'][0]);}">
+                <div class="nickname">{$goods['title']}</div>
+            </div>
+            {/if}
+            <div class="pay-price">
+                <input class="form-control" type="text" name="money" placeholder="请输入应支付的金额">
+            </div>
+            <div class="pay-desc">
+                <textarea class="form-control" name="note" placeholder="填写收货地址或给商家留言"></textarea>
+            </div>
+            <div class="pay-button">
+                <button type="button" class="js-pay">立即支付</button>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        require([],function(){
+            /* 支付 */
+            $('.js-pay').bind('click',function(){
+                $('.js-toast-loading').show();
+                util.loading();
+                $.post(
+                        window.location.href,
+                        {
+                            money:$('input[name="money"]').val(),
+                            note:$('textarea[name="note"]').val()
+                        },
+                        function(ret){
+                            $('.js-toast-loading').hide();
+                            util.toast(ret.message,ret.redirect,ret.type);
+                        },'json'
+                );
+            });
+        });
+    </script>
+</div>

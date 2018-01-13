@@ -1,0 +1,38 @@
+{template 'common/header-oto'}
+<link rel="stylesheet" href="{$_W['siteroot']}app/resource/css/email.css?v={STYLE_VERSION}">
+<div class="page-email">
+    <div class="email-header">
+        <i class="icon iconfont icon-fanhui back" onclick="history.go('-1')"></i>
+        绑定Email邮箱地址
+    </div>
+    <div style="width: 100%;height: 50px;"></div>
+    {if $do == 'display'}
+    <form id="set-email-form">
+        <div class="email-email">
+            <i class="icon iconfont icon-youxiang"></i>
+            <input type="text" name="email" placeholder="请输入您的邮箱">
+        </div>
+        <div class="email-footer js-set-email">
+            绑定邮箱
+        </div>
+    </form>
+    {/if}
+</div>
+<script type="text/javascript">
+    $(function(){
+
+        /* 绑定邮箱 */
+        $('.js-set-email').bind('click',function(){
+            $.post(
+                    window.location.href,
+                    $('#set-email-form').serialize(),
+                    function(ret){
+                        util.toast(ret.message,ret.redirect,ret.type);
+                        return false;
+                    },'json'
+            );
+        });
+
+    });
+</script>
+{template 'common/footer-oto'}

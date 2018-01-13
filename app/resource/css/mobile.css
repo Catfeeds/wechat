@@ -1,0 +1,93 @@
+.page-mobile {
+    position: relative;
+}
+.page-mobile .mobile-header {
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    color: #000000;
+    background: #f9f9f9;
+    width: 100%;
+    z-index: 99999;
+    position: fixed;
+    border-bottom: 1px solid #b8b8b8;
+}
+.page-mobile .mobile-header i.back{
+    position: absolute;
+    display: block;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    left: 0;
+    top: 0;
+    font-size: 21px;
+}
+.mobile-mobile{
+    position: relative;
+    height: 40px;
+    background: #ffffff;
+    margin-top: 10px;
+    padding-left:40px ;
+}
+.mobile-mobile i{
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 40px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 21px;
+    border-right: 1px solid #eee;
+}
+.mobile-mobile input{
+    border: 0;
+    padding-left: 5px;
+}
+.mobile-footer{
+    margin: 10px;
+    height: 35px;
+    text-align: center;
+    line-height: 35px;
+    color: #ffffff;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    background: yellowgreen;
+    display: block;
+}
+
+
+.mobile-verify{
+    position: relative;
+    height: 40px;
+    background: #ffffff;
+    margin-top: 10px;
+    padding-left:40px ;
+    padding-right: 100px;
+}
+.mobile-verify i{
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 40px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 21px;
+    border-right: 1px solid #eee;
+}
+.mobile-verify input{
+    border: 0;
+    padding-left: 5px;
+}
+.mobile-verify button{
+    border: 0;
+    position: absolute;
+    right: 5px;
+    display: block;
+    top:0;
+    height: 40px;
+    line-height: 40px;
+    font-size: 12px;
+}

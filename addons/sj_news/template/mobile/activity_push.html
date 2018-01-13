@@ -1,0 +1,91 @@
+{template 'common/header-sj-news'}
+<link rel="stylesheet" href="{ASSETS_URL}/sj_news/css/activity_push.css?v={STYLE_VERSION}">
+<div class="page-activity">
+    <div class="activity-header">
+        <span style="cursor: pointer;" onclick="history.back()">&lt;返回</span>
+        <span>发布活动</span>
+        <span style="cursor: pointer;right: 5px;" class="js-activity" onclick="location.href='{php echo $this->createMobileUrl('index');}'">首页</span>
+    </div>
+    <div class="activity-nav">
+        <ul>
+            <li>
+                <a href="{php echo $this->createMobileUrl('activity');}">活动列表</a>
+            </li>
+            <li>
+                <a class="active" href="{php echo $this->createMobileUrl('activity',array('op'=>'push'));}">发布活动</a>
+            </li>
+        </ul>
+    </div>
+    <div style="height: 80px"></div>
+    <form id="post_form">
+        <div class="suggest-box">
+            <span><i>*</i>活动标题</span>
+            <input name="title" maxlength="20" type="text" placeholder="不超过20个字">
+        </div>
+        <div class="suggest-box">
+            <span><i>*</i>主办单位</span>
+            <input name="from_user" maxlength="15" type="text" placeholder="不超过15个字">
+        </div>
+        <div class="suggest-box">
+            <span><i>*</i>开始时间</span>
+            {php echo _tpl_form_field_date('starttime');}
+        </div>
+        <div class="suggest-box">
+            <span><i>*</i>结束时间</span>
+            {php echo _tpl_form_field_date('endtime');}
+        </div>
+        <div class="suggest-box">
+            <span><i>*</i>活动区域</span>
+            {php echo tpl_app_form_field_district('area');}
+        </div>
+        <div class="suggest-box">
+            <span><i>*</i>详细地址</span>
+            <textarea rows="5" maxlength="225" name="address" placeholder="不超过255个字"></textarea>
+        </div>
+        <div class="suggest-box">
+            <span><i>*</i>咨询电话</span>
+            <input name="tel" maxlength="20" type="text" placeholder="请输入电话">
+        </div>
+        <div class="suggest-box">
+            <span><i>*</i>微信号</span>
+            <input name="wxid" maxlength="20" type="text" placeholder="请输入微信号">
+        </div>
+        <div class="suggest-box">
+            <span><i>*</i>活动内容</span>
+            <textarea rows="5" maxlength="225" name="content" placeholder="不超过255个字"></textarea>
+        </div>
+        <div class="suggest-box">
+            <span><i>*</i>表单选项</span>
+            <div class="fields">
+                {loop $joinFields $field_key $field}
+                <div class="fields-item">
+                    <input id="{$field_key}" type="checkbox" value="{$field_key}" name="join_fields[]">
+                    <label for="{$field_key}">{$field['title']}</label>
+                </div>
+                {/loop}
+            </div>
+        </div>
+        <div class="push-box" style="margin-top: 10px;">
+            <button type="button" class="js-push">提交</button>
+        </div>
+    </form>
+    <script type="text/javascript">
+        require(['util'],function(util){
+            //提交
+            $('.js-push').click(function(){
+                var _this = $(this);
+                _this.html('提交中...').attr('disabled','disabled');
+                $.post(
+                    window.location.href,
+                    $('#post_form').serialize(),
+                    function(ret){
+                        _this.html('提交').removeAttr('disabled');
+                        util.toast(ret.message,ret.redirect,ret.type);
+                    },'json'
+                );
+            });
+        });
+    </script>
+    {template 'common/nav-sj'}
+</div>
+{template 'common/footer-sj-news'}

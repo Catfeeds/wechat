@@ -1,0 +1,233 @@
+{template 'common/header'}
+<div class="account-tab">
+    <ul>
+        <li {if $do == 'display'}class="active"{/if}>
+        <a href="{php echo url('activity/display/display');}">活动列表</a>
+        </li>
+        {if $do == 'post' && !empty($item)}
+            <li class="active">
+                <a href="{php echo url('activity/display/post',array('id'=>$item['id']));}">修改活动</a>
+            </li>
+        {/if}
+        <li {if $do == 'post' && empty($item)}class="active"{/if}>
+            <a href="{php echo url('activity/display/post');}">发布活动</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    {if $do == 'display'}
+    <div class="page-content">
+        <div class="panel panel-info">
+            <div class="panel-heading">筛选</div>
+            <div class="panel-body">
+                <form method="get" action="./index.php" class="form-horizontal" role="form">
+                    <input type="hidden" name="c" value="activity" />
+                    <input type="hidden" name="a" value="display" />
+                    <input type="hidden" name="do" value="display" />
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                        <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                            <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入关键词，活动名称" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">活动所在地</label>
+                        <div class="col-xs-12 col-sm-8 col-md-6">
+                            {php echo tpl_form_field_district('area', array('province' => $_GPC['area']['province'], 'city' => $_GPC['area']['city'], 'district' => $_GPC['area']['district'] ));}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                            <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                            <input type="hidden" name="token" value="{$_W['token']}"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <form method="post" class="form-horizontal" id="display_form">
+            <input type="hidden" name="ac" value="delete" />
+            <div class="panel panel-default ">
+                <div class="table-responsive panel-body">
+                    <table class="table table-hover">
+                        <thead class="navbar-inner">
+                        <tr>
+                            <th>删?</th>
+                            <th>标题</th>
+                            <th>主办方</th>
+                            <th>浏览人数/报名人数</th>
+                            <th>地址</th>
+                            <th>活动时间</th>
+                            <th>进行状态</th>
+                            <th>显示状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {loop $list $li}
+                        <tr>
+                            <td><input type="checkbox" name="ids[]" value="{$li['id']}"></td>
+                            <td>{$li['title']}</td>
+                            <td>{$li['from_user']}</td>
+                            <td>
+                                <span class="label label-success">{$li['look_num']}</span>
+                                /
+                                <span class="label label-primary">{$li['join_num']}</span>
+                            </td>
+                            <td>{$li['province']}{$li['city']}{$li['district']}{$li['address']}</td>
+                            <td>
+                               <p>
+                                   开始时间：<span class="label label-success">{php echo date('Y年m月d日',$li['starttime']);}</span>
+                               </p>
+                                结束时间：<span class="label label-primary">{php echo date('Y年m月d日',$li['endtime']);}</span>
+                            </td>
+                            <td>
+                                {if TIMESTAMP < $li['starttime']}
+                                    <span class="label label-default">未开始</span>
+                                {else}
+                                    {if TIMESTAMP > $li['endtime']}
+                                        <span class="label label-danger">已结束</span>
+                                    {else}
+                                        <span class="label label-success">进行中</span>
+                                    {/if}
+                                {/if}
+                            </td>
+                            <td>
+                                {if empty($li['is_display'])}
+                                <span class="label label-default">隐藏</span>
+                                {else}
+                                <span class="label label-success">显示</span>
+                                {/if}
+                            </td>
+                            <td>
+                                <a class="btn btn-sm btn-primary" href="{php echo url('activity/display/post',array('id'=>$li['id']));}" title="编辑"><i class="fa fa-edit"></i>&nbsp;编辑</a>
+                            </td>
+                        </tr>
+                        {/loop}
+                        {if !empty($list) && is_array($list)}
+                        <tr>
+                            <td><input type="checkbox" name="" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});"></td>
+                            <input name="token" type="hidden" value="{$_W['token']}" />
+                            <td colspan="8">
+                                <button type="button" name="submit" class="btn btn-primary">删除</button>
+                            </td>
+                        </tr>
+                        {/if}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {$pager}
+        </form>
+        <script type="text/javascript">
+            require(['bootstrap'], function(){
+                $('button[name="submit"]').bind('click',function() {
+                    if (confirm('删除后不可恢复，您确定删除吗？')) {
+                        if ($(":checkbox[name='ids[]']:checked").size() > 0) {
+                            $.post(
+                                    window.location.href,
+                                    $('#display_form').serialize(),
+                                    function (ret) {
+                                        util.message(ret.message, ret.redirect, ret.type);
+                                        return false;
+                                    }, 'json'
+                            );
+                        }
+                        util.message('没有选择要删除的文章！', '', 'error');
+                        return false;
+                    }
+                });
+            });
+        </script>
+    </div>
+    {elseif $do == 'post'}
+    <div class="page-content">
+        <form action="" method="post" class="form-horizontal form" id="post_form">
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">活动标题</label>
+                <div class="col-sm-8 col-xs-12">
+                    <input type="text" class="form-control" name="title" maxlength="255" value="{$item['title']}" placeholder="请输入标题"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">主办方</label>
+                <div class="col-sm-8 col-xs-12">
+                    <input type="text" class="form-control" name="from_user" maxlength="255" value="{$item['from_user']}" placeholder="请输入主办方名称"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">活动所在地</label>
+                <div class="col-xs-12 col-sm-8 col-md-6">
+                    {php echo tpl_form_field_district('area', array('province' => $item['province'], 'city' => $item['city'], 'district' => $item['district'] ));}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">报名地址</label>
+                <div class="col-sm-8 col-xs-12">
+                    <textarea class="form-control" name="address" maxlength="500" placeholder="请输入活动的详细地址">{$item['address']}</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">活动日期</label>
+                <div class="col-sm-8 col-xs-12">
+                    {php echo tpl_form_field_daterange('activity_time', array('starttime' => date('Y-m-d', $item['starttime']), 'endtime' => date('Y-m-d', $item['endtime']),));}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">联系电话</label>
+                <div class="col-sm-8 col-xs-12">
+                    <input type="text" class="form-control" name="tel" maxlength="20" value="{$item['tel']}" placeholder="请输入联系电话"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">微信号</label>
+                <div class="col-sm-8 col-xs-12">
+                    <input type="text" class="form-control" name="wxid" maxlength="20" value="{$item['wxid']}" placeholder="请输入微信号"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">活动内容</label>
+                <div class="col-sm-8 col-xs-12">
+                    {php echo tpl_ueditor('content', $item['content']);}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 显示状态</label>
+                <div class="col-sm-8 col-xs-12">
+                    <label class="radio-inline">
+                        <input type="radio" name="is_display" value="1" {if $item['is_display'] == 1}checked{/if}>
+                        显示
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="is_display" value="0" {if $item['is_display'] != 1}checked{/if}>
+                        隐藏
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-8 col-md-8 col-xs-12 col-sm-offset-2 col-sm-offset-2">
+                    <input type="hidden" name="id" value="{$item['id']}"/>
+                    <button type="button" name="submit" class="btn btn-primary">提交</button>
+                    <input type="hidden" name="token" value="{$_W['token']}" />
+                </div>
+            </div>
+        </form>
+        <script type="text/javascript">
+            require(['util'],function(util){
+
+                $('button[name="submit"]').bind('click',function(){
+                    $.post(
+                            window.location.href,
+                            $('#post_form').serialize(),
+                            function(ret){
+                                util.message(ret.message,ret.redirect,ret.type);
+                            },'json'
+                    );
+                });
+
+            });
+        </script>
+    </div>
+    {/if}
+</div>
+{template 'common/footer'}

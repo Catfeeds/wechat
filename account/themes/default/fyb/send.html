@@ -1,0 +1,267 @@
+{template 'common/header'}
+<div class="account-tab">
+    <ul>
+        <li {if $do == 'display'}class="active"{/if}>
+        <a href="{php echo url('fyb/send/display');}">发放方圆宝</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    {if $do == 'display'}
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选
+            <span style="float: right">消费总数{$total}人 - 金额共计￥{$total_price}元（包含：{$total_credit1}积分）</span>
+        </div>
+        <div class="panel-body">
+            <form method="get" action="./index.php" class="form-horizontal" role="form">
+                <input type="hidden" name="c" value="fyb" />
+                <input type="hidden" name="a" value="send" />
+                <input type="hidden" name="do" value="display" />
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">会员ID</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="uid" value="{$_GPC['uid']}" placeholder="请输入会员ID" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入会员昵称、姓名" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">地区</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {php echo tpl_form_field_district('area',array('province' => $province, 'city' => $city,'district' => $district));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">消费时间</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        {php echo tpl_form_field_daterange('createtime', array('starttime' => date('Y-m-d', $starttime), 'endtime' => date('Y-m-d', $endtime),));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                        <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                        <button type="button" class="btn btn-primary js-old-send">原会员发放</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form method="get" class="form-horizontal" id="update_no_form">
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>序号</th>
+                        <th>会员ID</th>
+                        <th>昵称、姓名</th>
+                        <th>累计消费金额</th>
+                        <th>累计消费次数</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $k1 $li}
+                    <tr>
+                        <td>{php echo $pindex+$k1+1;}</td>
+                        <td>{$li['uid']}</td>
+                        <td>{$li['nickname']}/{$li['realname']}</td>
+                        <td>￥{$li['total_money']}</td>
+                        <td>{$li['total_count']}次</td>
+                        <td>
+                            <button data-uid="{$li['uid']}" type="button" class="btn btn-sm btn-primary js-exchange" id="js_uid_{$li['uid']}">兑换</button>
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+    <div class="modal fade in" id="sendModal" tabindex="-1" role="dialog" aria-labelledby="sendModalLabel" aria-hidden="false">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="sendModalLabel">会员信息</h4></div>
+                <div class="modal-body">
+                    <form style="margin-top:5%" class="form-horizontal" role="form" id="sendModalForm">
+                        <input type="hidden" name="uid" id="sendModalUid">
+                        <div class="form-group">
+                            <label class=" col-sm-3  control-label">会员ID</label>
+                            <div class="col-sm-9">
+                                <p class="form-control-static" id="sendModalUidDesc"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class=" col-sm-3  control-label">会员昵称/姓名</label>
+                            <div class="col-sm-9">
+                                <p class="form-control-static" id="sendModalNickname"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">方圆宝总数</label>
+                            <div class="col-sm-9">
+                                <p class="form-control-static" id="sendModalTotalCount"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">已兑换数量</label>
+                            <div class="col-sm-9">
+                                <p class="form-control-static" id="sendModalAlreadyCount"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">未兑换数量</label>
+                            <div class="col-sm-9">
+                                <p class="form-control-static" id="sendModalNoExchangeCount"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">本次兑换个数</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="text" name="count" placeholder="请输入兑换个数">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">方圆宝形成时间</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="text" name="birthtime" placeholder="请输入方圆宝形成时间">
+                                <span class="help-block">日期格式：2017-6-21&nbsp;或&nbsp;2017年6月21日</span>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" id="sendModalBtn">确认兑换</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade in" id="sendOldModal" tabindex="-1" role="dialog" aria-labelledby="sendOldModalLabel" aria-hidden="false">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="sendOldModalLabel">原会员信息</h4></div>
+                <div class="modal-body">
+                    <form style="margin-top:5%" class="form-horizontal" role="form" id="sendOldModalForm">
+                        <div class="form-group">
+                            <label class=" col-sm-3  control-label">原会员ID</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="uid" placeholder="请输入原会员ID">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class=" col-sm-3  control-label">昵称/姓名</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" name="nickname" placeholder="请输入昵称或姓名">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class=" col-sm-3  control-label">地区</label>
+                            <div class="col-sm-9">
+                                {php echo tpl_form_field_district('area',array('province' => $province, 'city' => $city,'district' => $district));}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">本次兑换个数</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="text" name="count" placeholder="请输入兑换个数">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">方圆宝形成时间</label>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="text" name="birthtime" placeholder="请输入方圆宝形成时间">
+                                <span class="help-block">日期格式：2017-6-21&nbsp;或&nbsp;2017年6月21日</span>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" id="sendOldModalBtn">确认兑换</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        require(['util'],function(){
+            //打开老会员
+            $('.js-old-send').bind('click',function(){
+                $('#sendOldModal').modal('show');
+            });
+            //兑换方圆宝
+            $('#sendOldModalBtn').bind('click',function(){
+                var obj = $(this);
+                obj.html('兑换中....').attr('disabled','disabled');
+                $.post(
+                        "{php echo url('fyb/send/old');}",
+                        $('#sendOldModalForm').serialize(),
+                        function(ret){
+                            obj.html('确认兑换').removeAttr('disabled');
+                            util.message(ret.message,ret.redirect,ret.type);
+                            $('#sendOldModal').modal('hide');
+                        },'json'
+                );
+            });
+
+            //兑换方圆宝
+            $('#sendModalBtn').bind('click',function(){
+                var obj = $(this);
+                obj.html('兑换中....').attr('disabled','disabled');
+                $.post(
+                    "{php echo url('fyb/send/display');}",
+                    $('#sendModalForm').serialize(),
+                    function(ret){
+                        obj.html('确认兑换').removeAttr('disabled');
+                        if(ret.type == 'success'){
+                            $('#sendModal').modal('hide');
+                            var uid = $('#sendModalUid').val();
+                            $('#js_uid_'+uid).removeClass('btn-primary').addClass('btn-danger').html('已兑换');
+                        }else{
+                            util.message(ret.message,ret.redirect,ret.type);
+                        }
+
+                    },'json'
+                );
+            });
+
+            //显示兑换框
+            $('.js-exchange').bind('click',function(){
+                var uid = $(this).attr('data-uid');
+                $.post(
+                     "{php echo url('fyb/send/get');}",
+                        {
+                            uid:uid
+                        },
+                        function(ret){
+                            if(ret.type == 'success'){
+                                $('#sendModalUid').val(ret.message['uid']);
+                                $('#sendModalUidDesc').html(ret.message['uid']);
+                                $('#sendModalNickname').html(ret.message['nickname']+'/'+ret.message['realname']);
+                                $('#sendModalTotalCount').html(ret.message['total_fyb_count']+'个');
+                                $('#sendModalAlreadyCount').html(ret.message['total_fyb_exchange_count']+'个');
+                                $('#sendModalNoExchangeCount').html(ret.message['total_fyb_not_exchange_count']+'个');
+                                $('#sendModal').modal('show');
+                                return true;
+                            }
+                            util.message(ret.message,ret.redirect,ret.type);
+                        },'json'
+
+                );
+            });
+        });
+    </script>
+    {/if}
+</div>
+{template 'common/footer'}

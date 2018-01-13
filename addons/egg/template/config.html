@@ -1,0 +1,84 @@
+{template 'common/header'}
+<div class="platform-tab">
+    <ul>
+        <li {if $op == 'display'}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('config',array('op'=>'display'));}">基本设置</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <form method="post" class="form-horizontal" role="form" id="post_config_form">
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">APP版本号</label>
+            <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                <input type="text" class="form-control" name="setting[version]" value="{$config['setting']['version']}" placeholder="请输入版本号" />
+                <span class="help-block">输入：1或2，或1.0.0,1.0.1，当输入最新版本号时，会在客户端提现升级</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">Android下载链接</label>
+            <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                <input type="text" class="form-control" name="setting[android_download_url]" value="{$config['setting']['android_download_url']}" placeholder="请输入下载链接" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">IOS下载链接</label>
+            <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                <input type="text" class="form-control" name="setting[ios_download_url]" value="{$config['setting']['ios_download_url']}" placeholder="请输入下载链接" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">官方微信</label>
+            <div class="col-sm-8 col-xs-12">
+                {php echo tpl_form_field_image('setting[wx_code]',$config['setting']['wx_code']);}
+                <span class="help-block">建议尺寸：120*120(或比例：1:1)</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">软件介绍</label>
+            <div class="col-sm-9 col-xs-12">
+                {php echo tpl_ueditor('setting[introduce]', $config['setting']['introduce']);}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">使用说明</label>
+            <div class="col-sm-9 col-xs-12">
+                {php echo tpl_ueditor('setting[use_introduce]', $config['setting']['use_introduce']);}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">更新说明</label>
+            <div class="col-sm-9 col-xs-12">
+                {php echo tpl_ueditor('setting[update_detail]', $config['setting']['update_detail']);}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">版权说明</label>
+            <div class="col-sm-9 col-xs-12">
+                {php echo tpl_ueditor('setting[copyright]', $config['setting']['copyright']);}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-9 col-xs-12">
+                <input type="hidden" name="token" value="{$_W['token']}"/>
+                <input type="button" name="submit" value="提交" class="btn btn-primary"/>
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+        require(['util'],function(util){
+            /* 提交 */
+            $('input[name="submit"]').bind('click',function(){
+                $.post(
+                        window.location.href,
+                        $('#post_config_form').serialize(),
+                        function(ret){
+                            util.message(ret.message,ret.redirect,ret.type);
+                            return false;
+                        },'json'
+                );
+            });
+        });
+    </script>
+</div>
+{template 'common/footer'}

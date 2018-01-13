@@ -1,0 +1,248 @@
+.page-old{}
+.page-old .header{
+    width: 100%;
+    height: 85px;
+    position: fixed;
+    z-index: 999;
+    background: #06c1ae;
+    text-align: center;
+}
+.page-old .header .top{
+    height: 45px;
+    line-height: 45px;
+    color: #ffffff;
+}
+.page-old .header .bottom{
+    height: 40px;
+    background: #ffffff;
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-around;
+    align-items: center;
+    border-bottom: 1px solid #b8b8b8;
+}
+.page-old .header .bottom li{
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    padding: 0 10px;
+    color: #000000;
+    list-style: none;
+    text-decoration: none;
+    width: 100%;
+    text-align: center;
+}
+.page-old .header .bottom li a,.page-old .header .bottom li a:hover,.page-old .header .bottom li a:visited,.page-old .header .bottom li a:active{
+    color: #000000;
+    text-decoration: none;
+}
+.page-old .header .bottom li.active{
+    color: #06c1ae;
+    border-bottom: 2px solid #06c1ae;
+}
+.page-old .header .top i.icon-fanhui {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    width: 45px;
+    height: 45px;
+    text-align: center;
+    line-height: 45px;
+    font-size: 21px;
+}
+.page-old .push-box{
+    padding: 5px;
+    background: #ffffff;
+}
+.page-old .push-box .push-item{
+    position: relative;
+    padding: 10px 0 10px 80px;
+    border-bottom: 1px solid #eee;
+}
+.page-old .push-box .push-item input,.page-old .push-box .push-item textarea{
+    margin-bottom:0!important;
+}
+.page-old .push-box .push-item select{
+    border: 0!important;
+}
+.page-old .push-box .push-item:last-child{
+    border: 0;
+    padding-bottom: 0;
+}
+.page-old .push-box .push-item .push-left{
+    position: absolute;
+    left: 0;
+    top: 10px;
+}
+.page-old .push-box .push-item .thumb-list{
+    content: "";
+    overflow: hidden;
+}
+.page-old .push-box .push-item .thumb-list:after{
+    clear: both;
+}
+.page-old .push-box .push-item .thumb-list .item{
+    width: 80px;
+    height: 80px;
+    position: relative;
+    border: 1px dashed #eee;
+    margin: 5px 0 0 5px;
+    float: left;
+    text-align: center;
+    line-height: 80px;
+}
+.page-old .push-box .push-item .thumb-list .item img{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    display: none;
+}
+.page-old .push-box .push-item .thumb-list .item span.upload-tip{
+    text-align: center;
+    line-height: 80px;
+    font-size: 21px;
+}
+.page-old .push-box .push-item .thumb-list .item img{
+    width: 100%;
+    height: 100%;
+}
+.page-old .push-box .push-item .thumb-list .item input{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    z-index: 3;
+}
+.push-footer{
+    padding: 20px 5px;
+}
+.push-footer button{
+    background: #06c1ae;
+    color: #ffffff;
+    height: 40px;
+    width: 100%;
+    text-align: center;
+}
+.push-footer .agree{
+    margin-bottom: 10px;
+}
+.push-footer .agree span{
+    padding-left: 20px;
+    position: relative;
+    font-weight: normal!important;
+}
+.push-footer .agree span i{
+    position: absolute;
+    left: 0;
+}
+.push-footer .agree span i.active,.push-right i.active{
+    color: green;
+}
+
+.fee-box{
+    position: relative;
+    padding: 5px;
+}
+.fee-box .layer{
+    position: absolute;
+    width:200px;
+    height:100px;
+    left:50%;
+    top:50%;
+    margin-left:-100px;
+    margin-top:-50px;
+    background: #FFFFFF;
+    border: 1px solid silver;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+.fee-box .product-list{
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+}
+.fee-box .product-list .item{
+    padding-left: 10px;
+    height: 45px;
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    background: #ffffff;
+}
+.fee-box .product-list .item span:nth-child(2n){
+    margin-left: 5px;
+}
+.fee-box .product-list .item .active{
+    color: green;
+}
+.fee-box .pay button{
+    background: yellowgreen;
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    border: 0;
+    padding: 0;
+    color: #ffffff;
+}
+.fee-box  .tips{
+    margin: 10px 0;
+    background: #ffffff;
+    line-height: 25px;
+    padding: 10px;
+    border-top: 1px solid #eee;
+}
+
+
+
+/* 商品列表 */
+.goods-box{}
+.goods-box .goods-list{
+    padding:0 5px;
+}
+.goods-box .goods-list .item{
+    padding-bottom: 10px;
+    margin-top: 10px;
+    border-bottom: 1px solid #eee;
+    background: #ffffff;
+}
+.goods-box .goods-list .item:last-child{
+    border: 0;
+}
+.goods-box .goods-list .item .top{
+    position: relative;
+    height: 100px;
+    padding-left: 100px;
+}
+.goods-box .goods-list .item .top img{
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    left: 0;
+    top: 0;
+}
+.goods-box .goods-list .item .top ul{
+    padding: 0;
+    margin: 0;
+}
+.goods-box .goods-list .item .top ul li{
+    height: 22px;
+    line-height: 22px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.goods-box .goods-list .item .bottom{
+    display: flex;
+    display: -webkit-flex;
+    justify-content: flex-end;
+}
+.goods-box .goods-list .item .bottom button{
+    margin-right: 5px;
+    padding: 0 10px;
+}

@@ -1,0 +1,154 @@
+{template 'common/header-oto'}
+<link rel="stylesheet" href="{ASSETS_URL}/oto/css/point.css?v={STYLE_VERSION}">
+<div class="page-point">
+    <div class="point-header">
+        <i class="icon iconfont icon-fanhui back" onclick="window.location.href='{php echo $this->createMobileUrl('index');}'"></i>
+        选择地址
+        <i class="icon iconfont icon-androidmorevertical more"></i>
+        <div class="menu">
+            <ul>
+                <li><a href="{php echo $this->createMobileUrl('index');}"><i class="icon iconfont icon-shouye_shouye"></i>&nbsp;首页</a></li>
+                <li><a href="{php echo $this->createMobileUrl('search');}"><i class="icon iconfont icon-icon"></i>&nbsp;发现</a></li>
+                <li><a href="{php echo $this->createMobileUrl('cart');}"><i class="icon iconfont icon-gouwuche1"></i>&nbsp;购物车</a></li>
+                <li><a href="{php echo $this->createMobileUrl('order');}"><i class="icon iconfont icon-dingdan1"></i>&nbsp;订单</a></li>
+                <li><a href="{php echo $this->createMobileUrl('user');}"><i class="icon iconfont icon-wode"></i>&nbsp;我的</a></li>
+            </ul>
+        </div>
+    </div>
+    <div style="width: 100%;height: 50px;"></div>
+    <div class="point-search">
+        <i class="icon iconfont icon-sousuo"></i>
+        <input type="text" autofocus name="keywords" placeholder="请输入地点关键字">
+    </div>
+    <div style="width: 100%;height: 50px;"></div>
+    <div class="point-now">
+        <i class="icon iconfont icon-icon"></i>点击定位当前位置
+    </div>
+    <div class="no-data">
+        <div class="no-data-tips-box">
+            <i class="icon iconfont icon-ma"></i>
+        </div>
+        <div class="no-data-tips">没有找到符合条件的地点</div>
+    </div>
+    <div class="address-list"></div>
+</div>
+<script type="text/javascript" src="https://3gimg.qq.com/lightmap/components/geolocation/geolocation.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+        /* 定位当前位置 */
+        $('.point-now').bind('click',function(){
+            $('.js-toast-loading').show();
+            util.loading();
+            var geolocation = new qq.maps.Geolocation("{$tencent_js_key}", "web端定位服务");
+            var options = {timeout: 8000};
+            geolocation.getLocation(showPosition, showErr, options);
+            function showPosition(position) {
+                $.post(
+                        "{php echo $this->createMobileUrl('location',array('op'=>'save'));}",
+                        {
+                            address:position['addr'],
+                            city:position['city'],
+                            district:position['district'],
+                            province:position['province'],
+                            lng:position['lng'],
+                            lat:position['lat']
+                        } ,
+                        function(ret){
+                            $('.js-toast-loading').hide();
+                            var address = ret.message.address == ''?ret.message.city:ret.message.address;
+                            util.toast('您当前位于：'+address,ret.redirect,'success');
+                            return false;
+                        },'json'
+                );
+            }
+            function showErr() {
+                util.toast('定位失败，请刷新重试','','error');
+                return false;
+            }
+        });
+
+        /* 初始化地址库 */
+        var addressList = {};
+
+        /* 搜索地址 */
+        $('input[name="keywords"]').bind('input propertychange',function(){
+            $('.js-toast-loading').show();
+            util.loading();
+            var keywords = $(this).val();
+            if(keywords != ''){
+                $.post(
+                    window.location.href,
+                    {
+                        keywords:keywords
+                    },
+                    function(ret){
+                        $('.js-toast-loading').hide();
+                        if(ret.type == 'success'){
+                            //地址库赋值
+                            addressList = ret.message;
+                            var str = '';
+                            $.each(ret.message,function(index,item){
+                                str += '<div class="address-item" data-index="'+ index +'">' +
+                                            '<i class="icon iconfont icon-duoxuanbuxuan"></i>' +
+                                            '<ul>' +
+                                                '<li class="province">省份：'+ item['province'] +'</li>' +
+                                                '<li class="city">城市：' + item['city'] +'</li>' +
+                                                '<li class="address">地址：' +item['address']+ '</li>' +
+                                            '</ul>' +
+                                        '</div>';
+                            });
+                            $('.no-data').hide();
+                            $('.address-list').html(str).show();
+                            return false;
+                        }else{
+                            $('.address-list').hide();
+                            $('.no-data').show();
+                            util.toast(ret.message,'','error');
+                            return false;
+                        }
+                    },'json'
+                );
+            }else{
+                $('.address-list').hide();
+                $('.no-data').show();
+            }
+        });
+
+        /* 点击地点 */
+        $(document).on('click','.address-item',function(){
+            var index = $(this).attr('data-index');
+            $('.address-list i').removeClass('icon-xuanzhong1 active').addClass('icon-duoxuanbuxuan');
+            $(this).find('i').removeClass('icon-duoxuanbuxuan').addClass('icon-xuanzhong1 active')
+            $.post(
+                    "{php echo $this->createMobileUrl('location',array('op'=>'save'));}",
+                    {
+                        address:addressList[index]['address'],
+                        city:addressList[index]['city'],
+                        district:addressList[index]['district'],
+                        province:addressList[index]['province'],
+                        lng:addressList[index]['location']['lng'],
+                        lat:addressList[index]['location']['lat']
+                    } ,
+                    function(ret){
+                        var address = ret.message.address == ''?ret.message.city:ret.message.address;
+                        util.toast('您当前位于：'+address,ret.redirect,'success');
+                    },'json'
+            );
+        });
+
+
+        /* 展开右侧菜单 */
+        $('.more').bind('click',function(){
+            var menu = $('.menu');
+            var display = menu.css('display');
+            if(display == 'none'){
+                menu.css({right:'0',width:'0'}).show().animate({
+                    width:'80px'
+                });
+            }else{
+                menu.hide();
+            }
+        });
+    });
+</script>
+{template 'common/footer-oto'}

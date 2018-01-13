@@ -1,0 +1,74 @@
+{template 'common/header-oto'}
+<link rel="stylesheet" href="{ASSETS_URL}/oto/css/user.css?v={STYLE_VERSION}">
+<div class="page-user">
+    <div class="user-header">
+        <i class="icon iconfont icon-fanhui back" onclick="history.go('-1')"></i>
+        <span></span>
+        <i onclick="window.location.href='{php echo url('set/display/display');}'" class="icon iconfont icon-shezhi1"></i>
+        <a href="{php echo url('set/display/display');}">修改信息</a>
+    </div>
+    <div class="user-info">
+        <h4>{$user['nickname']}</h4>
+        <p>
+            会员ID:{$user['uid']}
+        </p>
+        <img src="{$user['avatar']}">
+        <ul>
+            <li><a href="{php echo url('mc/collect/display',array('type'=>COLLECT_TYPE_STORE));}">{$store_collect_count}<br>店铺收藏</a></li>
+            <li><a href="{php echo url('mc/collect/display',array('type'=>COLLECT_TYPE_GOODS));}">{$goods_collect_count}<br>商品收藏</a></li>
+            <li><a>{$look_collect_count}<br>我的足迹</a></li>
+        </ul>
+    </div>
+    <div class="assets-box">
+        <a href="{php echo url('rebate/display/display');}">积分兑换</a>
+        <a href="{php echo $this->createMobileUrl('order');}">订单查询</a>
+        <a href="{php echo url('rebate/consume/display');}">累计消费</a>
+    </div>
+    <div class="nav-top-title">
+        必备工具
+    </div>
+    <div class="nav-list">
+        <a class="user-nav" href="{php echo url('set/address/display');}">
+            <i class="icon iconfont icon-icon" style="color: #FF9933"></i>
+            <span>收货地址</span>
+        </a>
+        <a class="user-nav" href="{php echo url('mc/friend/display');}">
+            <i class="icon iconfont icon-wode" style="color: darkturquoise"></i>
+            <span>我的好友</span>
+        </a>
+        <a class="user-nav" href="{php echo url('mc/poster/show_poster',array('uid'=>$_W['member']['uid']));}">
+            <i class="icon iconfont icon-erweima2" style="color: #e64c2e"></i>
+            <span>我的海报</span>
+        </a>
+        <a class="user-nav" href="{php echo url('mc/balance/display');}">
+            <i class="icon iconfont icon-dianpu" style="color: darkorange"></i>
+            <span>商家中心</span>
+        </a>
+    </div>
+    <div class="nav-list">
+        <a class="user-nav" href="{php echo url('old/display/display');}">
+            <i class="icon iconfont icon-svgmoban06" style="color:steelblue"></i>
+            <span>发布二手货</span>
+        </a>
+        <a class="user-nav" href="{php echo url('mc/cashier/display');}">
+            <i class="icon iconfont icon-shoukuan" style="color:red"></i>
+            <span>收款二维码</span>
+        </a>
+        <a class="user-nav" href="{php echo url('agent/display/display');}">
+            <i class="icon iconfont icon-wode" style="color:steelblue"></i>
+            <span>代理中心</span>
+        </a>
+        <a class="user-nav" href="{php echo url('shop/display/display');}">
+            <i class="icon iconfont icon-fangwu1" style="color:yellowgreen"></i>
+            <span>我要开店</span>
+        </a>
+    </div>
+    <div class="nav-list" style="display: none">
+        <a class="user-nav" href="{php echo url('tree/display/display');}">
+            <i class="icon iconfont icon-shu" style="color:seagreen"></i>
+            <span>爱心树</span>
+        </a>
+    </div>
+</div>
+{template 'common/nav-oto'}
+{template 'common/footer-oto'}

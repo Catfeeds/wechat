@@ -1,0 +1,78 @@
+<!-- begin 左侧菜单 -->
+<div class="account-menu">
+    <div class="account-system">
+        <a style="color: #ffffff" href="{php echo url('account/display');}">
+            会计后台
+        </a>
+    </div>
+    <div class="account-nav-item">
+        <div class="account-nav-title">
+            <span class="icon"><i class="icon iconfont icon-shopfill"></i></span>
+            <span class="desc">订单管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="account-menu-sub" {if $controller == 'account'} style="display: block"{/if}>
+            <li><a href="{php echo url('account/display');}" {if $controller == 'account' && $action == 'display'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-settings"></i></span><span class="desc">全部订单</span></a></li>
+        </ul>
+    </div>
+    <div class="account-nav-item">
+        <div class="account-nav-title">
+            <span class="icon"><i class="icon iconfont icon-shopfill"></i></span>
+            <span class="desc">提现管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="account-menu-sub" {if $controller == 'withdraw'} style="display: block"{/if}>
+            <li><a href="{php echo url('withdraw/display');}" {if $controller == 'withdraw' && $action == 'display'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-settings"></i></span><span class="desc">提现管理</span></a></li>
+        </ul>
+    </div>
+    <div class="account-nav-item">
+        <div class="account-nav-title">
+            <span class="icon"><i class="icon iconfont icon-goodsnewfill"></i></span>
+            <span class="desc">佣金管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="account-menu-sub" {if $controller == 'rebate'} style="display: block"{/if}>
+        <li><a href="{php echo url('rebate/display');}" {if $controller == 'rebate' && $action == 'display'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-goodsfavor"></i></span><span class="desc">返佣明细</span></a></li>
+        </ul>
+    </div>
+    <div class="account-nav-item">
+        <div class="account-nav-title">
+            <span class="icon"><i class="icon iconfont icon-goodsnewfill"></i></span>
+            <span class="desc">方圆宝管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="account-menu-sub" {if $controller == 'fyb'} style="display: block"{/if}>
+            <li><a href="{php echo url('fyb/display');}" {if $controller == 'fyb' && $action == 'display'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-goodsfavor"></i></span><span class="desc">发放方圆宝（自动）</span></a></li>
+            <li><a href="{php echo url('fyb/send');}" {if $controller == 'fyb' && $action == 'send'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-goodsfavor"></i></span><span class="desc">发放方圆宝（消费）</span></a></li>
+        </ul>
+    </div>
+    <div class="account-nav-item">
+        <div class="account-nav-title">
+            <span class="icon"><i class="icon iconfont icon-goodsnewfill"></i></span>
+            <span class="desc">代理佣金</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="account-menu-sub" {if $controller == 'agent'} style="display: block"{/if}>
+            <li><a href="{php echo url('agent/display');}" {if $action == 'display'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-goodsfavor"></i></span><span class="desc">发放佣金</span></a></li>
+        </ul>
+    </div>
+    <div class="account-nav-item">
+        <div class="account-nav-title">
+            <span class="icon"><i class="icon iconfont icon-goodsnewfill"></i></span>
+            <span class="desc">新晋传媒</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="account-menu-sub" {if $controller == 'sjnews'} style="display: block"{/if}>
+        <li><a href="{php echo url('sjnews/order');}" {if $action == 'display'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-goodsfavor"></i></span><span class="desc">订单管理</span></a></li>
+        </ul>
+    </div>
+</div>
+<script type="text/javascript">
+    require([],function(){
+        $('.account-nav-title').bind('click',function(){
+            $('.account-menu-sub').not($(this).next('.account-menu-sub')).slideUp();
+            $(this).next('.account-menu-sub').slideToggle();
+        });
+    });
+</script>
+<!-- end 左侧菜单 -->

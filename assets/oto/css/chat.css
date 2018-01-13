@@ -1,0 +1,201 @@
+body {
+    background: url('/assets/oto/images/chat_bg02.png') no-repeat;
+    background-size: 100%;
+}
+
+input, button {
+    outline: none;
+}
+
+.write_box input {
+    height: 40px;
+    padding: 0 5px;
+    line-height: 40px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 0;
+}
+
+.wenwen_help button {
+    width: 95%;
+    background: #a0e959;
+    color: #fff;
+    border-radius: 5px;
+    border: 0;
+    height: 40px;
+    display: none;
+}
+
+.speak_window {
+    overflow-y: scroll;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.speak_box {
+    margin-bottom: 50px;
+    padding: 10px;
+}
+
+.question, .answer {
+    margin-bottom: 1rem;
+}
+
+.question {
+    text-align: right;
+}
+
+.question > div {
+    display: inline-block;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+.clear {
+    clear: both;
+}
+
+.heard_img {
+    height: 40px;
+    width: 40px;
+    border-radius: 5px;
+    overflow: hidden;
+    background: #ddd;
+}
+
+.heard_img img {
+    width: 100%;
+    height: 100%
+}
+
+.question_text, .answer_text {
+    box-sizing: border-box;
+    position: relative;
+    display: table-cell;
+    min-height: 40px;
+}
+
+.question_text {
+    padding-right: 20px;
+}
+
+.answer_text {
+    padding-left: 20px;
+}
+
+.question_text p, .answer_text p {
+    border-radius: 10px;
+    padding: .5rem;
+    margin: 0;
+    font-size: 15px;
+    line-height: 25px;
+    box-sizing: border-box;
+    vertical-align: middle;
+    display: table-cell;
+    height: 45px;
+    word-wrap: break-word;
+}
+
+.answer_text p {
+    word-wrap:break-word;
+    word-break:break-all;
+    background: #ffffff;
+    color: #000000;
+}
+
+.question_text p {
+    word-wrap:break-word;
+    word-break:break-all;
+    background: #a0e959;
+    text-align: left;
+    color: #000000;
+}
+
+.question_text i, .answer_text i {
+    width: 0;
+    height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    position: absolute;
+    top: 15px;
+}
+
+.answer_text i {
+    border-right: 10px solid #fff;
+    left: 10px;
+}
+
+.question_text i {
+    border-left: 10px solid #a0e959;
+    right: 10px;
+}
+
+.answer_text p a {
+    color: #a0e959;
+    display: inline-block;
+}
+
+.chat-send{
+    position: fixed;
+    z-index: 5;
+    width: 100%;
+    height: 50px;
+    bottom: 0;
+    background: #ffffff;
+    left: 0;
+    border-top: 1px solid #eee;
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 2px solid seagreen;
+}
+.chat-send input{
+    font-size: 16px;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    text-indent: 15px;
+}
+.chat-send button{
+    margin-right: 5px;
+    width: 60px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background: green;
+    color: #ffffff;
+    border: 0;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+}
+
+.answer_text,.question_text{
+    max-width: 300px;
+}
+.date-receiver{
+    display: block;
+    text-align: center;
+    border-top: 1px solid #eee;
+    margin-top: 5px;
+    color: silver;
+    font-size: 12px;
+}
+.date-send{
+    display: block;
+    text-align: center;
+    border-top: 1px solid #ffffff;
+    margin-top: 5px;
+    color: #ffffff;
+    font-size: 12px;
+}

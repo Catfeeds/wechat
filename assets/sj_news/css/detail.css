@@ -1,0 +1,220 @@
+p{
+    color: #333;
+    font-size: 18px!important;
+    line-height: 30px!important;
+    letter-spacing: 1px!important;
+}
+.page-detail{}
+.page-detail .detail-header{
+    padding: 0 10px;
+    position: fixed;
+    width: 100%;
+    height: 45px;
+    background: yellowgreen;
+    text-align: center;
+    line-height: 45px;
+    color: #ffffff;
+    z-index: 999999;
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.page-detail .news-info{
+    padding: 0 10px;
+    overflow-x:hidden;
+}
+.page-detail .news-info .title{
+    margin-top: 10px;
+    font-weight: 400;
+    font-size: 21px;
+    line-height: 24px;
+}
+.page-detail .news-info .desc{
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-between;
+    color: #8c8c8c;
+    margin-top: 10px;
+}
+.page-detail .news-info .content{
+    border-top: 1px solid #eee;
+    margin: 10px 0;
+    padding: 10px 0;
+}
+.look-num span{
+    padding: 5px 10px;
+    background: whitesmoke;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    color: #333333;
+}
+.other{
+    margin: 10px;
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+}
+.other a{
+    display: block;
+    height: 30px;
+    line-height: 30px;
+    color: #428bca;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-decoration: none;
+}
+
+.audio{
+    margin-top: 10px;
+    height: 80px;
+    background: url("../img/audio.png") 0 0 no-repeat scroll;
+    background-size: 100% 100%;
+}
+.audio audio{
+    width: 100%;
+    max-height: 80px;
+}
+.video{
+    margin-top: 10px;
+    height: 180px;
+    background: url("../img/video.png") 0 0 no-repeat scroll;
+    background-size: 100% 100%;
+}
+.video video{
+    width: 100%;
+    height: 180px;
+}
+
+.images{
+    padding: 15px;
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.images img{
+    width: 100%;
+    height: auto;
+}
+.ad-box{
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.ad-box img{
+    width: 100%;
+    height: auto;
+}
+
+.talk-box{
+    padding: 5px;
+    border-top: 1px solid #eee;
+    height: 40px;
+    position: fixed;
+    z-index: 2;
+    width: 100%;
+    bottom: 50px;
+    background: #ffffff;
+}
+.talk-box input{
+    height: 30px;
+    line-height: 30px;
+    margin: 0;
+    border: 0;
+    padding: 0 0 0 15px;
+}
+.talk-box button{
+    padding: 0 10px;
+    margin: 0;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    color: #ffffff;
+    background: yellowgreen;
+}
+
+.talk-list{
+    border-top: 1px solid #eee;
+    margin-top: 10px;
+}
+.talk-list .talk-item{
+    margin-top: 15px;
+    padding-left: 45px;
+    position: relative;
+}
+.talk-list .talk-item img{
+    overflow: hidden;
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    -webkit-border-radius: 40px;
+    left: 0;
+    position: absolute;
+}
+.talk-list .talk-item ul{
+    padding: 0;
+    margin: 0;
+}
+.talk-list .talk-item ul li{
+    list-style: none;
+}
+.talk-list .talk-item ul li.talk-nickname{
+    color: royalblue;
+    font-size: 12px;
+    line-height: 25px;
+}
+.talk-list .talk-item ul li.talk-content{
+    color: #000000;
+    font-size: 14px;
+    line-height: 25px;
+}
+.talk-list .talk-item ul li.talk-date{
+    color: #999999;
+    font-size: 12px;
+    line-height: 25px;
+}
+
+/* 关注人数 */
+.focus-box{
+    margin-top: 15px;
+    padding-top: 10px;
+    display: flex;
+    display: -webkit-flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.focus-box p{
+    font-size: 14px!important;
+    color: #000000;
+}
+.focus-box .imgs{
+    display: flex;
+    display: -webkit-flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: wrap;
+}
+.focus-box .imgs img{
+    margin: 2px 4px 2px 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+}
+
+.look-num{
+    padding: 10px 0 20px 0;
+    font-size: 12px;
+    border-bottom: 1px solid #eee;
+}

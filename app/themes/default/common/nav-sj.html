@@ -1,0 +1,144 @@
+<style type="text/css">
+    .diymenu{
+        z-index: 3;
+        background: #f3f6f6;
+        border-top: 1px solid #eee;
+        height: 52px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        display: flex;
+        display: -webkit-flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .diymenu a{
+        text-decoration: none;
+        display: flex;
+        display: -webkit-flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .diymenu a span:first-child{
+        font-size: 21px;
+        color: #565656!important;
+    }
+    .diymenu a span:last-child{
+        color: #686b6b!important;
+    }
+    .diymenu a.active span{
+        color: yellowgreen!important;
+    }
+    .footer-menu{
+        width: 100%;
+        background: #edf0f0;
+        position: fixed;
+        bottom: 0;
+        z-index: 5;
+        display: none;
+    }
+    .push-box{
+        margin-top: 20px;
+        border-top: 1px solid #eee;
+        display: flex;
+        display: -webkit-flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .push-box a{
+        padding: 10px 0;
+        text-decoration: none;
+        display: flex;
+        display: -webkit-flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+    }
+    .push-box a span:first-child i{
+        font-size: 26px;
+    }
+    .push-box a span:first-child{
+        text-align: center;
+        line-height: 50px;
+        width: 50px;
+        height: 50px;
+        background: #ffffff;
+        border: 1px solid #e0e3e3;
+        border-radius: 15px;
+        -webkit-border-radius: 15px;
+        -moz-border-radius: 15px;
+    }
+    .push-box a span:last-child{
+        margin-top: 5px;
+        color: #666666!important;
+    }
+    .push-close{
+        height: 40px;
+        line-height: 30px;
+        text-align: center;
+    }
+</style>
+<div style="height: 50px"></div>
+<div class="diymenu">
+    <a {if $_GPC['do'] == 'index'}class="active"{/if} href="{php echo $this->createMobileUrl('index');}">
+        <span class="iconfont icon-homepage{if $_GPC['do'] == 'index'}_fill{/if}"></span>
+        <span class="text top">首页</span>
+    </a>
+    <a href="http://sd.51yifangyuan.com/app/index.php?i=7&c=entry&do=index&m=oto&wxref=mp.weixin.qq.com#wechat_redirect">
+        <span class="iconfont icon-service"></span>
+        <span class="text top">商城</span>
+    </a>
+    <a class="js-open-push {if in_array($_GPC['do'] ,array('text','image','video'))}active{/if}">
+        <span class="iconfont icon-addition{if in_array($_GPC['do'] ,array('text','image','video'))}_fill{/if}"></span>
+        <span class="text top">发布</span>
+    </a>
+	<a href="{php echo $this->createMobileUrl('activity');}" class="{if in_array($_GPC['do'] ,array('activity'))}active{/if}">
+        <span class="iconfont icon-huodong"></span>
+        <span class="text top">活动</span>
+    </a>
+    <a  {if $_GPC['do'] == 'user'}class="active"{/if} href="{php echo $this->createMobileUrl('user');}">
+        <span class="iconfont icon-addressbook{if $_GPC['do'] == 'user'}_fill{/if}"></span>
+        <span class="text top">我的</span>
+    </a>
+</div>
+<div class="footer-menu">
+    <div class="push-box">
+        <a href="{php echo $this->createMobileUrl('text');}" style="color: #4f88f6">
+                <span>
+                    <i class="iconfont icon-document_fill"></i>
+                </span>
+            <span style="font-size: 12px" class="text top">文章</span>
+        </a>
+        <a href="{php echo $this->createMobileUrl('image');}" style="color: #1dda9a">
+                <span>
+                    <i class="iconfont icon-picture_fill"></i>
+                </span>
+            <span style="font-size: 12px" class="text top">图片</span>
+        </a>
+        <a href="{php echo $this->createMobileUrl('video');}" style="color: #fe6c6a">
+                <span>
+                    <i class="iconfont icon-video_fill"></i>
+                </span>
+            <span style="font-size: 12px" class="text top">视频</span>
+        </a>
+        <a href="{php echo $this->createMobileUrl('ad');}" style="color:#fcc90d ">
+                <span>
+                    <i class="iconfont icon-systemprompt_fill"></i>
+                </span>
+            <span style="font-size: 12px" class="text top">广告</span>
+        </a>
+    </div>
+    <div class="push-close">
+        <span class="iconfont icon-close"></span>
+    </div>
+</div>
+<script type="text/javascript">
+    $('.js-open-push').click(function(){
+        $('.footer-menu').slideDown();
+    });
+
+    $('.push-close').click(function(){
+        $('.footer-menu').slideUp();
+    });
+</script>

@@ -1,0 +1,115 @@
+{template 'common/header'}
+<div class="store-tab">
+    <ul>
+        <li {if $do == 'display'}class="active"{/if}>
+        <a href="{php echo url('balance/code/display');}">收款二维码</a>
+        </li>
+        <li {if $do == 'list'}class="active"{/if}>
+        <a href="{php echo url('balance/code/list');}">收款记录</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+{if $do == 'display'}
+<img src="{$img}">
+{elseif $do == 'list'}
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选
+            <span style="float: right">合计{$total}单 - 商品共计￥{$total_pay_price}元 - 支付金额共计￥{$total_pay_price}元</span>
+        </div>
+        <div class="panel-body">
+            <form method="post" class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入会员ID、昵称、姓名、订单号" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">下单时间</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        {php echo tpl_form_field_daterange('createtime', array('starttime' => date('Y-m-d', $starttime), 'endtime' => date('Y-m-d', $endtime),));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">支付状态</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_status[]" {if in_array(PAY_YES,$pay_status)}checked{/if} value="{PAY_YES}"> 已支付
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_status[]" {if in_array(PAY_NO,$pay_status)}checked{/if} value="{PAY_NO}"> 未支付
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">支付方式</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_WECHAT,$pay_methods)}checked{/if} value="{PAY_METHOD_WECHAT}"> 微信支付
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_CREDIT,$pay_methods)}checked{/if} value="{PAY_METHOD_CREDIT}"> 余额支付
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_CASH,$pay_methods)}checked{/if} value="{PAY_METHOD_CASH}"> 货到付款
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_ALIPAY,$pay_methods)}checked{/if} value="{PAY_METHOD_ALIPAY}"> 支付宝
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                        <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                        <input class="btn btn-primary" type="submit" name="export_submit" id="export_submit" value="导出">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form method="post" class="form-horizontal">
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>会员ID</th>
+                        <th>昵称/姓名</th>
+                        <th>订单号</th>
+                        <th>备注信息</th>
+                        <th>支付方式</th>
+                        <th>付款金额</th>
+                        <th>付款时间</th>
+                        <th>状态</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $li}
+                    <tr>
+                        <td>{$li['id']}</td>
+                        <td>{$li['nickname']}/{$li['realname']}</td>
+                        <td>{$li['order_no']}</td>
+                        <td>{$li['note']}</td>
+                        <td>{$payMethodArrSpan[$li['pay_method']]}</td>
+                        <td>￥{$li['money']}</td>
+                        <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                        <td>
+                            {if $li['pay_status'] == PAY_YES}
+                            <label class="label label-success">已付款</label>
+                            {else}
+                            <label class="label label-default">未付款</label>
+                            {/if}
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+{/if}
+</div>
+{template 'common/footer'}

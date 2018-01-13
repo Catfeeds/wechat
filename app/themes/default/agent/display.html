@@ -1,0 +1,17 @@
+{template 'common/header-oto'}
+<link rel="stylesheet" href="{$_W['siteroot']}app/resource/css/agent.css?v={STYLE_VERSION}">
+<div class="page-agent">
+    {if $do == 'display'}
+        {template 'agent/balance'}
+    {elseif $do == 'person'}
+        {template 'agent/person'}
+    {elseif $do == 'servicer'}
+        {template 'agent/servicer'}
+    {elseif $do == 'order'}
+        {template 'agent/order'}
+    {elseif $do == 'withdraw' || $do == 'withdraw_log'}
+        {template 'agent/withdraw'}
+    {/if}
+</div>
+{template 'agent/nav'}
+{template 'common/footer-oto'}

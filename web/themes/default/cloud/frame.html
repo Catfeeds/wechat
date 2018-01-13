@@ -1,0 +1,21 @@
+{template 'common/header'}
+<div class="page-content">
+	{if !empty($_GPC['a']) && $_GPC['a'] != 'appstore'}
+	<div class="clearfix">
+		<iframe src="{$iframe}" marginheight="0" marginwidth="0" frameborder="0" width="100%" style="{if in_array($do, array('profile', 'sms')) }height:1020px;{/if}" scrolling="no" allowTransparency="true"></iframe>
+	</div>
+	<style>
+		.container-fluid:{padding-bottom:30px;}
+	</style>
+	{else}
+	<iframe src="{$iframe}" marginheight="0" marginwidth="0" frameborder="0" width="100%" scrolling="auto" allowTransparency="true" id="iframe" name="iframe"></iframe>
+	<style>
+		body{overflow:hidden; background:#FFF; display:flex;}
+		.gw-container{width:100%;}
+	</style>
+	<script>
+		$("#iframe, body").height($(window).height());
+	</script>
+	{/if}
+</div>
+{template 'common/footer'}

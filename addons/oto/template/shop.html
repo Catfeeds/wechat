@@ -1,0 +1,23 @@
+{template 'common/header'}
+<div class="platform-tab">
+    <ul>
+        <li {if $op == 'display'}class="active"{/if}>
+            <a href="{php echo $this->createWebUrl('shop');}">开店设置</a>
+        </li>
+        <li {if $op == 'user'}class="active"{/if}>
+        <a  href="{php echo $this->createWebUrl('shop',array('op'=>'user'));}">开店会员</a>
+        </li>
+        <li {if $op == 'rebate'}class="active"{/if}>
+        <a  href="{php echo $this->createWebUrl('shop',array('op'=>'rebate'));}">返佣管理</a>
+        </li>
+        <li {if $op == 'list'}class="active"{/if}>
+        <a  href="{php echo $this->createWebUrl('shop',array('op'=>'list'));}">店铺管理</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    {if $op == 'display'}
+        {template 'oto/shop-display'}
+    {/if}
+</div>
+{template 'common/footer'}

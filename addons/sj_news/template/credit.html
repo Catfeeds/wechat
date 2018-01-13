@@ -1,0 +1,106 @@
+{template 'common/header'}
+<div class="platform-tab">
+    <ul>
+        <li {if $op == 'display'}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('credit',array('op'=>'display'));}">基本设置</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <form class="form-horizontal form" method="post" id="post_form">
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">开启积分奖励</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                <label class="radio-inline">
+                    <input type="radio" name="setting[status]" {if $item['setting']['status'] == 1}checked{/if} value="{OPEN_STATUS}">开启
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="setting[status]" {if $item['setting']['status'] != 1}checked{/if}  value="{CLOSE_STATUS}">关闭
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">兑换比例</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                <div class="input-group">
+                    <input type="text" name="setting[credit_rate]" value="{$item['setting']['credit_rate']}" class="form-control" placeholder="请输入兑换比例">
+                    <span class="input-group-addon">%</span>
+                </div>
+                <span class="help-block">*如果设置为100%，则表示1积分 = 1*100% = 1元</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">关注赠送</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                <div class="input-group">
+                    <input type="text" name="setting[focus]" value="{$item['setting']['focus']}" class="form-control" placeholder="请输入积分">
+                    <span class="input-group-addon">积分</span>
+                </div>
+                <span class="help-block">*如果设置为50，则首次关注赠送50积分</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">操作奖励</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                <div class="input-group">
+                    <span class="input-group-addon">文章</span>
+                    <input type="text" name="setting[article]" value="{$item['setting']['article']}" class="form-control" placeholder="请输入积分">
+                    <span class="input-group-addon">积分/次</span>
+                </div>
+                <span class="help-block">如设置1，则每次发布文章审核通过后奖励1积分</span>
+                <div class="input-group">
+                    <span class="input-group-addon">图片</span>
+                    <input type="text" name="setting[img]" value="{$item['setting']['img']}" class="form-control" placeholder="请输入积分">
+                    <span class="input-group-addon">积分/次</span>
+                </div>
+                <span class="help-block">如设置1，则每次发布图片审核通过后奖励1积分</span>
+                <div class="input-group">
+                    <span class="input-group-addon">视频</span>
+                    <input type="text" name="setting[video]" value="{$item['setting']['video']}" class="form-control" placeholder="请输入积分">
+                    <span class="input-group-addon">积分/次</span>
+                </div>
+                <span class="help-block">如设置1，则每次发布视频审核通过后奖励1积分</span>
+                <div class="input-group">
+                    <span class="input-group-addon">评论</span>
+                    <input type="text" name="setting[talk]" value="{$item['setting']['talk']}" class="form-control" placeholder="请输入积分">
+                    <span class="input-group-addon">积分/次</span>
+                </div>
+                <span class="help-block">如设置0.2，则每次发表评论审核通过后奖励0.2积分</span>
+                <div class="input-group">
+                    <span class="input-group-addon">转发</span>
+                    <input type="text" name="setting[share]" value="{$item['setting']['share']}" class="form-control" placeholder="请输入积分">
+                    <span class="input-group-addon">积分/次</span>
+                </div>
+                <span class="help-block">如设置0.5，则每次转发成功后奖励0.5积分</span>
+                <div class="input-group">
+                    <span class="input-group-addon">每天转发、评论积分上限</span>
+                    <input type="text" name="setting[share_limit]" value="{$item['setting']['share_limit']}" class="form-control" placeholder="请输入积分上限">
+                    <span class="input-group-addon">积分</span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label"></label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="hidden" name="token" value="{$_W['token']}">
+                <input name="submit" type="button" value="提交" class="btn btn-primary span2">
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+        require(['util'],function(util){
+            /* 提交 */
+            $('input[name="submit"]').bind('click',function(){
+                $.post(
+                        window.location.href,
+                        $('#post_form').serialize(),
+                        function(ret){
+                            util.message(ret.message,ret.redirect,ret.type);
+                            return false;
+                        },'json'
+                );
+            });
+        });
+    </script>
+</div>
+{template 'common/footer'}

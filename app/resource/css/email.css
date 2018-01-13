@@ -1,0 +1,58 @@
+.page-email {
+    position: relative;
+}
+.page-email .email-header {
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    color: #000000;
+    background: #f9f9f9;
+    width: 100%;
+    z-index: 99999;
+    position: fixed;
+    border-bottom: 1px solid #b8b8b8;
+}
+.page-email .email-header i.back{
+    position: absolute;
+    display: block;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    left: 0;
+    top: 0;
+    font-size: 21px;
+}
+.email-email{
+    position: relative;
+    height: 40px;
+    background: #ffffff;
+    margin-top: 10px;
+    padding-left:40px ;
+}
+.email-email i{
+    position: absolute;
+    left: 0;
+    top: 5px;
+    width: 40px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    font-size: 21px;
+    border-right: 1px solid #eee;
+}
+.email-email input{
+    border: 0;
+    padding-left: 5px;
+}
+.email-footer{
+    margin: 10px;
+    height: 35px;
+    text-align: center;
+    line-height: 35px;
+    color: #ffffff;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    background: yellowgreen;
+    display: block;
+}

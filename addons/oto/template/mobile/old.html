@@ -1,0 +1,45 @@
+{template 'common/header-oto'}
+<link rel="stylesheet" href="{ASSETS_URL}/oto/css/old.css?v={STYLE_VERSION}">
+<link rel="stylesheet" href="{$_W['siteroot']}app/resource/components/swiper/swiper.min.css">
+<div class="page-old">
+    <i class="icon iconfont icon-fanhui back" onclick="history.go('-1')"></i>
+    <div class="js-old-header">
+        <!-- begin 宣传图 -->
+        {if !empty($goods['thumbs']) && is_array($goods['thumbs'])}
+        <div class="swiper-container">
+            <div class="swiper-wrapper">
+                {loop $goods['thumbs'] $thumb}
+                <div class="swiper-slide">
+                    <img src="{php echo tomedia($thumb);}">
+                </div>
+                {/loop}
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+        </div>
+        {/if}
+        <div class="goods-title">
+            {$goods['title']}（*{$goods['total']}件）
+            <span class="goods-price">￥{$goods['price']}</span>
+        </div>
+    </div>
+    <a class="shop-address-show" href="tel:{$goods['tel']}">
+        <p class="address">商家地址：{$goods['province']}{$goods['city']}{$goods['district']}{$goods['address']}</p>
+        <p>商家电话：<i class="icon iconfont icon-dianhua2"></i>{$goods['tel']}</p>
+    </a>
+    <div class="goods-detail">
+        {$goods['desc']}
+    </div>
+    <div style="width: 100%;height: 60px;"></div>
+    <a  href="{$pay_url}" class="buy-box">立即购买</a>
+</div>
+<script type="text/javascript">
+    require(['util','swiper'],function(util){
+        var swiper_1 = new Swiper('.swiper-container', {
+            pagination: '.swiper-pagination',
+            paginationClickable: true,
+            autoplay: 5000 //可选选项，自动滑动
+        });
+    });
+</script>
+{template 'common/footer-oto'}

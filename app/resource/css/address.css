@@ -1,0 +1,168 @@
+.page-address{position: relative}
+.page-address .address-header{
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    color: #000000;
+    background: #f9f9f9;
+    width: 100%;
+    z-index: 99999;
+    position: fixed;
+    border-bottom: 1px solid #b8b8b8;
+}
+.address-list .item{
+    background: #ffffff;
+    padding: 0 10px;
+    margin-top: 10px;
+    border-bottom: 1px solid #d8d8d8;
+    border-top: 1px solid #d8d8d8;
+}
+.address-list .item .item-header{
+    height: 40px;
+    line-height: 40px;
+    padding-right: 145px;
+    position: relative;
+}
+.address-list .item .item-header span.name{
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #101c1b;
+}
+.address-list .item .item-header span.mobile{
+   color: #101c1b;
+    position: absolute;
+    right: 0;
+    top: 0;
+    max-width: 140px;
+    display: block;
+    overflow: hidden; /*自动隐藏文字*/
+    text-overflow: ellipsis;/*文字隐藏后添加省略号*/
+    white-space: nowrap;/*强制不换行*/
+}
+.address-list .item .item-detail{
+    line-height: 25px;
+    font-size: 12px;
+    color: #121f23;
+}
+.address-list .item .item-footer{
+    height: 45px;
+    line-height: 45px;
+    border-top: 1px dashed #e6e6e6;
+    position: relative;
+}
+.address-list .item .item-footer span{
+    display: block;
+    height: 45px;
+    position: relative;
+    padding-left: 15px;
+}
+.address-list .item .item-footer .item-button-group{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 150px;
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    height: 45px;
+    justify-content: space-around;
+}
+.address-list .item .item-footer .item-button-group a,.address-list .item .item-footer .item-button-group button{
+    height: 30px;
+    width: 70px;
+    line-height: 30px;
+    text-align: center;
+    display: block;
+    border: 1px solid #d8d8d8;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background: #ffffff;
+    color: #101e21;
+}
+.address-list .item .item-footer span i{
+    position: absolute;
+    left: 0;
+    top: 1px;
+}
+.address-list .item .item-footer span i.active{
+    color: green;
+}
+.page-address .address-header i.back{
+    position: absolute;
+    display: block;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    left: 0;
+    top: 0;
+    font-size: 21px;
+}
+.page-address .add-address-box{
+    margin: 10px;
+    height: 35px;
+    text-align: center;
+    line-height: 35px;
+    color: #ffffff;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    background: yellowgreen;
+    display: block;
+
+}
+.address-box{
+    padding: 0 5px;
+    margin-top: 10px;
+    background: #ffffff;
+}
+.address-box .username,
+.address-box .mobile,
+.address-box .area,
+.address-box .address,
+.address-box .zipcode{
+    position: relative;
+    height: 50px;
+    line-height: 50px;
+    padding-left: 40px;
+    border-bottom: 1px solid #eee;
+}
+.address-box .username label,
+.address-box .mobile label,
+.address-box .area label,
+.address-box .address label,
+.address-box .zipcode label{
+    font-weight: normal;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.address-box .username input,
+.address-box .mobile input,
+.address-box .area input,
+.address-box .address input,
+.address-box .zipcode input{
+   border: 0;
+}
+
+.address-box .default{
+    position: relative;
+    height: 50px;
+    line-height: 50px;
+    padding-left: 20px;
+}
+.address-box .default input{
+    display: none;
+}
+.address-box .default i{
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.address-box .default i.active{
+    color: green;
+}

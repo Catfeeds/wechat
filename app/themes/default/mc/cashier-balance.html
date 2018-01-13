@@ -1,0 +1,52 @@
+<div class="page-cashier">
+    <div class="header">
+        <span class="back">
+          <i class="icon iconfont icon-fanhui back" onclick="history.go('-1')"></i>
+        </span>
+        {$tip}
+    </div>
+    <div class="page-balance">
+        <div class="withdraw-apply">
+            <form id="withdraw_apply_form">
+                <div class="username">
+                    <span>姓名：</span>
+                    <input name="username" type="text" placeholder="请输入姓名">
+                </div>
+                <div class="tel">
+                    <span>电话：</span>
+                    <input name="tel" type="text" placeholder="请输入电话">
+                </div>
+                <div class="money">
+                    <span>金额：</span>
+                    <input name="money" type="text" placeholder="请输入提现金额">
+                </div>
+                <div class="desc">
+                    您当前可提现金额<span style="color: red;padding: 0 5px;">￥{$can_withdraw_money}</span>元<br>
+                    提现金额不能小于<span style="color: red;padding: 0 5px">1.00</span>元
+                </div>
+                <div class="withdraw-btn">
+                    <button type="button" class="js-withdraw-btn">申请提现</button>
+                </div>
+            </form>
+        </div>
+        <script type="text/javascript">
+            require([],function(){
+                $('.js-withdraw-btn').bind('click',function(){
+                    var obj = $(this);
+                    $('.js-toast-loading').show();
+                    util.loading();
+                    obj.attr('disabled','disabled');
+                    $.post(
+                            window.location.href,
+                            $('#withdraw_apply_form').serialize(),
+                            function(ret){
+                                obj.removeAttr('disabled');
+                                $('.js-toast-loading').hide();
+                                util.toast(ret.message,ret.redirect,ret.type);
+                            },'json'
+                    );
+                });
+            });
+        </script>
+    </div>
+</div>

@@ -1,0 +1,186 @@
+{template 'common/header-sj-news'}
+<link rel="stylesheet" href="{ASSETS_URL}/sj_news/css/m-text.css?v={STYLE_VERSION}">
+<div class="page-m-text">
+    <div class="m-text-header">
+        <span style="cursor: pointer;" onclick="history.back()">&lt;返回</span>
+        <span>我的广告</span>
+        <span style="cursor: pointer;right: 5px;" class="js-m-text" onclick="location.href='{php echo $this->createMobileUrl('index');}'">首页</span>
+    </div>
+    <div style="height: 45px"></div>
+    <div class="text-list">
+        {loop $list $li}
+        <div class="item">
+            <div class="top">
+                <ul>
+                    <li class="title">{$li['title']}</li>
+                    <li class="date">{php echo date('Y-m-d H:i',$li['createtime']);}</li>
+                </ul>
+                {if $li['is_display'] == 1}
+                    <span class="status" style="color: green;">已审核{if $li['renew_is_check'] == 1}&nbsp;|&nbsp;续费中{/if}&nbsp;|&nbsp;{$li['package_name']}</span>
+                {else}
+                    <span class="status" style="color: red;">审核中{if $li['renew_is_check'] == 1}&nbsp;|&nbsp;续费中{/if}&nbsp;|&nbsp;{$li['package_name']}</span>
+                {/if}
+            </div>
+            <div class="center">{$li['desc']}</div>
+            <div class="bottom" data-id="{$li['id']}" style="position:relative;">
+                {if $li['is_display'] != 2 && !empty($li['last_time'])}
+                    <span style="position: absolute;left: 5px;top: 5px;">
+                        {if TIMESTAMP >= $li['last_time']}
+                        已过期
+                        {else}
+                            有效期剩余&nbsp;<font style="color: red;">{php echo ceil(($li['last_time'] - TIMESTAMP)/(24*3600));}</font>&nbsp;天
+                        {/if}
+                    </span>
+                {/if}
+                {if $li['pay_status'] == 1}
+                <button type="button" data-json='{$li["package_json"]}' class="btn btn-sm btn-info js-renew">续费</button>
+                {/if}
+                {if $li['pay_status'] == 0}
+                <button type="button" style="margin-left: 5px;" class="btn btn-sm btn-success js-pay">立即支付</button>
+                {/if}
+                <button data-type="{$li['package_id']}" type="button" style="margin-left: 5px;" class="btn btn-sm btn-primary js-preview">预览</button>
+            </div>
+        </div>
+        {/loop}
+    </div>
+    {template 'common/nav-sj'}
+</div>
+<style type="text/css">
+    .renew-box{
+        margin: 5px;
+    }
+    .renew-box button{
+        width: 100%;
+        height: 35px;
+        text-align: center;
+        line-height: 35px;
+        color: #ffffff;
+        background: red;
+    }
+    .renew-box button span{
+        font-weight: 700;
+    }
+    .renew-top{
+        position: relative;
+        border: 1px solid darkgray;
+        margin: 10px 0;
+    }
+    .renew-top input{
+        width: 180px;
+        border: 0;
+        margin: 0!important;
+        height: 35px;
+    }
+    .renew-top span{
+        position: absolute;
+        right: 5px;
+        display: inline-block;
+        height: 35px;
+        line-height: 35px;
+    }
+</style>
+<script type="text/javascript">
+    require(['util','layer'],function(ret,layer){
+        //预览
+        $('.js-preview').click(function(){
+            var type = $(this).attr('data-type');
+            var img_01 = '/assets/sj_news/img/1.png';
+            var img_02 = '/assets/sj_news/img/2.png';
+            var img_03 = '/assets/sj_news/img/3.png';
+            var src = img_01;
+            if(type >2 && type < 5){
+                src = img_02;
+            }
+            if(type > 4){
+                src = img_03;
+            }
+            var _index = layer.open({
+                'title':'广告展示示例',
+                type: 1,
+                skin: 'layui-layer-rim', //加上边框
+                area: ['300px', '320px'], //宽高
+                content: '<img style="width:100%;height:auto" src="'+src+'"></im>'
+            });
+        });
+
+        //续费
+        $('.js-renew').click(function(){
+            //页面层
+            var id = $(this).parent().attr('data-id');
+            var package = $.parseJSON($(this).attr('data-json'));
+            console.log(package);
+            var _index = layer.open({
+                'title':'当前套餐：'+package['name'],
+                type: 1,
+                skin: 'layui-layer-rim', //加上边框
+                area: ['300px', '156px'], //宽高
+                content: '' +
+                '<div class="renew-box">' +
+                    '<div class="renew-top">' +
+                        '<input type="number" id="day_nums" placeholder="请输入购买的套餐数量">' +
+                        '<span class="js-day-tips">0天</span>' +
+                    '</div>' +
+                    '<button type="button" class="js-renew-pay">立即续费（￥<span class="js-price-tips">0</span>）</button>'+
+                '</div>'
+            });
+
+            //输入框值变化事件
+            $('#day_nums').bind('input propertychange',function(){
+                var num = parseInt($(this).val());
+                if(num == '' || num < 1 || isNaN(num) || num > 10){
+                    num = 0;
+                }
+                $(this).val(num);
+                //天数提示
+                $('.js-day-tips').html((num*package['day'])+'天');
+                //支付金额
+                $('.js-price-tips').html((num*package['price']*(1-0.01*package['pay_rate'])).toFixed(2));
+            });
+
+            //续费
+            $('.js-renew-pay').click(function(){
+                //记录原始的内容
+                layer.close(_index);
+                var obj = $(this);
+                var _html = obj.html();
+                var num = parseInt($('#day_nums').val());
+                if(num == '' || num < 1 || isNaN(num) || num > 10){
+                    util.toast('请输入1-10之间的数字','','error');
+                    return false;
+                }
+                $('.js-toast-loading').show();
+                util.loading();
+                obj.html('续费中').attr('disabled','disabled');
+                $.post(
+                        "{php echo $this->createMobileUrl('m_ad',array('op'=>'renew'));}",
+                        {id:id,num:num},
+                        function(ret){
+                            obj.html(_html).removeAttr('disabled');
+                            $('.js-toast-loading').hide();
+                            util.toast(ret.message,ret.redirect,ret.type);
+                        },'json'
+                );
+            });
+
+        });
+
+        //立即支付
+        $('.js-pay').click(function(){
+            var obj = $(this);
+            var id = $(this).parent().attr('data-id');
+            $('.js-toast-loading').show();
+            util.loading();
+            obj.html('支付中').attr('disabled','disabled');
+            $.post(
+                    window.location.href,
+                    {id:id},
+                    function(ret){
+                        obj.html('立即支付').removeAttr('disabled');
+                        $('.js-toast-loading').hide();
+                        util.toast(ret.message,ret.redirect,ret.type);
+                    },'json'
+            );
+        });
+    });
+</script>
+{template 'common/footer-sj-news'}

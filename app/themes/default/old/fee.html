@@ -1,0 +1,100 @@
+<div class="fee-box">
+
+   <div class="product-list">
+       <div class="item" data-type="1">
+           <span class="icon iconfont active icon-xuanzhong1"></span>
+           <span>A套餐（支付300元）</span>
+       </div>
+       <div class="item" data-type="2">
+           <span class="icon iconfont icon-duoxuanbuxuan"></span>
+           <span>A套餐（支付10个方圆宝）</span>
+       </div>
+       <div class="item" data-type="3">
+           <span class="icon iconfont icon-duoxuanbuxuan"></span>
+           <span>C套餐（支付1500元）</span>
+       </div>
+       <div class="item" data-type="4">
+           <span class="icon iconfont icon-duoxuanbuxuan"></span>
+           <span>C套餐（支付1300元+10个方圆宝）</span>
+       </div>
+   </div>
+    <div class="tips">套餐说明：含一年的信息发布权限、产品图片修饰服务，自动开通平台收款二维码</div>
+    <div class="parent">
+        <form id="pay_form">
+            <input type="hidden" name="type" value="1">
+            <input type="text" name="parent_uid" placeholder="请输入所属ID">
+        </form>
+    </div>
+    <div class="pay">
+        <button type="button" class="js-pay">立即支付</button>
+    </div>
+    <div style="padding: 5px;line-height: 25px;">选择方圆宝抵扣时，请确保&nbsp;<span style="color: red">余额足够支付</span>&nbsp;，下单后系统将自动扣除方圆宝</div>
+</div>
+<script type="text/javascript">
+    require(['layer'],function(layer){
+        var tips1 = '套餐说明：含一年的信息发布权限、产品图片修饰服务，自动开通平台收款二维码';
+        var tips2 = '套餐说明：含五年的信息发布权限、产品图片修饰服务，如您是本平台商家，您的店铺可自动显示在平台“积分商城”拥有“积分交易”权限，自动开通平台收款二维码';
+        $('.item').bind('click',function(){
+            var type = $(this).attr('data-type');
+            $('.tips').hide().html(type<3?tips1:tips2+'').slideDown();
+            $('.product-list').find('.icon').removeClass('active icon-xuanzhong1').addClass('icon-duoxuanbuxuan');
+            $(this).find('.icon').addClass('active icon-xuanzhong1').removeClass('icon-duoxuanbuxuan');
+            $('input[name="type"]').val(type);
+        });
+
+        //支付
+        $('.js-pay').bind('click',function(){
+            var parent_uid = $('input[name="parent_uid"]').val();
+            $.post(
+                 window.location.href,
+                    {ac:'check',parent_uid:parent_uid},
+                    function(ret){
+                        if(ret.type == 'success'){
+                            layer.msg('您的所属者为：【'+ret.message['nickname']+'】', {
+                                time: 0 //不自动关闭
+                                ,btn: ['确认支付', '取消']
+                                ,yes: function(index){
+                                    layer.close(index);
+                                    $.post(
+                                         window.location.href,
+                                         $('#pay_form').serialize(),
+                                         function(ret){
+                                             util.toast(ret.message,ret.redirect,ret.type);
+                                         },'json'
+                                    );
+                                }
+                            });
+                        }else{
+                            util.toast(ret.message,'','error');
+                        }
+                    },'json'
+            );
+        });
+
+
+        //选择套餐
+        var product = {php echo json_encode($setting['product']);};
+        $('.product-box ul li').bind('click',function(){
+            var key = $(this).attr('data-key');
+            $('input[name="key"]').val(key);
+            var tc_tip = "";
+            if(key == 1){
+                tc_tip = "(&nbsp;套餐A&nbsp;)";
+            }else if(key == 2){
+                tc_tip = "(&nbsp;套餐B&nbsp;)";
+            }else if(key == 3){
+                tc_tip = "(&nbsp;套餐C&nbsp;)";
+            }
+            $('.tip span').html(tc_tip+product[key]['desc']);
+            $('.price span').html('￥'+product[key]['price']);
+            var select = $(this).attr('data-select');
+            if(select == '0'){
+                $('.js-pay').attr('disabled','disabled');
+                return false;
+            }
+            $('.product-box ul li').css('border','1px solid #eee');
+            $(this).css('border','1px solid green');
+            $('.js-pay').removeAttr('disabled');
+        });
+    });
+</script>

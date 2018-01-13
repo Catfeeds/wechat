@@ -1,0 +1,24 @@
+<div class="page-cashier">
+    <div class="header">
+        <span class="back">
+          <i class="icon iconfont icon-fanhui back" onclick="history.go('-1')"></i>
+        </span>
+        {$tip}
+        <a class="qrcode-log-btn" href="{php echo url('mc/cashier/balance_log');}">结算记录</a>
+    </div>
+    <div class="qrcode-box">
+        <div class="title">无需加好友，扫二维码向我付款</div>
+        <div class="qrcode">
+            <img class="qrcode-img" src="{$img}">
+            <img class="safe-img" src="/assets/common/images/safe.png">
+            <img class="avatar-img" src="{php echo tomedia($member['avatar']);}">
+        </div>
+        <div class="btns">
+            <a href="{php echo url('mc/cashier/pay_log');}">转账记录</a>
+            <span>|</span>
+            <a href="{php echo url('mc/cashier/income_log');}">收款记录</a>
+            <span>|</span>
+            <a href="{php echo url('mc/cashier/balance');}">申请结算</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,120 @@
+<div class="panel panel-info">
+    <div class="panel-heading">筛选</div>
+    <div class="panel-body">
+        <form method="get" action="./index.php" class="form-horizontal" role="form">
+            <input type="hidden" name="c" value="site" />
+            <input type="hidden" name="a" value="entry" />
+            <input type="hidden" name="op" value="display" />
+            <input type="hidden" name="do" value="staff" />
+            <input type="hidden" name="m" value="oto" />
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                    <input type="text" class="form-control" name="keyword" value="{$keyword}" placeholder="请输入昵称、姓名、会员ID" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">所属地区</label>
+                <div class="col-sm-6 col-md-8 col-xs-12">
+                    {php echo tpl_form_field_district('area', array('province' => $province, 'city' => $city, 'district' => $district ));}
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">状态</label>
+                <div class="col-sm-9 col-xs-12">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="is_check[]" value="{CHECK_PASS}" {if in_array(CHECK_PASS,$is_check)}checked{/if}>正常
+                    </label>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name="is_check[]" value="{CHECK_NOT_PASS}" {if in_array(CHECK_NOT_PASS,$is_check)}checked{/if}> 禁用
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                    <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                    <input type="hidden" name="token" value="{$_W['token']}"/>
+                    <input class="btn btn-primary" type="submit" name="export_submit" id="export_submit" value="导出">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<form method="post" class="form-horizontal" id="agent_form">
+    <input type="hidden" name="ac" value="delete" />
+    <div class="panel panel-default ">
+        <div class="table-responsive panel-body">
+            <table class="table table-hover js-goods-box">
+                <thead class="navbar-inner">
+                <tr>
+                    <th>删除</th>
+                    <th>会员ID</th>
+                    <th>昵称/姓名</th>
+                    <th>省份</th>
+                    <th>城市</th>
+                    <th>区县</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop $list $li}
+                <tr>
+                    <td><input type="checkbox" name="ids[]" value="{$li['id']}"></td>
+                    <td>{$li['uid']}</td>
+                    <td>{$li['nickname']}/{$li['realname']}</td>
+                    <td>{$li['province']}</td>
+                    <td>{$li['city']}</td>
+                    <td>{$li['district']}</td>
+                    <td>
+                        {if $li['is_check'] == CHECK_PASS}
+                        <span class="label label-success">正常</span>
+                        {else}
+                        <span class="label label-default">禁用</span>
+                        {/if}
+                    </td>
+                    <td><a href="{php echo $this->createWebUrl('staff',array('op'=>'post','id'=>$li['id']));}">编辑</a></td>
+                </tr>
+                {/loop}
+                {if !empty($list) && is_array($list)}
+                <tr>
+                    <td><input class="js-check" type="checkbox"></td>
+                    <input name="token" type="hidden" value="{$_W['token']}" />
+                    <td colspan="7"><button type="button" name="submit" class="btn btn-primary">删除</button></td>
+                </tr>
+                {/if}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {$pager}
+</form>
+<script type="text/javascript">
+    require(['bootstrap'], function(){
+        /* 选中 */
+        $('.js-check').bind('click',function(){
+            var ck = this.checked;
+            $('.js-goods-box :checkbox').each(function(index,obj){
+                this.checked = ck;
+            });
+        });
+
+        /* 删除 */
+        $('button[name="submit"]').bind('click',function() {
+            if (confirm('删除后不可恢复，您确定删除吗？')) {
+                if ($(":checkbox[name='ids[]']:checked").size() > 0) {
+                    $.post(
+                            window.location.href,
+                            $('#agent_form').serialize(),
+                            function (ret) {
+                                util.message(ret.message, ret.redirect, ret.type);
+                                return false;
+                            }, 'json'
+                    );
+                }
+                util.message('没有选择要删除的代理！', '', 'error');
+                return false;
+            }
+        });
+    });
+</script>

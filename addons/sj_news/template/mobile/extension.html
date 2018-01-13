@@ -1,0 +1,32 @@
+{template 'common/header-sj-news'}
+<link rel="stylesheet" href="{ASSETS_URL}/sj_news/css/extension.css?v={STYLE_VERSION}">
+<div class="page-notice">
+    <div class="notice-header">
+        <span style="cursor: pointer;" onclick="history.back()">&lt;返回</span>
+        <span>成为媒老板</span>
+        <span style="cursor: pointer;right: 5px;" class="js-notice" onclick="location.href='{php echo $this->createMobileUrl('index');}'">首页</span>
+    </div>
+    <div style="height: 45px"></div>
+    <div class="desc">
+        {php echo htmlspecialchars_decode($setting['introduce']);}
+    </div>
+    <div class="pay-box">
+        <button type="button" class="js-pay">
+            <span>预存&nbsp;{$setting['price']}元&nbsp;</span>成为媒老板
+        </button>
+    </div>
+    {template 'common/nav-sj'}
+    <script type="text/javascript">
+        $('.js-pay').click(function(){
+            var _this = $(this);
+            _this.html('支付中，请稍等...').attr('disabled','disabled');
+            $.post(
+                  window.location.href,
+                  function(ret){
+                    util.toast(ret.message,ret.redirect,ret.type);
+                  },'json'
+            );
+        });
+    </script>
+</div>
+{template 'common/footer-sj-news'}

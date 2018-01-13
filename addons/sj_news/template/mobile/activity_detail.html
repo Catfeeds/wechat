@@ -1,0 +1,90 @@
+{template 'common/header-sj-news'}
+<link rel="stylesheet" href="{ASSETS_URL}/sj_news/css/activity_detail.css?v={STYLE_VERSION}">
+<div class="page-apply">
+    <div class="activity-header">
+        <span style="cursor: pointer;" onclick="history.back()">&lt;返回</span>
+        <span>报名详情</span>
+        <span style="cursor: pointer;right: 5px;" class="js-activity" onclick="location.href='{php echo $this->createMobileUrl('index');}'">首页</span>
+    </div>
+    <div style="width: 100%;height: 50px"></div>
+    <div class="page-detail">
+        <p class="title">{$item['title']}</p>
+        <p class="from-user"> -- {$item['from_user']}</p>
+        <p class="date">
+            开始时间：{php echo date('Y年m月d日',$item['starttime']);}
+            <br>
+            结束时间：{php echo date('Y年m月d日',$item['endtime']);}
+            <br>
+            报名地址：{$item['address']}
+            <br>
+            咨询电话：{$item['tel']}
+            <br>
+            客服微信：{$item['wxid']}
+        </p>
+        <div class="desc" style="color:#ffffff;">
+            {$item['content']}
+        </div>
+    </div>
+    <div class="push-box">
+        <form method="post" enctype="multipart/form-data" id="apply_form">
+            <div class="apply-form-box">
+                <div class="apply-form-title" style="color: salmon;">报名信息</div>
+                <div class="apply-form-info">
+                    {loop $item['join_fields'] $field}
+                        {if $joinFields[$field]['type'] == 'text'}
+                            <div class="apply-form-input">
+                                <label for="{$field}">{$joinFields[$field]['title']}</label>
+                                <input name="{$field}" id="{$field}" type="text" placeholder="{$joinFields[$field]['placeholder']}">
+                            </div>
+                        {/if}
+
+                        {if $joinFields[$field]['type'] == 'area'}
+                        <div class="apply-form-input">
+                            <label>{$joinFields[$field]['title']}</label>
+                            {php echo tpl_app_form_field_district('area');}
+                        </div>
+                        {/if}
+
+                        {if $joinFields[$field]['type'] == 'select'}
+                            <div class="apply-form-input">
+                                <label for="{$field}">{$joinFields[$field]['title']}</label>
+                                <select name="{$field}" id="{$field}">
+                                    {loop $joinFields[$field]['value'] $f_index $f_value}
+                                    <option value="{$f_index}">{$f_value}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        {/if}
+                    {/loop}
+                </div>
+                <div class="apply-footer">
+                    <button type="button" class="apply-btn">提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div style="display: flex;display: -webkit-flex;flex-direction: column;padding: 10px;align-items: center;justify-content: space-around;">
+        <img style="width: 200px;height: 200px;" src="{$img}">
+        <span>转发二维码</span>
+    </div>
+</div>
+<script type="text/javascript">
+    require([],function(){
+
+        /* 申请 */
+        $('.apply-btn').bind('click',function(){
+            var apply_btn = $(this);
+            $('.js-toast-loading').show();
+            util.loading();
+            $.post(
+                   window.location.href,
+                   $('#apply_form').serialize(),
+                    function(ret){
+                        $('.js-toast-loading').hide();
+                        util.toast(ret.message,ret.redirect,ret.type);
+                    },'json'
+            );
+        });
+    });
+</script>
+{template 'common/footer-sj-news'}

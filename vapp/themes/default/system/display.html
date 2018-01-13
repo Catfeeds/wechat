@@ -1,0 +1,62 @@
+{template 'common/header'}
+<div class="vapp-tab">
+    <ul>
+        <li {if $do == 'display'}class="active"{/if}>
+            <a href="{php echo url('goods/display');}">提示设置</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+{if $do == 'display'}
+    <form method="post" class="form-horizontal form" id="post_form">
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">状态</label>
+            <div class="col-sm-8 col-xs-12">
+                <label class="radio-inline">
+                    <input type="radio" name="status" value="{OPEN_STATUS}" {if $item['status']== OPEN_STATUS}checked{/if}>
+                    打开
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="status" value="{CLOSE_STATUS}" {if $item['status']!= OPEN_STATUS}checked{/if}>
+                    关闭
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">频率</label>
+            <div class="col-sm-8 col-xs-12">
+                <input class="form-control" type="text" name="play_rate" value="{$item['play_rate']}" placeholder="请输入更新频率，单位：分钟，最小为1分钟">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">提示选项</label>
+            <div class="col-sm-8 col-xs-12">
+                <div class="alert alert-info">
+                    <i class="fa fa-info-circle"></i> 订单提醒（包含未发货、退款的订单）<br>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-8 col-xs-12 col-sm-offset-2">
+                <input type="hidden" name="id" value="{$item['id']}">
+                <button type="button" name="submit" class="btn btn-primary">提交</button>
+                <input type="hidden" name="token" value="{$_W['token']}">
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+        require(['util'],function(util){
+            $('button[name="submit"]').bind('click',function(){
+                $.post(
+                    window.location.href,
+                    $('#post_form').serialize(),
+                    function(ret){
+                        util.message(ret.message,ret.redirect,ret.type);
+                    },'json'
+                );
+            });
+        });
+    </script>
+{/if}
+</div>
+{template 'common/footer'}

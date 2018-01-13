@@ -1,0 +1,294 @@
+{template 'common/header-sj-news'}
+<link rel="stylesheet" href="{ASSETS_URL}/sj_news/css/user.css?v={STYLE_VERSION}">
+<style type="text/css">
+    .footer-a{
+        display: flex;
+        display: -webkit-flex;
+        width: 100%;
+        margin-top: 20px;
+        border-top: 1px solid wheat;
+    }
+    .footer-a a{
+        margin-top: 20px!important;
+    }
+</style>
+<div class="page-user">
+    <div class="user-top"></div>
+    <div class="user-info">
+        <div class="info-box">
+            <div class="face">
+                <img src="{php echo tomedia($member['avatar']);}">
+            </div>
+            <span>{$member['nickname']}</span>
+        </div>
+    </div>
+    <div class="score-box">
+        <b>{$member['credit1']}</b>&nbsp;积分
+    </div>
+    <div class="menu">
+        <a href="{php echo $this->createMobileUrl('m_text');}">
+            <i style="color: blueviolet" class="iconfont icon-document_fill"></i>
+            <span>文章</span>
+        </a>
+        <a href="{php echo $this->createMobileUrl('m_image');}">
+            <i style="color: chocolate" class="iconfont icon-picture_fill"></i>
+            <span>图片</span>
+        </a>
+        <a href="{php echo $this->createMobileUrl('m_video');}">
+            <i style="color: deepskyblue"  class="iconfont icon-video_fill"></i>
+            <span>视频</span>
+        </a>
+        <a href="{php echo $this->createMobileUrl('m_ad');}">
+            <i style="color: yellowgreen"  class="iconfont icon-systemprompt_fill"></i>
+            <span>广告</span>
+        </a>
+        <a href="{php echo $this->createMobileUrl('m_talk');}">
+            <i style="color: blue"  class="iconfont icon-interactive_fill"></i>
+            <span>评论</span>
+        </a>
+        <a href="{php echo $this->createMobileUrl('suggest');}">
+            <i style="color: chocolate;"  class="iconfont icon-fankui1"></i>
+            <span>反馈</span>
+        </a>
+        <div class="footer-a">
+            <a href="{php echo $this->createMobileUrl('notice');}">
+                <i style="color: violet;"  class="iconfont icon-gonggao1"></i>
+                <span>公告</span>
+            </a>
+            <a class="js-exchange">
+                <i style="color: red"  class="iconfont icon-shangjiabanduijiang"></i>
+                <span>兑奖</span>
+            </a>
+            <a href="{php echo $this->createMobileUrl('activity');}">
+                <i style="color: mediumturquoise;"  class="iconfont icon-huodong"></i>
+                <span>活动</span>
+            </a>
+        </div>
+    </div>
+    <style type="text/css">
+        .diymenu{
+            z-index: 3;
+            background:#53c565;
+            border-top: 1px solid #eee;
+            height: 52px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            display: flex;
+            display: -webkit-flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .diymenu a{
+            text-decoration: none;
+            display: flex;
+            display: -webkit-flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .diymenu a span:first-child{
+            font-size: 21px;
+            color: yellow!important;
+        }
+        .diymenu a span:last-child{
+            color: #ffffff!important;
+        }
+        .footer-menu{
+            width: 100%;
+            background: #edf0f0;
+            position: fixed;
+            bottom: 0;
+            z-index: 5;
+            display: none;
+        }
+        .push-box{
+            margin-top: 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            display: -webkit-flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .push-box a{
+            padding: 10px 0;
+            text-decoration: none;
+            display: flex;
+            display: -webkit-flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .push-box a span:first-child i{
+            font-size: 26px;
+        }
+        .push-box a span:first-child{
+            text-align: center;
+            line-height: 50px;
+            width: 50px;
+            height: 50px;
+            background: #ffffff;
+            border: 1px solid #e0e3e3;
+            border-radius: 15px;
+            -webkit-border-radius: 15px;
+            -moz-border-radius: 15px;
+        }
+        .push-box a span:last-child{
+            margin-top: 5px;
+            color: #666666!important;
+        }
+        .push-close{
+            height: 40px;
+            line-height: 30px;
+            text-align: center;
+        }
+        .exchange-box{
+            position: relative;
+        }
+        .exchange-bottom{
+            display: flex;
+            display: -webkit-flex;
+            position: fixed;
+            bottom: 0;
+            height: 35px;
+            width: 100%;
+            border-top: 2px solid yellowgreen;
+        }
+        .exchange-bottom input{
+            height: 35px;
+            border: 0;
+            border-radius: 0;
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+        }
+        .exchange-bottom button{
+            height: 35px;
+            border: 0;
+            border-radius: 0;
+            -webkit-border-radius: 0;
+            -moz-border-radius: 0;
+            color: #ffffff;
+            background: yellowgreen;
+        }
+        .exchange-top{
+            padding-bottom: 40px;
+        }
+        .exchange-top p{
+            padding: 0 15px;
+            font-size: 13px;
+            color: #000000;
+        }
+    </style>
+    <div style="height: 60px"></div>
+    <div class="diymenu">
+        <a {if $_GPC['do'] == 'index'}class="active"{/if} href="{php echo $this->createMobileUrl('index');}">
+        <span class="iconfont icon-homepage{if $_GPC['do'] == 'index'}_fill{/if}"></span>
+        <span class="text top">首页</span>
+        </a>
+        <a href="http://sd.51yifangyuan.com/app/index.php?i=7&c=entry&do=index&m=oto&wxref=mp.weixin.qq.com#wechat_redirect">
+            <span class="iconfont icon-service"></span>
+            <span class="text top">商城</span>
+        </a>
+		<a class="js-open-push {if in_array($_GPC['do'] ,array('text','image','video'))}active{/if}">
+            <span class="iconfont icon-addition{if in_array($_GPC['do'] ,array('text','image','video'))}_fill{/if}"></span>
+            <span class="text top">发布</span>
+        </a>
+		<a href="{php echo $this->createMobileUrl('activity');}" class="{if in_array($_GPC['do'] ,array('activity'))}active{/if}">
+            <span class="iconfont icon-huodong"></span>
+            <span class="text top">活动</span>
+        </a>
+        <a  {if $_GPC['do'] == 'user'}class="active"{/if} href="{php echo $this->createMobileUrl('user');}">
+        <span class="iconfont icon-addressbook{if $_GPC['do'] == 'user'}_fill{/if}"></span>
+        <span class="text top">我的</span>
+        </a>
+    </div>
+    <div class="footer-menu">
+        <div class="push-box">
+            <a href="{php echo $this->createMobileUrl('text');}" style="color: #4f88f6">
+                <span>
+                    <i class="iconfont icon-document_fill"></i>
+                </span>
+                <span style="font-size: 12px" class="text top">文章</span>
+            </a>
+            <a href="{php echo $this->createMobileUrl('image');}" style="color: #1dda9a">
+                <span>
+                    <i class="iconfont icon-picture_fill"></i>
+                </span>
+                <span style="font-size: 12px" class="text top">图文</span>
+            </a>
+            <a href="{php echo $this->createMobileUrl('video');}" style="color: #fe6c6a">
+                <span>
+                    <i class="iconfont icon-video_fill"></i>
+                </span>
+                <span style="font-size: 12px" class="text top">视频</span>
+            </a>
+            <a href="{php echo $this->createMobileUrl('ad');}" style="color:#fcc90d ">
+                <span>
+                    <i class="iconfont icon-systemprompt_fill"></i>
+                </span>
+                <span style="font-size: 12px" class="text top">广告</span>
+            </a>
+        </div>
+        <div class="push-close">
+            <span class="iconfont icon-close"></span>
+        </div>
+    </div>
+    <div id="credit_desc" style="display: none;">
+        {php echo htmlspecialchars_decode($setting['credit_desc']);}
+    </div>
+    <script type="text/javascript">
+        //点赞
+        require(['layer'],function(layer){
+            $('.js-exchange').click(function(){
+                var _index = layer.open({
+                    'title':'兑奖说明',
+                    type: 1,
+                    skin: 'layui-layer-rim', //加上边框
+                    area: ['300px', '300px'], //宽高
+                    content: '' +
+                    '<div class="exchange-box">' +
+                        '<div class="exchange-top">' + $('#credit_desc').html() +'</div>' +
+                        '<div class="exchange-bottom">' +
+                            '<input type="number" name="credit1" placeholder="请输入积分数量">' +
+                            '<button type="button" class="js-exchange-btn">立即兑换</button>' +
+                        '</div>'+
+                    '</div>'
+                });
+
+                //续费
+                $('.js-exchange-btn').click(function(){
+                    //记录原始的内容
+                    layer.close(_index);
+                    var obj = $(this);
+                    var _html = obj.html();
+                    var credit1 = parseFloat($('input[name="credit1"]').val());
+                    if(isNaN(credit1) || credit1 <=0){
+                        util.toast('积分数量输入不正确','','error');
+                        return false;
+                    }
+                    $('.js-toast-loading').show();
+                    util.loading();
+                    obj.html('兑换中').attr('disabled','disabled');
+                    $.post(
+                            window.location.href,
+                            {credit1:credit1},
+                            function(ret){
+                                obj.html(_html).removeAttr('disabled');
+                                $('.js-toast-loading').hide();
+                                util.toast(ret.message,ret.redirect,ret.type);
+                            },'json'
+                    );
+                });
+            });
+
+            $('.js-open-push').click(function(){
+                $('.footer-menu').slideDown();
+            });
+
+            $('.push-close').click(function(){
+                $('.footer-menu').slideUp();
+            });
+        });
+    </script>
+</div>
+{template 'common/footer-sj-news'}

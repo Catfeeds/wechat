@@ -1,0 +1,304 @@
+.page-balance{}
+.page-balance .balance-header{
+    height: 70px;
+    background: #06c1ad;
+    position: fixed;
+    width: 100%;
+    z-index: 3;
+}
+.page-balance .balance-header .title{
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    color: #ffffff;
+}
+.page-balance .balance-header .search-box{
+    height: 30px;
+    line-height: 30px;
+    margin: 0 5px;
+    padding-left: 70px;
+    padding-right: 35px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    background: #ffffff;
+    position: relative;
+}
+
+.page-balance .search{
+    height: 30px;
+    line-height: 30px;
+    margin: 0 5px;
+    padding-left: 70px;
+    padding-right: 35px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    background: #ffffff;
+    position: relative;
+}
+.page-balance .search .type{
+    top: 0;
+    left: 5px;
+    position: absolute;
+    padding-right: 5px;
+    border-right: 1px solid #eee;
+}
+.page-balance .search input{
+    height: 28px;
+    line-height: 28px;
+    padding: 0;
+    margin: 0;
+    text-indent: 15px;
+    border: 0;
+}
+.page-balance .search .button{
+    position: absolute;
+    right: 5px;
+    top: 0;
+    display: block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+}
+.page-balance .search .button i{
+    font-size: 21px;
+}
+ /* 展开菜单 */
+.page-balance .menu{
+    position: absolute;
+    top: 35px;
+    left: 3px;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    border-radius: 4px;
+    display: none;
+}
+.page-balance .menu ul li{
+    padding: 0 10px;
+    line-height: 35px;
+    color: #fff;
+    border-bottom: 1px solid #fff;
+}
+.page-balance .menu ul li:last-child{
+    border: none;
+}
+.page-balance .menu ul li i{
+    font-size: 16px;
+    padding-right: 5px;
+    float: left;
+}
+.page-balance .menu .up {
+    position: absolute;
+    top: -5px;
+    left: 30px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid rgba(0, 0, 0, 0.7);
+}
+
+.page-balance .ajax-more {
+    height: 40px;
+    margin-top: 10px;
+    background: #ffffff;
+    line-height: 40px;
+    text-align: center;
+}
+.page-balance .balance-list{}
+.page-balance .balance-list .item{
+    background: #ffffff;
+    margin-top: 10px;
+}
+.page-balance .balance-list .item .date{
+    height: 40px;
+    line-height: 40px;
+    padding-left: 10px;
+    border-bottom: 1px solid #eee;
+    position: relative;
+}
+.page-balance .balance-list .item .date label{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+.page-balance .balance-list .item .desc{
+    position: relative;
+    height: 120px;
+    padding-left: 100px;
+}
+.page-balance .balance-list .item .desc img{
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    width: 90px;
+    height: 90px;
+}
+.page-balance .balance-list .item .desc ul li.store-name{
+    height: 30px;
+    line-height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 16px;
+}
+.page-balance .balance-list .item .desc ul li.store-address,
+.page-balance .balance-list .item .desc ul li.store-tel{
+    font-size: 14px;
+    height: 25px;
+    line-height: 25px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.page-balance .balance-list .item .op{
+    padding: 5px;
+    height: 40px;
+    border-top: 1px solid #eee;
+}
+.page-balance .balance-list .item .op a{
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+
+.date-range{
+    background: #ffffff;
+    position: relative;
+    padding-left: 70px;
+    border-bottom: 1px solid #eee;
+}
+.date-range span{
+    padding-left: 10px;
+    text-align: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    height: 40px;
+    line-height: 40px;
+}
+.date-range input{
+    border: 0;
+    margin: 0!important;
+}
+
+
+.page-agent .balance2-header{
+    height: 45px;
+    line-height: 45px;
+    border-bottom: 1px solid #B8B8B8;
+    background: #f9f9f9;
+    position: relative;
+    text-align: center;
+}
+.menu .up {
+    position: absolute;
+    top: -5px;
+    right: 10px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid rgba(0, 0, 0, 0.7);
+}
+
+
+.page-agent .balance2-header i:first-child {
+    width: 50px;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 21px;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.page-agent .balance2-header i.icon-menu {
+    color: #000000;
+    font-size: 21px;
+    width: 45px;
+    height: 45px;
+    text-align: center;
+    line-height: 45px;
+    display: block;
+    position: absolute;
+    right: 0!important;
+    top: 0;
+}
+.menu {
+    padding: 0 10px;
+    position: absolute;
+    top: 43px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    border-radius: 4px;
+    display: none;
+}
+.page-agent .withdraw-apply {
+    margin-top: 10px;
+    background: #ffffff;
+    border-bottom: 1px solid #eee;
+}
+.page-agent .withdraw-apply .username, .page-agent .withdraw-apply .tel, .page-agent .withdraw-apply .money {
+    padding: 5px 5px 5px 70px;
+    position: relative;
+    border-top: 1px solid #eee;
+}
+
+.page-agent .withdraw-apply .username span, .page-agent .withdraw-apply  .tel span, .page-agent .withdraw-apply  .money span {
+    position: absolute;
+    display: block;
+    width: 60px;
+    height: 45px;
+    line-height: 45px;
+    text-align: right;
+    left: 0;
+}
+.page-agent .withdraw-apply .username input, .page-agent .withdraw-apply .tel input, .page-agent .withdraw-apply .money input {
+    border: 0;
+    margin: 0;
+}
+.page-agent .withdraw-apply .desc {
+    padding: 20px 10px 10px 80px;
+    border-top: 1px solid #eee;
+    line-height: 20px;
+    color: #000000;
+}
+.page-agent .withdraw-apply .withdraw-btn {
+    padding: 10px;
+}
+.page-agent .withdraw-btn button {
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    background: limegreen;
+    color: #ffffff;
+    width: 100%;
+    padding: 10px 0;
+    border: 0;
+}
+
+.log-list .item {
+    padding: 5px;
+    background: #ffffff;
+    border-bottom: 1px solid #eee;
+}
+.log-list .item ul {
+    margin: 0;
+    padding: 0;
+}
+.log-list .item ul li {
+    height: 25px;
+    line-height: 25px;
+}
+
+.ajax-more {
+    height: 40px;
+    margin-top: 10px;
+    background: #ffffff;
+    line-height: 40px;
+    text-align: center;
+}

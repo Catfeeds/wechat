@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns="http://wx.51muma.com" versionCode="0.6">
+	<application setting="false">
+		<name><![CDATA[百变App]]></name>
+		<identifie><![CDATA[vapp]]></identifie>
+		<version><![CDATA[1.0.0]]></version>
+		<type><![CDATA[app]]></type>
+		<ability><![CDATA[百变App]]></ability>
+		<description><![CDATA[百变App]]></description>
+		<author><![CDATA[慕马科技]]></author>
+		<url><![CDATA[http://wx.51muma.com/]]></url>
+	</application>
+	<platform>
+		<subscribes>
+		</subscribes>
+		<handles>
+		</handles>
+		<rule embed="false" />
+		<card embed="false" />
+	</platform>
+	<bindings>
+		<cover>
+			<entry title="手机入口" do="index" state="" direct="false" />
+			<entry title="API入口" do="api" state="" direct="false" />
+            <entry title="直播入口" do="play" state="" direct="false" />
+		</cover>
+		<menu>
+            <entry title="参数设置" do="config" state="" direct="false" />
+            <entry title="发现管理" do="find" state="" direct="false" />
+            <entry title="会员管理" do="member" state="" direct="false" />
+            <entry title="公司管理" do="company" state="" direct="false" />
+            <entry title="企业网站" do="article" state="" direct="false" />
+            <entry title="商品管理" do="goods" state="" direct="false" />
+            <entry title="直播管理" do="live" state="" direct="false" />
+            <entry title="聊天管理" do="chat" state="" direct="false" />
+            <entry title="社群管理" do="zone" state="" direct="false" />
+            <entry title="圈子管理" do="news" state="" direct="false" />
+            <entry title="分销管理" do="rebate" state="" direct="false" />
+        </menu>
+	</bindings>
+	<permissions>
+	</permissions>
+	<install><![CDATA[]]></install>
+	<uninstall><![CDATA[]]></uninstall>
+	<upgrade><![CDATA[]]></upgrade>
+</manifest>

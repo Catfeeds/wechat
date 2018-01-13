@@ -1,0 +1,106 @@
+body{
+    background: url("/assets/oto/images/check_bg.jpg") 0 0 no-repeat fixed;
+    background-size: cover;
+}
+.page-verify{
+    position: relative;
+}
+.page-verify .back{
+    width: 30px;
+    height: 30px;
+    border-radius: 30px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    background: rgba(0,0,0,0.5);
+    display: block;
+    position: fixed;
+    color: #ffffff;
+    top: 10px;
+    left: 10px;
+    z-index: 3;
+    text-align: center;
+    line-height: 30px;
+}
+.page-verify .logo{
+    padding: 10px;
+    width: 100px;
+    height: 100px;
+    margin: 70px auto 0 auto;
+    background: rgba(0,0,0,0.4);
+    border-radius: 100px;
+    -moz-border-radius: 100px;
+    -webkit-border-radius: 100px;
+}
+.page-verify .logo img{
+    width: 100%;
+    height: 100%;
+    border-radius: 80px;
+    -webkit-border-radius: 80px;
+    -moz-border-radius: 80px;
+    border: 1px solid #ffffff;
+}
+.login-box{
+    border: 1px solid #f4f5ff;
+    margin: 30px 5px 0 5px;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    background: rgba(255,255,255,0.1);
+}
+.login-box .input-box{
+    padding-left: 85px;
+    height: 45px;
+    line-height: 45px;
+    border-bottom: 1px solid #f4f5ff;
+    position: relative;
+}
+.login-box .input-box:last-child{
+    border: 0;
+}
+.login-box .input-box span{
+    display: block;
+    width: 80px;
+    text-align: right;
+    color: #ffffff;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.login-box .input-box input{
+    border: 0;
+    background: transparent;
+    color: #ffffff;
+    padding-left: 0;
+}
+.login-box .input-box .right{
+    position: absolute;
+    right: 5px;
+    top: 8px;
+    background: green;
+    color: #ffffff;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    padding: 0 10px;
+}
+.link,.link:hover,.link:active{
+    margin: 0 5px;
+    color: #04be02;
+    cursor: pointer;
+    text-decoration: underline!important;
+}
+.recover{
+    margin: 40px 5px 5px 5px;
+}
+.recover button{
+    width: 100%;
+    height: 40px;
+    line-height: 40px;
+    color: #ffffff;
+    font-size: 16px;
+}
+.desc{
+    padding: 5px;
+    line-height: 20px;
+    color: #ffffff;
+}

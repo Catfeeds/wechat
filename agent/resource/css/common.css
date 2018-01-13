@@ -1,0 +1,334 @@
+/* 商家管理主容器 */
+body{
+    background: #203544;
+    font-family: "Helvetica Neue",Roboto,Arial,"Droid Sans",sans-serif;
+}
+
+/*多图上传*/
+.multi-img-details{margin-top:.5em;}
+.multi-img-details .multi-item{max-width: 150px; position:relative; float: left; margin-right: 18px;}
+.multi-img-details .multi-item img{max-width: 150px; max-height: 150px;}
+.multi-img-details .multi-item em{position:absolute; top: 0; right: -14px;}
+
+/*登录注册*/
+.login,.register{background-size:cover; -webkit-background-size:cover; -o-background-size:cover;padding-top:5em;}
+@media screen and (max-width:767px){.login .panel.panel-default{width:90%; min-width:300px;}}
+@media screen and (min-width:768px){.login .panel.panel-default{width:70%;}}
+@media screen and (min-width:1200px){.login .panel.panel-default{width:50%;}}
+
+.page-login {
+    width: 800px;
+    margin: 10px auto;
+    padding-bottom: 100px;
+    min-height: 600px;
+}
+
+.page-login .title {
+    display: flex;
+    display: -webkit-flex;
+    height: 80px;
+    justify-content: center;
+    align-items: center;
+}
+
+.page-login .title img {
+    width: 80px;
+    height: 80px;
+    margin-right: 20px;
+}
+
+.page-login .title span {
+    color: #ffffff;
+    font-size: 30px;
+}
+
+.page-login .login-box {
+    display: flex;
+    display: -webkit-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 30px auto;
+}
+.page-login .login-box img{
+    width: 200px;
+    height: 200px;
+}
+.page-login .login-box span{
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-align: center;
+    color: #ffffff;
+    background: rgba(0,0,0,0.6);
+    border-radius: 50px;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+}
+
+.page-login .tip {
+    height: 30px;
+    text-align: center;
+    color: #333333;
+    font-size: 26px;
+}
+
+.page-login .username ,.page-login .password,.page-login .verify{
+    padding: 5px 0 5px 40px;
+    position: relative;
+    height: 40px;
+    border: 1px solid #ece1ff;
+    background: #ffffff;
+    margin-top: 20px;
+}
+.page-login .verify {
+    width: 170px;
+}
+
+.page-login .remember {
+    height: 30px;
+    margin: 20px 0 15px 0;
+    position: relative;
+    padding-left: 20px;
+}
+
+.page-login .button {
+    height: 50px;
+}
+
+.page-login .button input {
+    width: 100%;
+    height: 50px;
+    border: 0;
+    background: #00ad66;
+    border-radius: 0;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    color: #ffffff;
+    font-size: 21px;
+    outline: none;
+}
+
+.page-login .username span ,.page-login .password span,.page-login .verify span{
+    display: block;
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    line-height: 30px;
+    color: #333333;
+    position: absolute;
+    border-right: 1px solid #eee;
+    left: 5px;
+    top: 5px;
+}
+
+.page-login .username span i ,.page-login .password span i,.page-login .verify span i{
+    color: #333333;
+    font-size: 16px;
+}
+
+.page-login .verify img {
+    position: absolute;
+    right: -170px;
+    top: -1px;
+}
+
+.page-login .username input, .page-login .password input, .page-login .verify input {
+    font-size: 16px;
+    width: 100%;
+    text-indent: 15px;
+    height: 28px;
+    line-height: 28px;
+    border: 0;
+    outline: none;
+}
+
+.page-login .remember input {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.page-login .remember label{
+    font-weight: normal;
+}
+
+/* webupload 图片预览 */
+.history .img-list { margin: 4px; display: block; clear: both; list-style: outside none none; padding:0px;}
+.history .img-list .img-item { float: left; padding: 1px; cursor: pointer; position: relative;}
+.history .img-list .img-item .img-container { position: relative; width:75px; height:75px; text-align:center; background-color:#eee; background-size: contain; background-repeat: no-repeat; background-position: 50% 50%;}
+.history .img-list .img-item .img-container:hover .img-meta{display:none; }
+.history .img-list .img-item .img-container .img-meta { width:100%; position: absolute; bottom: 0; z-index:1; background:rgba(0,0,0,0.5); color:#eee;}
+.history .img-list .img-item .img-container .select-status {display:inline-block; width:50px; height:50px; position: absolute; bottom:0; right:0; z-index:2;}
+.history .img-list .img-item-selected .img-container .select-status {display:inline-block; width:50px; height:50px; position: absolute; bottom:0; right:0; background: url('../images/success-small.png') no-repeat right bottom; z-index:2;}
+.history .img-list .img-item-selected .img-container .img-meta {display:none;}
+.history .img-list .img-item .btnClose{text-align:right; position:absolute; top:-10px; right:-5px; display:none; z-index:10;}
+.history .img-list .img-item:hover .btnClose{display:block;}
+.history .img-list .img-item .btnClose a{display:inline-block; width:20px; height:20px; text-align:center; line-height:20px; color:#fff; background:rgba(0,0,0,.3); border-radius:50%;}
+.history .img-list .img-item .btnClose a i.fa-times{font-size:14px; padding:3px;margin-top: 0;}
+.history .img-list .img-item .btnClose a:hover{background:rgba(0,0,0,1);}
+.pagination { margin:0;}
+
+
+
+.page-agent{
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+.agent-menu{
+    min-height: 100%;
+    width: 230px;
+    padding: 0;
+    position: absolute;
+    z-index: 1;
+}
+.agent-panel{
+    margin-left: 230px;
+    min-height: 1704px;
+    background: #f9f9f9;
+}
+
+.page-agent .agent-menu .agent-system{
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    color: #ffffff;
+    font-size: 18px;
+    border-bottom: 1px solid #284357;
+}
+.agent-nav-title{
+    cursor: pointer;
+    position: relative;
+    height: 55px;
+    background: #203544;
+    color: #ffffff;
+    line-height: 55px;
+    padding-left: 65px;
+    display: block;
+    font-size: 16px;
+    border-bottom: 1px solid #284357;
+}
+.agent-nav-title .icon,.agent-menu-sub .icon{
+    display: block;
+    font-size: 21px;
+    position: absolute;
+    left: 15px;
+    top: 0;
+}
+.agent-nav-title .direct{
+    position: absolute;
+    right: 25px;
+}
+.agent-menu-sub{
+    display: none;
+    background: #162530;
+    padding: 0;
+    list-style: none;
+}
+.agent-menu-sub li{
+    position: relative;
+    padding-left: 65px;
+}
+.agent-menu-sub li a{
+    cursor: pointer;
+    display: block;
+    height: 50px;
+    line-height: 50px;
+    color: #8b9298;
+    text-decoration: none;
+    font-size: 16px;
+    border-bottom: 1px dashed #284357;
+}
+.agent-menu-sub li a.active,.agent-menu-sub li a:hover{
+    color: #06c1ae;
+}
+.agent-menu-sub li a:last-child{
+    border: 0;
+}
+.agent-panel .agent-nav{
+    position: relative;
+    height: 50px;
+    background: #06c1ae;
+    border-bottom: 1px solid #eee;
+}
+
+.agent-panel .agent-nav span.nav-toggle{
+    z-index: 5;
+    cursor: pointer;
+    background: #ffffff;
+    color: #06c1ae;
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    padding: 0 10px;
+    height: 30px;
+    display: block;
+    text-align: center;
+    line-height: 30px;
+}
+.agent-panel .agent-nav .agent-info{
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+}
+.agent-panel .agent-nav .agent-info span{
+    color: #ffffff;
+    padding: 10px 15px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    background: black;
+}
+.agent-panel .agent-body{
+    padding: 10px;
+}
+.agent-main{
+    background: #ffffff;
+    border: 1px solid #eee;
+    min-height: 500px;
+}
+.agent-tab{
+    height: 50px;
+}
+.agent-tab ul{
+    margin: 0;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+    list-style: none;
+    padding: 0;
+    height: 50px;
+    border-bottom: 1px solid #f4f4f4;;
+}
+.agent-tab ul li{
+    float: left;
+    height: 50px;
+    border-top: 3px solid transparent;
+    margin-bottom: -2px;
+    margin-right: 5px;
+}
+.agent-tab ul li.active{
+    border-top-color: #284357;
+    border-bottom: 1px solid #ffffff;
+}
+.agent-tab ul li a{
+    color: #333333;
+    text-decoration: none;
+    cursor: pointer;
+    display: block;
+    padding: 10px 15px;
+}
+.page-content{
+    padding: 10px;
+}
+
+.help-block,.text-danger{
+    color: red;
+}
+.spec-table input{
+    width: 80px;
+}

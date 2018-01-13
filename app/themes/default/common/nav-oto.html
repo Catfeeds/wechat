@@ -1,0 +1,29 @@
+<div class="foot-nav-fixed" style="width: 100%;height: 60px;"></div>
+<div class="page-nav">
+    <div class="nav-box">
+        <a class="nav-item" href="{php echo $this->createMobileUrl('index');}">
+            <ul class="{if $_GPC['do'] == 'index' && $op == 'display'}active{/if}">
+                <li class="nav-icon"><i class="icon iconfont {if $_GPC['do'] == 'index' && $op == 'display'}icon-shouye_shouye{else}icon-shouye-copy-copy{/if}"></i></li>
+                <li class="nav-title">首页</li>
+            </ul>
+        </a>
+        <a class="nav-item" href="{php echo $this->createMobileUrl('category');}">
+            <ul class="{if $_GPC['do'] == 'category' && $op == 'display'}active{/if}">
+                <li class="nav-icon"><i class="icon iconfont {if $_GPC['do'] == 'category' && $op == 'display'}icon-fenlei{else}icon-sort{/if}"></i></li>
+                <li class="nav-title">分类</li>
+            </ul>
+        </a>
+        <a class="nav-item" href="{php echo url('mc/apply');}">
+            <ul  class="{if $_GPC['c'] == 'mc' && $_GPC['a'] == 'apply'}active{/if}">
+                <li class="nav-icon"><i class="icon iconfont {if $_GPC['c'] == 'mc' && $_GPC['a'] == 'apply'}icon-dianpu{else}icon-dianpu1{/if}"></i></li>
+                <li class="nav-title">商家申请</li>
+            </ul>
+        </a>
+        <a class="nav-item" href="{php echo $this->createMobileUrl('user');}">
+            <ul class="{if $_GPC['do'] == 'user' && $op == 'display'}active{/if}">
+                <li class="nav-icon"><i class="icon iconfont {if $_GPC['do'] == 'user' && $op == 'display'}icon-wode{else}icon-wodeicon{/if}"></i></li>
+                <li class="nav-title">我的</li>
+            </ul>
+        </a>
+    </div>
+</div>

@@ -1,0 +1,81 @@
+{template 'common/header-oto'}
+<link rel="stylesheet" href="{ASSETS_URL}/oto/css/category.css?v={STYLE_VERSION}">
+<div class="page-category">
+    <form method="post" action="{php echo $this->createMobileUrl('search');}">
+        <input type="hidden" name="search_type" value="{SEARCH_TYPE_GOODS}">
+        <div class="category-header">
+            <i class="icon iconfont icon-fanhui" onclick="history.go('-1')"></i>
+            <input type="text" name="keyword" placeholder="请输入商品名称关键字">
+            <i class="icon iconfont icon-sousuo"></i>
+        </div>
+    </form>
+    <div style="height: 50px;width: 100%"></div>
+    <div class="category-box">
+        <div class="category-relative">
+            <div class="tab-nav">
+                <ul>
+                    {if !empty($categoryList) && is_array($categoryList)}
+                        {loop $categoryList $key $item}
+                        <li data-id="{$item['id']}" {if $key == 0}class="active"{/if}>{$item['title']}</li>
+                        {/loop}
+                    {/if}
+                </ul>
+            </div>
+            <div class="tab-menu">
+                <ul class="tab-ul">
+                    {if !empty($categoryList) && is_array($categoryList)}
+                    {loop $categoryList $key_1 $item_1}
+                    <li class="tab-li tab-li-{$item_1['id']} {if $key_1 == 0}active{/if}">
+                        {if !empty($item_1['subs']) && is_array($item_1['subs'])}
+                        {loop $item_1['subs'] $item_2}
+                        <div class="tab-list">
+                            <h2 style="font-size:14px;">{$item_2['title']}</h2>
+                            {if !empty($item_2['subs']) && is_array($item_2['subs'])}
+                            <ul>
+                                {loop $item_2['subs'] $item_3}
+                                <li>
+                                    <a data-id="{$item_3['id']}" href="{php echo $this->createMobileUrl('search',array('search_type'=>SEARCH_TYPE_GOODS,'category_id'=>$item_3['id']));}">
+                                        <div class="tab-img">
+                                            <img src="{php echo tomedia($item_3['thumb']);}">
+                                        </div>
+                                        <p class="tab-desc">{$item_3['title']}</p>
+                                    </a>
+                                </li>
+                                {/loop}
+                            </ul>
+                            {/if}
+                        </div>
+                        {/loop}
+                        {/if}
+                    </li>
+                    {/loop}
+                    {/if}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{template 'common/nav-oto'}
+<script type="text/javascript">
+    require([],function(){
+
+        /* 搜素 */
+        $('.icon-sousuo').bind('click',function(){
+            $('form').submit();
+        });
+
+        $('.category-menu ul li').bind('click',function(){
+            var subs = eval($(this).attr('data-subs'));
+            var ad = $(this).attr('data-ad');
+        });
+
+        $('.tab-nav ul li').bind('click',function(){
+            $('.tab-nav ul li.active').removeClass('active');
+            var id = $(this).attr('data-id');
+            $(this).addClass('active');
+            $('.tab-li').removeClass('active');
+            $('.tab-li-'+id).addClass('active');
+        });
+    });
+</script>
+{template 'common/footer-oto'}

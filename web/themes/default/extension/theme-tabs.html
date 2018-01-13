@@ -1,0 +1,8 @@
+<div class="platform-tab">
+	<ul>
+		<li {if $do == 'installed'} class="active"{/if}><a href="{php echo url('extension/theme/installed');}">已安装的微站风格</a></li>
+		<li {if $do == 'prepared' || $do == 'install'} class="active"{/if}><a href="{php echo url('extension/theme/prepared');}">安装微站风格</a></li>
+		<li {if $do == 'designer'} class="active"{/if}><a href="{php echo url('extension/theme/designer');}">设计微站风格设计微站风格</a></li>
+		<li {if $do == 'web'} class="active"{/if}><a href="{php echo url('extension/theme/web');}">管理后台风格</a></li>
+	</ul>
+</div>

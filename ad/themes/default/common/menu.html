@@ -1,0 +1,111 @@
+<!-- begin 左侧菜单 -->
+<div class="account-menu">
+    <div class="account-system">
+        <a style="color: #ffffff" href="{php echo url('account/display');}">
+            新晋传媒总后台
+        </a>
+    </div>
+    <div class="account-nav-item">
+        <div class="account-nav-title">
+            <span class="icon"><i class="icon iconfont icon-shopfill"></i></span>
+            <span class="desc">审核管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="account-menu-sub" {if $controller == 'account'} style="display: block"{/if}>
+            <li>
+                <a href="{php echo url('account/display');}" {if $controller == 'account' && $action == 'display'}class="active"{/if}>
+                        <span class="icon">
+                            <i class="icon iconfont icon-settings"></i>
+                        </span>
+                <span class="desc">文章管理</span>
+                </a>
+            </li>
+            <li>
+                <a href="{php echo url('account/push');}" {if $controller == 'account' && $action == 'push'}class="active"{/if}>
+                        <span class="icon">
+                            <i class="icon iconfont icon-settings"></i>
+                        </span>
+                        <span class="desc">发布管理</span>
+                    </a>
+            </li>
+        <li>
+            <a href="{php echo url('account/talk');}" {if $controller == 'account' && $action == 'talk'}class="active"{/if}>
+                        <span class="icon">
+                            <i class="icon iconfont icon-settings"></i>
+                        </span>
+            <span class="desc">评论管理</span>
+            </a>
+        </li>
+        <li>
+            <a href="{php echo url('account/ad');}" {if $controller == 'account' && $action == 'ad'}class="active"{/if}>
+                        <span class="icon">
+                            <i class="icon iconfont icon-settings"></i>
+                        </span>
+            <span class="desc">广告管理</span>
+            </a>
+        </li>
+        </ul>
+    </div>
+    <div class="account-nav-item">
+        <div class="account-nav-title">
+            <span class="icon"><i class="icon iconfont icon-shopfill"></i></span>
+            <span class="desc">活动管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="account-menu-sub" {if $controller == 'activity'} style="display: block"{/if}>
+        <li><a href="{php echo url('activity/display');}" {if $controller == 'activity' && $action == 'display'}class="active"{/if}>
+            <span class="icon">
+                <i class="icon iconfont icon-settings"></i>
+            </span>
+            <span class="desc">活动列表</span></a></li>
+        <li><a href="{php echo url('activity/join');}" {if $controller == 'activity' && $action == 'join'}class="active"{/if}>
+            <span class="icon">
+                <i class="icon iconfont icon-settings"></i>
+            </span>
+            <span class="desc">报名列表</span></a></li>
+        </ul>
+    </div>
+    <div class="account-nav-item">
+        <div class="account-nav-title">
+            <span class="icon"><i class="icon iconfont icon-shopfill"></i></span>
+            <span class="desc">反馈管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="account-menu-sub" {if $controller == 'suggest'} style="display: block"{/if}>
+        <li>
+            <a href="{php echo url('suggest/display');}" {if $controller == 'suggest' && $action == 'display'}class="active"{/if}>
+            <span class="icon">
+                <i class="icon iconfont icon-settings"></i>
+            </span>
+            <span class="desc">反馈列表</span>
+            </a>
+        </li>
+        </ul>
+    </div>
+    <div class="account-nav-item">
+        <div class="account-nav-title">
+            <span class="icon"><i class="icon iconfont icon-shopfill"></i></span>
+            <span class="desc">公告管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="account-menu-sub" {if $controller == 'notice'} style="display: block"{/if}>
+        <li>
+            <a href="{php echo url('notice/display');}" {if $controller == 'notice' && $action == 'display'}class="active"{/if}>
+            <span class="icon">
+                <i class="icon iconfont icon-settings"></i>
+            </span>
+            <span class="desc">公告管理</span>
+            </a>
+        </li>
+        </ul>
+    </div>
+</div>
+<script type="text/javascript">
+    require([],function(){
+        $('.account-nav-title').bind('click',function(){
+            $('.account-menu-sub').not($(this).next('.account-menu-sub')).slideUp();
+            $(this).next('.account-menu-sub').slideToggle();
+        });
+    });
+</script>
+<!-- end 左侧菜单 -->

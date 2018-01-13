@@ -1,0 +1,255 @@
+{template 'common/header'}
+<link rel="stylesheet" href="./resource/css/balance.css?v={STYLE_VERSION}">
+{if $do == 'display' && empty($store_id)}
+<div class="page-balance">
+    <div class="balance-header">
+        <i class="icon iconfont icon-fanhui icon-left" onclick="history.go('-1')"></i>
+        请选择您的店铺
+    </div>
+    <div style="width: 100%;height: 50px"></div>
+    {loop $stores $store}
+    <a class="user-nav" href="{php echo url('mc/balance/display',array('store_id'=>$store['id']));}">
+        <i class="icon iconfont icon-dianpu icon-left" style="color: #ff0033"></i>
+        {$store['title']}
+        <span class="right">
+          <i class="icon iconfont icon-right icon-xiangyou"></i>
+        </span>
+    </a>
+    {/loop}
+</div>
+{elseif !empty($store_id)}
+<div class="page-balance">
+    <div class="balance-header">
+        <i class="icon iconfont icon-fanhui icon-left" onclick="history.go('-1')"></i>
+        {if $do == 'display'}
+        {$store_info['title']}
+        {elseif $do == 'order'}
+        订单信息
+        {elseif $do == 'withdraw_record'}
+        提现记录
+        {elseif $do == 'withdraw_apply'}
+        提现中心
+        {elseif $do == 'income'}
+        资金明细
+        {/if}
+    </div>
+    <div style="width: 100%;height: 50px"></div>
+    {if $do == 'display'}
+    <a class="user-nav" href="{php echo url('mc/balance/order',array('store_id'=>$store_id));}">
+        <i class="icon iconfont icon-wodedingdan icon-left" style="color: #ff0033"></i>
+        订单信息
+        <span class="right">
+          <i class="icon iconfont icon-right icon-xiangyou"></i>
+        </span>
+    </a>
+    <a class="user-nav" href="{php echo url('mc/balance/withdraw_record',array('store_id'=>$store_id));}">
+        <i class="icon iconfont icon-yongjin1 icon-left" style="color: #ff9933"></i>
+        提现记录
+        <span class="right">
+          <i class="icon iconfont icon-right icon-xiangyou"></i>
+        </span>
+    </a>
+    <a class="user-nav" href="{php echo url('mc/balance/withdraw_apply',array('store_id'=>$store_id));}">
+        <i class="icon iconfont icon-yue icon-left" style="color: #cc6666"></i>
+        提现中心
+        <span class="right">
+          <i class="icon iconfont icon-right icon-xiangyou"></i>
+        </span>
+    </a>
+    <a class="user-nav" href="{php echo url('mc/balance/income',array('store_id'=>$store_id));}">
+        <i class="icon iconfont icon-zhifu2 icon-left" style="color: darkorange"></i>
+        资金明细
+        <span class="right">
+          <i class="icon iconfont icon-right icon-xiangyou"></i>
+        </span>
+    </a>
+    {elseif $do == 'order'}
+    <div class="order-list">
+        {loop $list $li}
+        <div class="item">
+            <span class="pay-status label label-{if $li['pay_status'] == PAY_YES}success{else}danger{/if}">
+                {if $li['pay_status'] == PAY_YES}
+                已支付
+                {else}
+                未付款
+                {/if}
+            </span>
+            <span class="order-no">订单号：{$li['order_no']}</span>
+            <span class="pay-note">会员ID：{$li['uid']}</span>
+            <span class="pay-note">昵称：{$li['nickname']}</span>
+            <span class="pay-note">支付方式：{$li['pay_method']}</span>
+            <span class="pay-note">留言：{$li['note']}</span>
+            <span class="pay-date">日期：{$li['createtime']}</span>
+            <span class="price">￥{$li['money']}</span>
+        </div>
+        {/loop}
+    </div>
+    {if !empty($list) && is_array($list)}
+    <div class="ajax-more">加载更多&gt;&gt;</div>
+    <script type="text/javascript">
+        var page = 2;
+        $('.ajax-more').bind('click',function(){
+            $.post(
+                    window.location.href,
+                    {page:page},
+                    function(ret){
+                        if(ret.type == 'success'){
+                            var html = '';
+                            $.each(ret.message,function(index,item){
+                                html += '<div class="item">' +
+                                        '<span class="pay-status label '+item['label']+'">' +item['label_text']+ '</span>' +
+                                        '<span class="order-no">订单号：' + item['order_no']+
+                                        '</span>' +
+                                        '<span class="pay-date">日期：' +item['createtime']+
+                                        '</span>'+
+                                        '<span class="price">￥'+item['pay_total_price']+'</span> </div>';
+                            });
+                            $('.order-list').append(html);
+                            page++;
+                        }else{
+                            util.toast(ret.message,ret.redirect,ret.type);
+                        }
+                    },'json'
+            );
+        });
+
+    </script>
+    {/if}
+    {elseif $do == 'withdraw_record'}
+    <div class="withdraw-list">
+        {loop $list $li}
+        <div class="item">
+            <span class="balance-status label {$li['label']}">
+                {$li['label_text']}
+            </span>
+            <span class="date">时间：{$li['createtime']}</span>
+            <span class="method">提现方式：{$li['withdraw_method']}</span>
+            <span class="money">￥{$li['money']}</span>
+        </div>
+        {/loop}
+    </div>
+    {if !empty($list) && is_array($list)}
+    <div class="ajax-more">加载更多&gt;&gt;</div>
+    <script type="text/javascript">
+        var page = 2;
+        $('.ajax-more').bind('click',function(){
+            $.post(
+                    window.location.href,
+                    {page:page},
+                    function(ret){
+                        if(ret.type == 'success'){
+                            var html = '';
+                            $.each(ret.message,function(index,item){
+                                html += '<div class="item">' +
+                                        '<span class="balance-status label '+item['label']+'">'+
+                                        item['label_text'] + '</span>'+
+                                        '<span class="date">时间：'+item['createtime']+'</span>'+
+                                        '<span class="method">提现方式：'+ item['withdraw_method'] +'</span>'+
+                                        '<span class="money">￥'+ item['money']+'</span></div>';
+                            });
+                            $('.withdraw-list').append(html);
+                            page++;
+                        }else{
+                            util.toast(ret.message,ret.redirect,ret.type);
+                        }
+                    },'json'
+            );
+        });
+
+    </script>
+    {/if}
+    {elseif $do == 'withdraw_apply'}
+    <div class="withdraw-apply">
+        <form id="withdraw_apply_form">
+            <div class="username">
+                <span>姓名：</span>
+                <input name="username" type="text" placeholder="请输入姓名">
+            </div>
+            <div class="tel">
+                <span>电话：</span>
+                <input name="tel" type="text" placeholder="请输入电话">
+            </div>
+            <div class="money">
+                <span>金额：</span>
+                <input name="money" type="text" placeholder="请输入提现金额">
+            </div>
+            <div class="desc">
+                您当前可提现金额<span style="color: red">￥{$can_withdraw_money}</span>元，提现金额将发放到您的微信，请注意查收
+            </div>
+            <div class="withdraw-btn">
+                <button type="button" class="js-withdraw-btn">申请提现</button>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        require([],function(){
+            $('.js-withdraw-btn').bind('click',function(){
+                var obj = $(this);
+                $('.js-toast-loading').show();
+                util.loading();
+                obj.attr('disabled','disabled');
+                $.post(
+                        window.location.href,
+                        $('#withdraw_apply_form').serialize(),
+                        function(ret){
+                            obj.removeAttr('disabled');
+                            $('.js-toast-loading').hide();
+                            util.toast(ret.message,ret.redirect,ret.type);
+                        },'json'
+                );
+            });
+        });
+    </script>
+    {elseif $do == 'income'}
+    <div class="income-list">
+        <div class="item">
+            <a style="background: skyblue">
+                待发货：￥{$li1}
+            </a>
+        </div>
+        <div class="item">
+            <a style="background: yellowgreen">
+                待付款：￥{$li2}
+            </a>
+        </div>
+        <div class="item">
+            <a style="background: blueviolet">
+                已发货：￥{$li3}
+            </a>
+        </div>
+        <div class="item">
+            <a style="background: violet">
+                已退款：￥{$li4}
+            </a>
+        </div>
+        <div class="item">
+            <a style="background: turquoise">
+                已完成：￥{$li5}
+            </a>
+        </div>
+        <div class="item">
+            <a style="background: teal">
+                已提现：￥{$li6}
+            </a>
+        </div>
+        <div class="item">
+            <a style="background: chocolate">
+                总收入：￥{$li7}
+            </a>
+        </div>
+        <div class="item">
+            <a style="background: yellowgreen">
+                未提现：￥{$li8}
+            </a>
+        </div>
+        <div class="item">
+            <a style="background: coral">
+                提现中：￥{$li9}
+            </a>
+        </div>
+    </div>
+    {/if}
+
+</div>
+{/if}
+{template 'common/footer'}

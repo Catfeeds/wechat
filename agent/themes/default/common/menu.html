@@ -1,0 +1,39 @@
+<!-- begin 左侧菜单 -->
+<div class="agent-menu">
+    <div class="agent-system">
+        <a style="color: #ffffff" href="{php echo url('account/display');}">
+           代理后台
+        </a>
+    </div>
+    <div class="agent-nav-item">
+        <div class="agent-nav-title">
+            <span class="icon"><i class="icon iconfont icon-shopfill"></i></span>
+            <span class="desc">结算管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="agent-menu-sub" {if $controller == 'account'} style="display: block"{/if}>
+            <li><a href="{php echo url('account/display');}" {if $do == 'display'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-settings"></i></span><span class="desc">商家结算</span></a></li>
+            <li><a href="{php echo url('account/dislay/old');}" {if $do == 'old'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-settings"></i></span><span class="desc">二手货结算</span></a></li>
+        </ul>
+    </div>
+    <div class="agent-nav-item">
+        <div class="agent-nav-title">
+            <span class="icon"><i class="icon iconfont icon-goodsnewfill"></i></span>
+            <span class="desc">订单管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="agent-menu-sub" {if $controller == 'order'} style="display: block"{/if}>
+            <li><a href="{php echo url('order/display');}" {if $controller == 'order' && $action == 'display'}class="active"{/if}><span class="icon"><i class="icon iconfont icon-goodsfavor"></i></span><span class="desc">全部订单</span></a></li>
+        </ul>
+    </div>
+
+</div>
+<script type="text/javascript">
+    require([],function(){
+        $('.agent-nav-title').bind('click',function(){
+            $('.agent-menu-sub').not($(this).next('.agent-menu-sub')).slideUp();
+            $(this).next('.agent-menu-sub').slideToggle();
+        });
+    });
+</script>
+<!-- end 左侧菜单 -->

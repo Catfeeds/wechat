@@ -1,0 +1,165 @@
+{template 'common/header-oto'}
+<link rel="stylesheet" href="{$_W['siteroot']}app/resource/css/collect.css?v={STYLE_VERSION}">
+<div class="page-collect">
+    <div class="collect-header">
+        <i class="icon iconfont icon-fanhui back" onclick="history.go('-1')"></i>
+        我的收藏
+    </div>
+    <div class="collect-tabs">
+        <span {if $type != COLLECT_TYPE_STORE || empty($type)}class="active"{/if}><i class="icon iconfont icon-gouwuche1"></i>&nbsp;商品</span>
+        <span {if $type == COLLECT_TYPE_STORE}class="active"{/if}><i class="icon iconfont icon-dianpu"></i>&nbsp;店铺</span>
+    </div>
+<div style="width: 100%;height: 100px;"></div>
+<div class="collect-list">
+    {if empty($type)}
+        {if !empty($list) && is_array($list)}
+            {loop $list $item}
+            <a class="goods-item" href="{$item['link']}">
+                <img src="{$item['thumb']}">
+                <ul>
+                    <li class="goods-name">{$item['title']}</li>
+                    <li class="goods-price">售价：<span>￥{$item['sale_price']}</span></li>
+                    <li class="goods-old-price">原价：<span>￥{$item['market_price']}</span></li>
+                </ul>
+            </a>
+            {/loop}
+        {else}
+            <div class="no-data" style="margin-top: 10px">
+                <div class="no-data-tips-box">
+                    <i class="icon iconfont icon-ma"></i>
+                </div>
+                <div class="no-data-tips">没有相关商品</div>
+            </div>
+        {/if}
+    {else}
+        {if !empty($list) && is_array($list)}
+            {loop $list $item}
+            <a class="store-item" href="{$item['link']}">
+                <img src="{$item['logo']}">
+                <ul>
+                    <li class="store-name">{$item['title']}</li>
+                    <li class="store-address">地址：<span>{$item['province']}{$item['city']}</span></li>
+                    <li class="store-collect">收藏：<span>{$item['collect_count']}</span></li>
+                </ul>
+            </a>
+            {/loop}
+        {else}
+            <div class="no-data" style="margin-top: 10px">
+                <div class="no-data-tips-box">
+                    <i class="icon iconfont icon-ma"></i>
+                </div>
+                <div class="no-data-tips">没有相关店铺</div>
+            </div>
+        {/if}
+    {/if}
+</div>
+<div class="ajax-more">加载更多&gt;&gt;</div>
+</div>
+<script type="text/javascript">
+    require([],function(){
+        var type = "{$type}";
+        var page = "{$page}";
+
+        /* 切换好有亲密度 */
+        $('.collect-tabs span').bind('click',function(){
+            page = 1;
+            var obj = $('.collect-tabs span');
+            obj.removeClass('active');
+            $(this).addClass('active');
+            var index = obj.index(this);
+            if(index == 1){
+                type = "{COLLECT_TYPE_STORE}";
+            }else{
+                type = "{COLLECT_TYPE_GOODS}";
+            }
+            $('.js-toast-loading').show();
+            util.loading();
+            $.post(
+                    window.location.href,
+                    {
+                        page:page,
+                        type:type
+                    },
+                    function(ret){
+                        $('.js-toast-loading').hide();
+                        if(ret.type == 'success'){
+                            var html = '';
+                            $.each(ret.message,function(index,item){
+                                if(type == "{COLLECT_TYPE_STORE}"){
+                                    html += '<a class="store-item" href="'+item['link']+'">' +
+                                            '<img src="'+item['logo']+'">' +
+                                            '<ul><li class="store-name">'+item['title']+'</li>' +
+                                            '<li class="store-address">地址：'+item['province']+item['city']+'</li>' +
+                                            '<li class="store-collect">收藏：'+item['collect_count']+'</li>' +
+                                            '</ul>' +
+                                            '</a>';
+                                }else{
+                                    html += '<a class="goods-item" href="'+item['link']+'">' +
+                                    '<img src="'+item['thumb']+'"><ul>' +
+                                    '<li class="goods-name">'+item['title']+'</li>' +
+                                    '<li class="goods-price">售价：<span>￥'+item['sale_price']+'</span></li>' +
+                                    '<li class="goods-old-price">原价：<span>￥'+item['market_price']+'</span></li>' +
+                                    '</ul>' +
+                                    '</a>';
+                                }
+                            });
+                            $('.collect-list').html(html);
+                        }else{
+                            $('.collect-list').html('<div class="no-data" style="margin-top: 10px"><div class="no-data-tips-box"> <i class="icon iconfont icon-ma"></i> </div> <div class="no-data-tips">没有相关好友</div> </div>');
+                            util.toast(ret.message,'','error');
+                            return true;
+                        }
+                    },'json'
+            );
+        });
+
+        /* ajax更多 */
+        $('.ajax-more').bind('click',function(){
+            if(page < 2){
+                page = 2;
+            }
+            $('.js-toast-loading').show();
+            util.loading();
+            $.post(
+                    window.location.href,
+                    {
+                        page:page,
+                        type:type
+                    },
+                    function(ret){
+                        $('.js-toast-loading').hide();
+                        if(ret.type == 'success'){
+                            var html = '';
+                            $.each(ret.message,function(index,item){
+                                if(type == "{COLLECT_TYPE_STORE}"){
+                                    html += '<a class="store-item" href="'+item['link']+'">' +
+                                            '<img src="'+item['logo']+'">' +
+                                            '<ul><li class="store-name">'+item['title']+'</li>' +
+                                            '<li class="store-address">地址：'+item['province']+item['city']+'</li>' +
+                                            '<li class="store-collect">收藏：'+item['collect_count']+'</li>' +
+                                            '</ul>' +
+                                            '</a>';
+                                }else{
+                                    html += '<a class="goods-item" href="'+item['link']+'">' +
+                                            '<img src="'+item['thumb']+'"><ul>' +
+                                            '<li class="goods-name">'+item['title']+'</li>' +
+                                            '<li class="goods-price">售价：<span>￥'+item['sale_price']+'</span></li>' +
+                                            '<li class="goods-old-price">原价：<span>￥'+item['market_price']+'</span></li>' +
+                                            '</ul>' +
+                                            '</a>';
+                                }
+                            });
+                            $('.no-data').remove();
+                            $('.collect-list').append(html);
+                            page++;
+                        }else{
+                            util.toast(ret.message,'','error');
+                            return true;
+                        }
+                    },'json'
+            );
+        });
+
+    });
+</script>
+{template 'common/footer-oto'}

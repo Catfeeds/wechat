@@ -1,0 +1,92 @@
+<form class="form-horizontal form" method="post" id="fee-form">
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">开启二手交易</label>
+        <div class="col-xs-12 col-sm-8 col-md-6">
+            <label class="radio-inline">
+                <input type="radio" name="setting[status]" {if $item['setting']['status'] == OPEN_STATUS}checked{/if} value="{OPEN_STATUS}">开启
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="setting[status]" {if $item['setting']['status'] != OPEN_STATUS}checked{/if}  value="{CLOSE_STATUS}">关闭
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">佣金比例</label>
+        <div class="col-xs-12 col-sm-8 col-md-8">
+            <div class="input-group">
+                <span class="input-group-addon">套餐原价的</span>
+                <input type="text" name="setting[pay_rate]" value="{$item['setting']['pay_rate']}" class="form-control" placeholder="佣金比例">
+                <span class="input-group-addon">%，套餐升级价格的</span>
+                <input type="text" name="setting[up_rate]" value="{$item['setting']['up_rate']}" class="form-control" placeholder="佣金比例">
+                <span class="input-group-addon">%</span>
+            </div>
+            <span class="help-block">设置为50%，如套餐价为200元，则会拿出100元去返佣</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">A套餐</label>
+        <div class="col-xs-12 col-sm-8 col-md-8">
+            <div class="input-group">
+                <span class="input-group-addon">价格</span>
+                <input type="text" name="setting[product][1][price]" value="{$item['setting']['product'][1]['price']}" class="form-control" placeholder="请输入套餐A价格">
+                <span class="input-group-addon">元，累计拿</span>
+                <input type="text" name="setting[product][1][num]" value="{$item['setting']['product'][1]['num']}" class="form-control" placeholder="次数">
+                <span class="input-group-addon">次直推奖励</span>
+            </div>
+            <div class="input-group" style="margin-top: 5px">
+                <span class="input-group-addon">描述</span>
+                <input type="text" name="setting[product][1][desc]" value="{$item['setting']['product'][1]['desc']}" class="form-control" placeholder="请输入套餐A描述">
+            </div>
+            <span class="help-block">不拿下级升级利润</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">B套餐</label>
+        <div class="col-xs-12 col-sm-8 col-md-8">
+            <div class="input-group">
+                <span class="input-group-addon">价格</span>
+                <input type="text" name="setting[product][2][price]" value="{$item['setting']['product'][2]['price']}" class="form-control" placeholder="请输入套餐B价格">
+                <span class="input-group-addon">元</span>
+            </div>
+            <div class="input-group" style="margin-top: 5px">
+                <span class="input-group-addon">描述</span>
+                <input type="text" name="setting[product][2][desc]" value="{$item['setting']['product'][2]['desc']}" class="form-control" placeholder="请输入套餐B描述">
+            </div>
+            <span class="help-block">不拿下级升级利润</span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-3 col-md-2 control-label">C套餐</label>
+        <div class="col-xs-12 col-sm-8 col-md-8">
+            <div class="input-group">
+                <span class="input-group-addon">价格</span>
+                <input type="text" name="setting[product][3][price]" value="{$item['setting']['product'][3]['price']}" class="form-control" placeholder="请输入套餐C价格">
+                <span class="input-group-addon">元</span>
+            </div>
+            <div class="input-group" style="margin-top: 5px">
+                <span class="input-group-addon">描述</span>
+                <input type="text" name="setting[product][3][desc]" value="{$item['setting']['product'][3]['desc']}" class="form-control" placeholder="请输入套餐C描述">
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-xs-12 col-sm-2 control-label"></label>
+        <div class="col-sm-9 col-xs-12">
+            <input type="hidden" name="token" value="{$_W['token']}">
+            <input name="submit" type="button" value="提交" class="btn btn-primary">
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    require([],function(){
+        $('input[name="submit"]').bind('click',function(){
+            $.post(
+                 window.location.href,
+                 $('#fee-form').serialize(),
+                 function(ret){
+                     util.message(ret.message,ret.redirect,ret.type);
+                 },'json'
+            );
+        });
+    });
+</script>

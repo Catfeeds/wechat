@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns="http://wx.51muma.com" versionCode="0.6">
+	<application setting="false">
+		<name><![CDATA[新晋传媒]]></name>
+		<identifie><![CDATA[sj_news]]></identifie>
+		<version><![CDATA[0.1.5]]></version>
+		<type><![CDATA[business]]></type>
+		<ability><![CDATA[新晋传媒]]></ability>
+		<description><![CDATA[新晋传媒]]></description>
+		<author><![CDATA[慕马科技]]></author>
+		<url><![CDATA[http://wx.51muma.com/]]></url>
+	</application>
+	<platform>
+		<subscribes>
+		</subscribes>
+		<handles>
+		</handles>
+		<rule embed="false" />
+		<card embed="false" />
+	</platform>
+	<bindings>
+		<cover>
+			<entry title="手机入口" do="index" state="" direct="false" />
+		</cover>
+		<menu>
+			<entry title="参数设置" do="config" state="" direct="false" />
+			<entry title="分类管理" do="category" state="" direct="false" />
+			<entry title="文章管理" do="article" state="" direct="false" />
+			<entry title="轮播管理" do="slide" state="" direct="false" />
+			<entry title="广告管理" do="ad" state="" direct="false" />
+			<entry title="账号管理" do="account" state="" direct="false" />
+			<entry title="活动管理" do="activity" state="" direct="false" />
+			<entry title="积分设置" do="credit" state="" direct="false" />
+		</menu>
+	</bindings>
+	<permissions>
+	</permissions>
+	<install><![CDATA[]]></install>
+	<uninstall><![CDATA[]]></uninstall>
+	<upgrade><![CDATA[]]></upgrade>
+</manifest>

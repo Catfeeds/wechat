@@ -1,0 +1,25 @@
+{template 'common/header-oto'}
+<link rel="stylesheet" type="text/css" href="./resource/css/cashier.css?v={STYLE_VERSION}">
+{if $do == 'pay'}
+<style type="text/css">
+    body{
+        background: url("/assets/oto/images/pay.jpg") 0 0 no-repeat fixed;
+        background-size: cover;
+    }
+</style>
+{/if}
+
+    {if $do == 'display'}
+        {template 'mc/cashier-qrcode'}
+    {elseif $do == 'pay'}
+        {template 'mc/cashier-pay'}
+    {elseif $do == 'pay_log'}
+        {template 'mc/cashier-pay-log'}
+    {elseif $do == 'income_log'}
+        {template 'mc/cashier-income'}
+    {elseif $do == 'balance'}
+        {template 'mc/cashier-balance'}
+    {elseif $do == 'balance_log'}
+        {template 'mc/cashier-balance-log'}
+    {/if}
+{template 'common/footer-oto'}

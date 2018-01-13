@@ -1,0 +1,219 @@
+{template 'common/header-oto'}
+<link rel="stylesheet" href="{$_W['siteroot']}app/resource/css/shop.css?v={STYLE_VERSION}">
+{if !empty($item)}
+    <style type="text/css">
+        body{
+            background: #FFFFFF;
+        }
+    </style>
+{/if}
+<div class="page-shop">
+    <div class="shop-header">
+        <i class="icon iconfont icon-fanhui back" onclick="history.go('-1')"></i>
+        {if !empty($item)}
+        我的店铺
+        <i class="icon iconfont icon-androidmorevertical icon-menu"></i>
+        <div class="menu" style="display: none;">
+            <span class="up"></span>
+            <ul>
+                <li><a style="color: #ffffff" href="{php echo url('shop/display/focus');}">已关注</a></li>
+                <li><a style="color: #ffffff" href="{php echo url('shop/display/focus_log');}">关注记录</a></li>
+            </ul>
+        </div>
+        {elseif $do == 'focus'}
+        已关注
+        {elseif $do == 'focus_log'}
+        关注记录
+        {else}
+        我要开店
+        {/if}
+    </div>
+    <div style="width: 100%;height: 50px;"></div>
+    {if $do == 'display'}
+        {if !empty($item)}
+        <div class="shop-info">
+            <div id="container" style="width: 100%;height: 230px;"></div>
+            <div class="info">
+                <div class="base">
+                    <span class="left">初选位置：</span>
+                    <span class="right">{$item['point_address']}</span>
+                </div>
+                <div class="base">
+                    <span class="left">所属区域：</span>
+                    <span class="right">{$item['province']}{$item['city']}{$item['district']}</span>
+                </div>
+            </div>
+            <div class="slogan">
+                <span>
+                    邀请更多朋友参与，<br>圆更多人创业梦想！
+                </span>
+            </div>
+        </div>
+        {else}
+        <div class="shop-box">
+            <div class="no-data">
+                <div class="no-data-tips-box">
+                    <i class="icon iconfont icon-ma"></i>
+                </div>
+                <div class="no-data-tips">您尚未发出申请</div>
+            </div>
+            <a class="select-address" href="{php echo url('shop/display/point');}">地图选点，理想地址</a>
+            <p style="padding: 0 10px;line-height: 20px;text-align: center;">
+                选择好地址转发给想创业的朋友们；<br>邀请更多朋友参与，<br>圆更多人创业梦想！
+            </p>
+        </div>
+        {/if}
+    {elseif $do == 'develop'}
+        <div class="shop-develop">
+            <div class="shop-thumb">
+                <img src="{$_W['siteroot']}app/resource/images/share_shop.jpg">
+            </div>
+            <div class="info">
+                <!--<div class="shop-desc">店铺基本信息</div>-->
+                <div class="base">
+                    <span class="left">位置：</span>
+                    <span class="right">初步选择，尚未确定</span>
+                </div>
+                <div class="base">
+                    <span class="left">省份：</span>
+                    <span class="right">{$info['province']}</span>
+                </div>
+                <div class="base">
+                    <span class="left">城市：</span>
+                    <span class="right">{$info['city']}</span>
+                </div>
+                <div class="base">
+                    <span class="left">区县：</span>
+                    <span class="right">{$info['district']}</span>
+                </div>
+                <div class="base">
+                    <span class="left">地址：</span>
+                    <span class="right">{$info['point_address']}</span>
+                </div>
+                <div class="base">
+                    <span class="left">经度：</span>
+                    <span class="right">{$info['lng']}</span>
+                </div>
+                <div class="base">
+                    <span class="left">纬度：</span>
+                    <span class="right">{$info['lat']}</span>
+                </div>
+            </div>
+            <div style="width: 100%;height: 110px"></div>
+            <div class="buy-box">
+                <div class="parent">
+                    <span>所属</span>
+                    <input type="text" name="parent_uid" placeholder="请输入所属ID号">
+                </div>
+                <button class="js-develop-btn">立即开店</button>
+            </div>
+        </div>
+        <script type="text/javascript">
+            require([],function(){
+                //开店按钮
+                $('.js-develop-btn').bind('click',function(){
+                    $.post(
+                        window.location.href,
+                            {parent_uid:$('input[name="parent_uid"]').val()},
+                            function(ret){
+                                util.toast(ret.message,ret.redirect,ret.type);
+                            },'json'
+                    );
+                });
+            });
+        </script>
+    {elseif $do == 'focus'}
+    <div class="focus-box">
+        <ul>
+            <li>
+                <span>1公里范围</span>
+                <span>-&nbsp;&nbsp;-&nbsp;&nbsp;-&nbsp;&nbsp;-&nbsp;&nbsp;-</span>
+                <span class="label label-sm label-danger">{$one}人</span>
+            </li>
+            <li>
+                <span>2公里范围</span>
+                <span>-&nbsp;&nbsp;-&nbsp;&nbsp;-&nbsp;&nbsp;-&nbsp;&nbsp;-</span>
+                <span class="label label-sm label-success">{$two}人</span>
+            </li>
+            <li>
+                <span>3公里范围</span>
+                <span>-&nbsp;&nbsp;-&nbsp;&nbsp;-&nbsp;&nbsp;-&nbsp;&nbsp;-</span>
+                <span class="label label-sm label-warning">{$three}人</span>
+            </li>
+            <li>
+                <span>4公里范围</span>
+                <span>-&nbsp;&nbsp;-&nbsp;&nbsp;-&nbsp;&nbsp;-&nbsp;&nbsp;-</span>
+                <span class="label label-sm label-primary">{$four}人</span>
+            </li>
+            <li>
+                <span>5公里范围</span>
+                <span>-&nbsp;&nbsp;-&nbsp;&nbsp;-&nbsp;&nbsp;-&nbsp;&nbsp;-</span>
+                <span class="label label-sm label-default">{$five}人</span>
+            </li>
+            <li>
+                <span>团队统计</span>
+                <span>-&nbsp;&nbsp;-&nbsp;&nbsp;-&nbsp;&nbsp;-&nbsp;&nbsp;-</span>
+                <span class="label label-sm label-warning">{$team}人</span>
+            </li>
+            <li>
+                <span>全部统计</span>
+                <span>-&nbsp;&nbsp;-&nbsp;&nbsp;-&nbsp;&nbsp;-&nbsp;&nbsp;-</span>
+                <span class="label label-sm label-success">{$total}人</span>
+            </li>
+        </ul>
+    </div>
+    {elseif $do == 'focus_log'}
+    <div class="focus-log-list">
+        {loop $list $item}
+        <div class="item">
+            <div class="item-info">
+                <img src="{php echo tomedia($item['avatar']);}">
+                <ul>
+                    <li>ID：{$item['uid']}</li>
+                    <li>昵称：{$item['nickname']}</li>
+                    <li>日期：{php echo date('Y年m月d日 H:i',$item['createtime'])}</li>
+                </ul>
+            </div>
+        </div>
+        {/loop}
+    </div>
+    {/if}
+</div>
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
+<script type="text/javascript">
+    require([],function(){
+        $('.icon-menu').bind('click',function(){
+            $('.menu').toggle();
+        });
+        var lat = "{$item['lat']}";
+        var lng = "{$item['lng']}";
+        var center = new qq.maps.LatLng(lat, lng);
+        var map = new qq.maps.Map(
+                document.getElementById("container"),
+                {
+                    center: center,
+                    zoom: 15
+                }
+        );
+        var marker = new qq.maps.Marker({
+            position: center,
+            map: map
+        });
+        var marker2 = new qq.maps.Label({
+            position: center,
+            map: map,
+            content:'' +
+            '<div class="my-shop">' +
+                    '<div class="desc-info">' +
+                        '<span class="span-left">编号：</span>' +
+                        '<span class="span-right">{php echo 'GD'.str_pad($item['id'],6,0,STR_PAD_LEFT);}</span>' +
+                    '</div>' +
+                    '<div class="desc-info">' +
+                        '<span class="span-left">发起人：</span>' +
+                        '<span class="span-right">{$member['nickname']}</span>' +
+                    '</div>' +
+            '</div>'
+        });
+    });
+</script>
+{template 'common/footer-oto'}

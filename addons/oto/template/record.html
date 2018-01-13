@@ -1,0 +1,112 @@
+{template 'common/header'}
+<div class="platform-tab">
+    <ul>
+        <li {if $op == 'display'}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('record',array('op'=>'display'));}">操作记录</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选</div>
+        <div class="panel-body">
+            <form method="post" class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">记录时间</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        {php echo tpl_form_field_daterange('createtime', array('starttime' => date('Y-m-d', $starttime), 'endtime' => date('Y-m-d', $endtime),));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">类别</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="type[]" value="{ORDER_STATUS_NOT_PAY}" {if in_array(ORDER_STATUS_NOT_PAY,$order_status)}checked{/if}> 总平台
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="type[]" value="{ORDER_STATUS_NOT_DELIVER}" {if in_array(ORDER_STATUS_NOT_DELIVER,$order_status)}checked{/if}> 会计
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="type[]" value="{ORDER_STATUS_NOT_CONFIRM}" {if in_array(ORDER_STATUS_NOT_CONFIRM,$order_status)}checked{/if}> 区域代理
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                        <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                        <input class="btn btn-primary" type="submit" name="export_submit" id="export_submit" value="导出">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form method="post" class="form-horizontal" id="delete_goods_form">
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>编号</th>
+                        <th>操作员ID/UID</th>
+                        <th>类别</th>
+                        <th>操作员信息</th>
+                        <th>操作详情</th>
+                        <th>IP地址</th>
+                        <th>操作时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $li}
+                    <tr>
+                        <td class="order-no">
+                            {$li['order_no']}<br>
+                            会员：{$li['uid']}
+                        </td>
+                        <td class="goods-thumb">
+                            <img style="width: 100px;height: 100px" src="{php echo tomedia($li['thumb']);}"><br>
+                        </td>
+                        <td class="goods-info">
+                            名称：{$li['goods_name']}<br>
+                            {if !empty($li['sku_desc'])}
+                            规格：{$li['sku_desc']}<br>
+                            {/if}
+                            出厂价：<b style="color: red">￥{$li['cost_price']}</b><br>
+                            购买数量：{$li['buy_num']}<br>
+                            邮费：<b style="color: red">￥{$li['pay_postage_fee']}</b>
+                        </td>
+                        <td class="user-info">
+                            收货人：{$li['username']}<br>
+                            联系方式：{$li['mobile']}<br>
+                            地区：{$li['province']}{$li['city']}{$li['district']}<br>
+                            详细地址：{$li['address']}<br>
+                            {if !empty($li['leave_words'])}
+                            买家留言：<b style="color: red">{$li['leave_words']}</b><br>
+                            {/if}
+                            {if !empty($li['deliver_no'])}
+                            运单号：<b style="color: red">{$li['deliver_no']}</b>
+                            {/if}
+                        </td>
+                        <td>
+                            使用积分：<b style="color: red">{$li['use_credit1']}</b>积分<br>
+                            使用余额：<b style="color: red">￥{$li['use_credit2']}</b>元<br>
+                            支付单价：<b style="color: red">￥{$li['pay_price']}</b>元<br>
+                            总邮费：<b style="color: red">￥{$li['pay_postage_fee']}</b>元<br>
+                            支付总价格：<b style="color: red">￥{$li['pay_total_price']}</b>元<br>
+                        </td>
+                        <td>
+                            {$orderStatusArrSpan[$li['order_status']]}
+                        </td>
+                        <td>
+                            操作
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+</div>
+{template 'common/footer'}

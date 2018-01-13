@@ -1,0 +1,396 @@
+{template 'common/header'}
+<div class="platform-tab">
+    <ul>
+        <li {if $op == 'display'}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('article',array('op'=>'display'));}">文章列表</a>
+        </li>
+        <li {if $op == 'post' && empty($item)}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('article',array('op'=>'post'));}">添加文章</a>
+        </li>
+        {if $op == 'post' && !empty($item)}
+        <li class="active">
+            <a href="{php echo $this->createWebUrl('article',array('op'=>'post','id'=>$item['id']));}">修改文章</a>
+        </li>
+        {/if}
+        <li {if $op == 'category'}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('article',array('op'=>'category'));}">栏目列表</a>
+        </li>
+        <li {if $op == 'post_category' && empty($category)}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('article',array('op'=>'post_category'));}">添加栏目</a>
+        </li>
+        {if $op == 'post_category' && !empty($category)}
+        <li class="active">
+            <a href="{php echo $this->createWebUrl('article',array('op'=>'post_category','id'=>$category['id']));}">修改栏目</a>
+        </li>
+        {/if}
+    </ul>
+</div>
+<div class="page-content">
+    {if $op == 'display'}
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选</div>
+        <div class="panel-body">
+            <form method="get" action="./index.php" class="form-horizontal" role="form">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="op" value="display" />
+                <input type="hidden" name="do" value="article" />
+                <input type="hidden" name="m" value="vapp" />
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入关键词，文章标题" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">状态</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="is_display[]" value="1" {if in_array(1,$is_display)}checked{/if}>
+                            显示
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="is_display[]" value="0" {if in_array(0,$is_display)}checked{/if}>
+                            隐藏
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                        <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form method="post" class="form-horizontal" id="post_company_form">
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>删?</th>
+                        <th>文章标题</th>
+                        <th>封面图</th>
+                        <th>状态</th>
+                        <th>添加时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $li}
+                    <tr>
+                        <td><input type="checkbox" name="ids[]" value="{$li['id']}"></td>
+                        <td>{$li['title']}</td>
+                        <td>
+                            <img style="width: 80px;height: 80px;" src="{php echo tomedia($li['thumb']);}">
+                        </td>
+                        <td >
+                            {if $li['is_display']==1}<span class="label label-success">显示</span>{else}<span class="label label-default">隐藏</span>{/if}
+                        </td>
+                        <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                        <td>
+                            <a href="{php echo $this->createWebUrl('article',array('op'=>'post','id'=>$li['id']));}" title="编辑"><i class="fa fa-edit"></i>&nbsp;编辑</a>
+                        </td>
+                    </tr>
+                    {/loop}
+                    {if !empty($list) && is_array($list)}
+                    <tr>
+                        <td><input type="checkbox" onclick="var ck = this.checked;$('#post_company_form').find('input').each(function(){this.checked = ck});"></td>
+                        <input name="token" type="hidden" value="{$_W['token']}" />
+                        <td colspan="5">
+                            <button type="button" name="submit" class="btn btn-primary">删除</button>
+                        </td>
+                    </tr>
+                    {/if}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+    <script type="text/javascript">
+        require(['bootstrap'], function(){
+            $('button[name="submit"]').bind('click',function() {
+                if (confirm('删除后不可恢复，您确定删除吗？')) {
+                    if ($(":checkbox[name='ids[]']:checked").size() > 0) {
+                        $.post(
+                            window.location.href,
+                            $('#post_company_form').serialize(),
+                            function (ret) {
+                                util.message(ret.message, ret.redirect, ret.type);
+                            }, 'json'
+                        );
+                    }
+                    util.message('没有选择要删除的公司信息！', '', 'error');
+                    return false;
+                }
+            });
+        });
+    </script>
+    {elseif $op == 'post'}
+    <div class="main">
+        <form method="post" class="form-horizontal form" id="post_form">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    添加文章信息
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">公司</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <select name="company_id" id="company_id" class="form-control">
+                                <option value="0">请选择公司</option>
+                                {loop $companies $company}
+                                <option {if $item['company_id'] == $company['id']}selected{/if} value="{$company['id']}">{$company['title']}</option>
+                                {/loop}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">公司栏目</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <select name="category_id" id="category_id" class="form-control">
+                                <option value="0">请选择公司栏目</option>
+                                {loop $menus $menu}
+                                <option {if $item['category_id'] == $menu['id']}selected{/if}  value="{$menu['id']}">{$menu['title']}</option>
+                                {/loop}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">文章标题</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" name="title" value="{$item['title']}" placeholder="请输入文章标题"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">封面图</label>
+                        <div class="col-sm-8 col-xs-12">
+                            {php echo tpl_form_field_image('thumb',$item['thumb']);}
+                            <span class="help-block">建议尺寸：300*150(或比例：2:1)</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">文章内容</label>
+                        <div class="col-sm-8 col-xs-12">
+                            {php echo tpl_ueditor('detail',$item['detail']);}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">排序</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="number" class="form-control" name="order_by" value="{$item['order_by']}" placeholder="数字越大越靠前"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">状态</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <label class="radio-inline">
+                                <input type="radio" name="is_display" value="1" {if $item['is_display'] == 1}checked{/if}>
+                                显示
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="is_display" value="0" {if $item['is_display'] != 1}checked{/if}>
+                                隐藏
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-xs-12 col-sm-offset-2">
+                            <input type="hidden" name="id" value="{$item['id']}">
+                            <button type="button" name="submit" class="btn btn-primary js-push">提交</button>
+                            <input type="hidden" name="token" value="$_W['token']">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        require(['util'],function(util){
+            //添加文章
+            $('.js-push').click(function(){
+                $.post(
+                    window.location.href,
+                    $('#post_form').serialize(),
+                    function(ret){
+                        util.message(ret.message,ret.redirect,ret.type);
+                    },'json'
+                );
+            });
+            
+            //获取相关的栏目
+            $('#company_id').change(function () {
+                var id = $(this).val();
+                if(id != 0){
+                    $.post(
+                        "{php echo $this->createWebUrl('article',array('op'=>'search'));}",
+                        {id:id},
+                        function (ret) {
+                            if(ret.type == 'success'){
+                                var html = '<option value="0">请选择公司栏目</option>';
+                                $.each(ret.message,function (index,item) {
+                                    html += '<option value="'+item['id']+'">'+item['title']+'</option>';
+                                });
+                                $('#category_id').html(html);
+                                return true;
+                            }
+                            util.message(ret.message,ret.redirect,ret.type);
+                        },'json'
+                    );
+                }else{
+                    $('#category_id').html('<option value="0">请选择公司栏目</option>');
+                }
+            });
+        });
+    </script>
+    {elseif $op == 'category'}
+    <div class="panel panel-info">
+        <div class="panel-heading">栏目列表</div>
+        <div class="panel-body">
+            <form method="post" class="form-horizontal" id="display_category_form">
+                <div class="panel panel-default ">
+                    <div class="table-responsive panel-body">
+                        <table class="table table-hover">
+                            <thead class="navbar-inner">
+                            <tr>
+                                <th>删?</th>
+                                <th>分类名称</th>
+                                <th>显示状态</th>
+                                <th>排序</th>
+                                <th>添加时间</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {loop $list $li}
+                            <tr>
+                                <td><input type="checkbox" name="ids[]" value="{$li['id']}"></td>
+                                <td>{$li['title']}</td>
+                                <td >
+                                    {if $li['is_display']==1}<span class="label label-success">显示</span>{else}<span class="label label-default">隐藏</span>{/if}
+                                </td>
+                                <td>{$li['order_by']}</td>
+                                <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                                <td>
+                                    <a href="{php echo $this->createWebUrl('article',array('op'=>'post_category','id'=>$li['id']));}" title="编辑"><i class="fa fa-edit"></i>&nbsp;编辑</a>
+                                </td>
+                            </tr>
+                            {/loop}
+                            {if !empty($list) && is_array($list)}
+                            <tr>
+                                <td><input type="checkbox" onclick="var ck = this.checked;$('#display_category_form').find('input').each(function(){this.checked = ck});"></td>
+                                <input name="token" type="hidden" value="{$_W['token']}" />
+                                <td colspan="5">
+                                    <button type="button" name="submit" class="btn btn-primary">删除</button>
+                                </td>
+                            </tr>
+                            {/if}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {$pager}
+            </form>
+            <script type="text/javascript">
+                require(['bootstrap'], function(){
+                    $('button[name="submit"]').bind('click',function() {
+                        if (confirm('删除后不可恢复，您确定删除吗？')) {
+                            if ($(":checkbox[name='ids[]']:checked").size() > 0) {
+                                $.post(
+                                    window.location.href,
+                                    $('#display_category_form').serialize(),
+                                    function (ret) {
+                                        util.message(ret.message, ret.redirect, ret.type);
+                                    }, 'json'
+                                );
+                            }
+                            util.message('没有选择要删除的分类！', '', 'error');
+                            return false;
+                        }
+                    });
+                });
+            </script>
+        </div>
+    </div>
+    {elseif $op == 'post_category'}
+    <div class="main">
+        <form method="post" class="form-horizontal form" id="post_category_form">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    添加公司栏目
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">栏目名称</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" name="title" value="{$category['title']}" placeholder="请输入分类名称"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">公司</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <select class="form-control" name="company_id">
+                                <option value="0">请选择公司</option>
+                                {loop $companies $company}
+                                <option {if $category['company_id'] == $company['id']}selected{/if} value="{$company['id']}">{$company['title']}</option>
+                                {/loop}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">缩略图</label>
+                        <div class="col-sm-8 col-xs-12">
+                            {php echo tpl_form_field_image('thumb',$category['thumb']);}
+                            <span class="help-block">建议尺寸：300*150(或比例：2:1)</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">排序</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="number" name="order_by" value="{$category['order_by']}" placeholder="请输入数字，越大排序越靠前" class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">显示状态</label>
+                        <div class="col-sm-9 col-xs-12">
+                            <label class="radio-inline">
+                                <input type="radio" name="is_display" value="1" {if $category['is_display'] == 1}checked{/if} >
+                                显示
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="is_display" value="0" {if $category['is_display'] == 0}checked{/if}>
+                                隐藏
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-xs-12 col-sm-offset-2">
+                            <input type="hidden" name="id" value="{$category['id']}">
+                            <button type="button" name="submit" class="btn btn-primary js-push-category">提交</button>
+                            <input type="hidden" name="token" value="{$_W['token']}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        require(['util'],function(util){
+            //添加代理
+            $('.js-push-category').click(function(){
+                $.post(
+                    window.location.href,
+                    $('#post_category_form').serialize(),
+                    function(ret){
+                        util.message(ret.message,ret.redirect,ret.type);
+                    },'json'
+                );
+            });
+        });
+    </script>
+    {/if}
+</div>
+{template 'common/footer'}

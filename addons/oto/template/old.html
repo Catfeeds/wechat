@@ -1,0 +1,46 @@
+{template 'common/header'}
+<div class="platform-tab">
+    <ul>
+        <li {if $op == 'display'}class="active"{/if}>
+            <a href="{php echo $this->createWebUrl('old');}">服务费设置</a>
+        </li>
+        <li {if $op == 'order'}class="active"{/if}>
+        <a  href="{php echo $this->createWebUrl('old',array('op'=>'order'));}">服务费订单管理</a>
+        </li>
+        <li {if $op == 'rebate'}class="active"{/if}>
+        <a  href="{php echo $this->createWebUrl('old',array('op'=>'rebate'));}">佣金管理</a>
+        </li>
+        <li {if $op == 'user'}class="active"{/if}>
+        <a  href="{php echo $this->createWebUrl('old',array('op'=>'user'));}">套餐会员管理</a>
+        </li>
+        {if $op == 'post_user' && !empty($item)}
+        <li class="active">
+            <a  href="{php echo $this->createWebUrl('old',array('op'=>'post_user','id'=>$li['id']));}">修改套餐会员</a>
+        </li>
+        {/if}
+        <li {if $op == 'post_user' && empty($item)}class="active"{/if}>
+        <a  href="{php echo $this->createWebUrl('old',array('op'=>'post_user'));}">添加套餐会员</a>
+        </li>
+        <li {if $op == 'goods'}class="active"{/if}>
+        <a  href="{php echo $this->createWebUrl('old',array('op'=>'goods'));}">商品管理</a>
+        </li>
+        <li {if $op == 'goods_order'}class="active"{/if}>
+        <a  href="{php echo $this->createWebUrl('old',array('op'=>'goods_order'));}">商品订单</a>
+        </li>
+
+    </ul>
+</div>
+<div class="page-content">
+    {if $op == 'display'}
+        {template 'oto/old-config'}
+    {elseif $op == 'user'}
+        {template 'oto/old-user'}
+    {elseif $op == 'order'}
+        {template 'oto/old-order'}
+    {elseif $op == 'rebate'}
+        {template 'oto/old-rebate'}
+    {elseif $op == 'post_user'}
+        {template 'oto/old-post-user'}
+    {/if}
+</div>
+{template 'common/footer'}

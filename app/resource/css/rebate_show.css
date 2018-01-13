@@ -1,0 +1,58 @@
+/* 形成 */
+.page-display{}
+.page-display .header, .page-list .header{
+    background: url("/assets/common/images/title-bg.png") repeat-x;
+    height: 58px;
+    text-align: center;
+    line-height: 58px;
+    color: #ffffff;
+    font-size: 16px;
+    position: fixed;
+    width: 100%;
+    z-index: 3;
+}
+.page-display .list{
+    padding: 5px;
+}
+.page-display .list .item{
+    padding-left: 105px;
+    height: 120px;
+    border: 1px solid navajowhite;
+    background: #ffffff;
+    position: relative;
+    margin-bottom: 10px;
+}
+.page-display .list .item img {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    left: 5px;
+    top: 5px;
+    border-radius: 90px;
+    -webkit-border-radius: 90px;
+    -moz-border-radius: 90px;
+}
+
+.page-display .list .item .nickname{
+    height: 30px;
+    line-height: 30px;
+    font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.page-display .list .item .tip{
+    line-height: 25px;
+    color: darkolivegreen;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.page-display .list .item .date{
+    height: 25px;
+    line-height: 25px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+

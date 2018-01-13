@@ -1,0 +1,113 @@
+{template 'common/header'}
+<div class="account-tab">
+    <ul>
+        <li class="active">
+        <a href="{php echo url('activity/display/display');}">报名列表</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选</div>
+        <div class="panel-body">
+            <form method="get" action="./index.php" class="form-horizontal" role="form">
+                <input type="hidden" name="c" value="activity" />
+                <input type="hidden" name="a" value="join" />
+                <input type="hidden" name="do" value="display" />
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入关键词，活动名称" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">活动所在地</label>
+                    <div class="col-xs-12 col-sm-8 col-md-6">
+                        {php echo tpl_form_field_district('area', array('province' => $_GPC['area']['province'], 'city' => $_GPC['area']['city'], 'district' => $_GPC['area']['district'] ));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                        <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                        <input type="submit" name="export" class="btn btn-info" value="导出表格">
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form method="post" class="form-horizontal" id="display_form">
+        <input type="hidden" name="ac" value="delete" />
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>删?</th>
+                        <th>活动名称</th>
+                        <th>姓名</th>
+                        <th>年龄</th>
+                        <th>性别</th>
+                        <th>微信号</th>
+                        <th>手机号</th>
+                        <th>地址</th>
+                        <th>报名时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $li}
+                    <tr>
+                        <td><input type="checkbox" name="ids[]" value="{$li['id']}"></td>
+                        <td>{$li['title']}</td>
+                        <td>{$li['realname']}</td>
+                        <td>{$li['age']}</td>
+                        <td>
+                            {if $li['gender'] == 1}
+                            <span class="label label-success">男</span>
+                            {else}
+                            <span class="label label-primary">女</span>
+                            {/if}
+                        </td>
+                        <td>{$li['wxid']}</td>
+                        <td>{$li['mobile']}</td>
+                        <td>{$li['province']}{$li['city']}</td>
+                        <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                    </tr>
+                    {/loop}
+                    {if !empty($list) && is_array($list)}
+                    <tr>
+                        <td><input type="checkbox" name="" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});"></td>
+                        <input name="token" type="hidden" value="{$_W['token']}" />
+                        <td colspan="8">
+                            <button type="button" name="submit" class="btn btn-primary">删除</button>
+                        </td>
+                    </tr>
+                    {/if}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+    <script type="text/javascript">
+        require(['bootstrap'], function(){
+            $('button[name="submit"]').bind('click',function() {
+                if (confirm('删除后不可恢复，您确定删除吗？')) {
+                    if ($(":checkbox[name='ids[]']:checked").size() > 0) {
+                        $.post(
+                                window.location.href,
+                                $('#display_form').serialize(),
+                                function (ret) {
+                                    util.message(ret.message, ret.redirect, ret.type);
+                                    return false;
+                                }, 'json'
+                        );
+                    }
+                    util.message('没有选择要删除的文章！', '', 'error');
+                    return false;
+                }
+            });
+        });
+    </script>
+</div>
+{template 'common/footer'}

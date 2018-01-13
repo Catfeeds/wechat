@@ -1,0 +1,50 @@
+{template 'common/header-oto'}
+<link rel="stylesheet" href="{$_W['siteroot']}app/resource/css/info.css?v={STYLE_VERSION}">
+<div class="page-info">
+    <div class="info-header">
+        <i class="icon iconfont icon-fanhui back" onclick="history.go('-1')"></i>
+        提现账户
+    </div>
+    <div style="width: 100%;height: 50px;"></div>
+    {if $do == 'display'}
+    <form id="save-form">
+        <div class="info-info">
+            <i class="icon iconfont icon-wode left-font-i"></i>
+            <input type="text" name="realname" value="{$withdraw_account['realname']}" placeholder="请输入您的真实姓名">
+        </div>
+        <div class="info-info">
+            <i class="icon iconfont icon-bianji1 left-font-i"></i>
+            <input type="text" name="bank_no" value="{$withdraw_account['bank_no']}" placeholder="请输入您的银行卡号">
+        </div>
+        <div class="info-info">
+            <i class="icon iconfont icon-bianji1 left-font-i"></i>
+            <input type="text" name="re_bank_no" placeholder="请再次确认您的银行卡号">
+        </div>
+        <div class="info-info">
+            <i class="icon iconfont icon-icon left-font-i"></i>
+            <input type="text" name="bank_address" value="{$withdraw_account['bank_address']}" placeholder="请输入开户行">
+        </div>
+        <div style="line-height: 20px;color: red;margin: 5px">*请填写您的真实姓名和开户行、确保信息的真实性，以保证资金安全，提现金额的准确到帐</div>
+        <div class="info-footer js-save">
+            保存
+        </div>
+    </form>
+    {/if}
+</div>
+<script type="text/javascript">
+    $(function(){
+        /* 绑定手机号码 */
+        $('.js-save').bind('click',function(){
+            $.post(
+                    window.location.href,
+                    $('#save-form').serialize(),
+                    function(ret){
+                        util.toast(ret.message,ret.redirect,ret.type);
+                        return false;
+                    },'json'
+            );
+        });
+
+    });
+</script>
+{template 'common/footer-oto'}

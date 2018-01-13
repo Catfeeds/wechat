@@ -1,0 +1,27 @@
+{template 'common/header-oto'}
+<link rel="stylesheet" href="{$_W['siteroot']}app/resource/css/talk.css?v={STYLE_VERSION}">
+<div class="page-talk">
+    <div class="talk-header">
+        <i class="icon iconfont icon-fanhui back" onclick="history.go('-1')"></i>
+        我的评价
+    </div>
+    <span class="talk-tabs">
+        <span {if $level == RELATION_ONE_LEVEL || empty($level)}class="active"{/if}>好评</span>
+        <span {if $level == RELATION_SECOND_LEVEL}class="active"{/if}>中评</span>
+        <span {if $level == RELATION_THIRD_LEVEL}class="active"{/if}>差评</span>
+    </div>
+    <div style="width: 100%;height: 100px;"></div>
+    <div class="ajax-more">加载更多&gt;&gt;</div>
+</div>
+<script type="text/javascript">
+    require([],function(){
+        /* 切换*/
+        $('.talk-tabs span').bind('click',function(){
+            var obj = $('.talk-tabs span');
+            obj.removeClass('active');
+            $(this).addClass('active');
+        });
+
+    });
+</script>
+{template 'common/footer-oto'}

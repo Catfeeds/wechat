@@ -1,0 +1,109 @@
+.page-point {
+    position: relative;
+}
+.page-point .point-header {
+    height: 50px;
+    background: #06c1ae;
+    line-height: 50px;
+    text-align: center;
+    color: #ffffff;
+    width: 100%;
+    z-index: 3;
+    position: fixed;
+}
+.page-point .point-header i.back{
+    position: absolute;
+    display: block;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    left: 0;
+    top: 0;
+    font-size: 21px;
+}
+.page-point .point-header i.more{
+    position: absolute;
+    display: block;
+    width: 50px;
+    height: 50px;
+    right: 0;
+    top: 0;
+    font-size: 21px;
+    text-align: center;
+}
+.page-point .point-header .menu{
+    z-index: 99999;
+    position: absolute;
+    right: 0;
+    top: 50px;
+    background: #06c1ae;
+    display: none;
+}
+.page-point .point-header .menu ul li{
+    border-top: 1px solid #ffffff;
+    height: 40px;
+    line-height: 40px;
+}
+.page-point .point-header .menu ul li a{
+    display: block;
+    width: 80px;
+    color: #ffffff;
+}
+.point-search{
+    width: 100%;
+    position: fixed;
+    padding: 5px;
+    background: #ffffff;
+    height: 50px;
+}
+.point-search i{
+    position: absolute;
+    display: block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    left: 5px;
+    top: 5px;
+}
+.point-search input{
+    padding-left: 35px;
+    line-height: 30px;
+    height: 40px;
+}
+.point-now{
+    margin: 10px 0;
+    height: 45px;
+    line-height: 45px;
+    text-align: center;
+    background: #ffffff;
+}
+.address-list{
+    display: none;
+    margin-top: 10px;
+    background: #ffffff;
+    border-bottom: 1px solid #cccccc;
+    border-top: 1px solid #cccccc;
+}
+.address-list .address-item{
+    padding: 5px;
+    cursor: pointer;
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+}
+.address-list .address-item:last-child{
+    border-bottom: 0;
+}
+.address-list .address-item ul{
+    margin-left: 10px;
+}
+.address-list .address-item ul li{
+    font-size: 12px;
+    color: #000000;
+    line-height: 20px;
+}
+.address-item i.active{
+    color: green;
+}

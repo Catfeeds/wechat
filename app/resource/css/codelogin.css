@@ -1,0 +1,45 @@
+.page-codelogin{}
+.page-codelogin .codelogin-top{
+    height: 200px;
+    display: flex;
+    display: -webkit-flex;
+    justify-content: center;
+    align-items: center;
+}
+.page-codelogin .codelogin-top img{
+    width: 100px;
+    height: 100px;
+}
+.page-codelogin .codelogin-buttons{
+    padding: 20px;
+    display: flex;
+    display: -webkit-flex;
+    margin-top: 20px;
+    flex-direction: column;
+}
+.page-codelogin .codelogin-buttons button{
+    margin-bottom: 10px;
+    padding: 10px 0;
+    font-size: 16px;
+}
+.page-codelogin .codelogin-buttons button:first-child{
+    background: #03bf01;
+    color: #ffffff;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+.page-codelogin .codelogin-buttons button:last-child{
+    background: #fcfcfd;
+    color: #323233;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+.page-codelogin .codelogin-desc{
+    font-size: 16px;
+    color: #000000;
+    padding: 0 5px;
+    text-align: center;
+    line-height: 25px;
+}

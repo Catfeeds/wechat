@@ -1,0 +1,235 @@
+<!-- begin 左侧菜单 -->
+<div class="vapp-menu">
+    <div class="vapp-system">
+        <a style="color: #ffffff" href="{php echo url('account/display');}">
+            百变APP后台
+        </a>
+    </div>
+    <div class="vapp-nav-item">
+        <div class="vapp-nav-title">
+            <span class="icon"><i class="icon iconfont icon-shopfill"></i></span>
+            <span class="desc">公司管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="vapp-menu-sub" {if $controller == 'account'} style="display: block"{/if}>
+             <li>
+                 <a href="{php echo url('account/display/display');}" {if $controller == 'account' && $action == 'display'}class="active"{/if}>
+                 <span class="icon">
+                     <i class="icon iconfont icon-list"></i>
+                 </span>
+                 <span class="desc">公司列表</span>
+                 </a>
+             </li>
+        </ul>
+    </div>
+    <div class="vapp-nav-item">
+        <div class="vapp-nav-title">
+            <span class="icon"><i class="icon iconfont icon-goodsnewfill"></i></span>
+            <span class="desc">企业网站</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="vapp-menu-sub" {if $controller == 'article'} style="display: block"{/if}>
+            <li>
+                <a href="{php echo url('article/display');}" {if $controller == 'article' && $action == 'display'}class="active"{/if}>
+                <span class="icon">
+                        <i class="icon iconfont icon-tmall"></i>
+                    </span>
+                <span class="desc">栏目管理</span>
+                </a>
+            </li>
+            <li>
+                <a href="{php echo url('article/list');}" {if $controller == 'article' && $action == 'list'}class="active"{/if}>
+                <span class="icon">
+                    <i class="icon iconfont icon-tmall"></i>
+                </span>
+                <span class="desc">文章管理</span>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+    <div class="vapp-nav-item">
+        <div class="vapp-nav-title">
+            <span class="icon"><i class="icon iconfont icon-goodsnewfill"></i></span>
+            <span class="desc">商品管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="vapp-menu-sub" {if $controller == 'goods'} style="display: block"{/if}>
+        <li>
+            <a href="{php echo url('goods/display');}" {if $controller == 'goods' && $action == 'display'}class="active"{/if}>
+            <span class="icon">
+                        <i class="icon iconfont icon-tmall"></i>
+                    </span>
+            <span class="desc">商品列表</span>
+            </a>
+        </li>
+        </ul>
+    </div>
+    <div class="vapp-nav-item">
+        <div class="vapp-nav-title">
+            <span class="icon"><i class="icon iconfont icon-goodsnewfill"></i></span>
+            <span class="desc">订单管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="vapp-menu-sub" {if $controller == 'order'} style="display: block"{/if}>
+            <li>
+                <a href="{php echo url('order/display');}" {if $controller == 'order' && $action == 'display'}class="active"{/if}>
+                <span class="icon">
+                            <i class="icon iconfont icon-tmall"></i>
+                        </span>
+                <span class="desc">订单列表</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="vapp-nav-item">
+        <div class="vapp-nav-title">
+            <span class="icon"><i class="icon iconfont icon-goodsnewfill"></i></span>
+            <span class="desc">直播管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="vapp-menu-sub" {if $controller == 'live'} style="display: block"{/if}>
+            <li>
+                <a href="{php echo url('live/display');}" {if $controller == 'live' && $action == 'display'}class="active"{/if}>
+                <span class="icon">
+                            <i class="icon iconfont icon-tmall"></i>
+                        </span>
+                <span class="desc">参数设置</span>
+                </a>
+            </li>
+            <li>
+                <a href="{php echo url('live/list');}" {if $controller == 'live' && $action == 'list'}class="active"{/if}>
+                <span class="icon">
+                        <i class="icon iconfont icon-tmall"></i>
+                    </span>
+                <span class="desc">直播记录</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="vapp-nav-item">
+        <div class="vapp-nav-title">
+            <span class="icon"><i class="icon iconfont icon-goodsnewfill"></i></span>
+            <span class="desc">聊天管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="vapp-menu-sub" {if $controller == 'chat'} style="display: block"{/if}>
+        <li>
+            <a href="{php echo url('chat/display');}" {if $controller == 'chat' && $action == 'display'}class="active"{/if}>
+            <span class="icon">
+                        <i class="icon iconfont icon-tmall"></i>
+                    </span>
+            <span class="desc">聊天记录</span>
+            </a>
+        </li>
+        </ul>
+    </div>
+    <div class="vapp-nav-item">
+        <div class="vapp-nav-title">
+            <span class="icon"><i class="icon iconfont icon-goodsnewfill"></i></span>
+            <span class="desc">社群管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="vapp-menu-sub" {if $controller == 'group'} style="display: block"{/if}>
+            <li>
+                <a href="{php echo url('group/display');}" {if $controller == 'group' && $action == 'display'}class="active"{/if}>
+                <span class="icon">
+                            <i class="icon iconfont icon-tmall"></i>
+                        </span>
+                <span class="desc">我的社群</span>
+                </a>
+            </li>
+            <li>
+                <a href="{php echo url('group/topic');}" {if $controller == 'group' && $action == 'topic'}class="active"{/if}>
+                <span class="icon">
+                                <i class="icon iconfont icon-tmall"></i>
+                            </span>
+                <span class="desc">社群话题</span>
+                </a>
+            </li>
+            <li>
+                <a href="{php echo url('group/talk');}" {if $controller == 'group' && $action == 'talk'}class="active"{/if}>
+                <span class="icon">
+                                <i class="icon iconfont icon-tmall"></i>
+                            </span>
+                <span class="desc">社群讨论</span>
+                </a>
+            </li>
+            <li>
+                <a href="{php echo url('group/member');}" {if $controller == 'group' && $action == 'member'}class="active"{/if}>
+                <span class="icon">
+                                <i class="icon iconfont icon-tmall"></i>
+                            </span>
+                <span class="desc">社群成员</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div class="vapp-nav-item">
+        <div class="vapp-nav-title">
+            <span class="icon"><i class="icon iconfont icon-goodsnewfill"></i></span>
+            <span class="desc">圈子管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="vapp-menu-sub" {if $controller == 'news'} style="display: block"{/if}>
+        <li>
+            <a href="{php echo url('news/display');}" {if $controller == 'news' && $action == 'display'}class="active"{/if}>
+            <span class="icon">
+                        <i class="icon iconfont icon-tmall"></i>
+                    </span>
+            <span class="desc">圈子列表</span>
+            </a>
+        </li>
+        </ul>
+    </div>
+    <div class="vapp-nav-item">
+        <div class="vapp-nav-title">
+            <span class="icon"><i class="icon iconfont icon-goodsnewfill"></i></span>
+            <span class="desc">系统管理</span>
+            <span class="direct"><i class="fa fa-angle-down"></i></span>
+        </div>
+        <ul class="vapp-menu-sub" {if $controller == 'sys'} style="display: block"{/if}>
+            <li>
+                <a href="{php echo url('sys/config');}" {if $controller == 'sys' && $action == 'config'}class="active"{/if}>
+                <span class="icon">
+                            <i class="icon iconfont icon-tmall"></i>
+                        </span>
+                <span class="desc">参数设置</span>
+                </a>
+            </li>
+            <li>
+                <a href="{php echo url('sys/member');}" {if $controller == 'sys' && $action == 'member'}class="active"{/if}>
+                <span class="icon">
+                                <i class="icon iconfont icon-tmall"></i>
+                            </span>
+                <span class="desc">会员管理</span>
+                </a>
+            </li>
+            <li>
+                <a href="{php echo url('sys/rebate');}" {if $controller == 'sys' && $action == 'rebate'}class="active"{/if}>
+                <span class="icon">
+                                <i class="icon iconfont icon-tmall"></i>
+                            </span>
+                <span class="desc">分销管理</span>
+                </a>
+            </li>
+            <li>
+                <a href="{php echo url('sys/find');}" {if $controller == 'sys' && $action == 'find'}class="active"{/if}>
+                <span class="icon">
+                                <i class="icon iconfont icon-tmall"></i>
+                            </span>
+                <span class="desc">发现管理</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<script type="text/javascript">
+    require([],function(){
+        $('.vapp-nav-title').bind('click',function(){
+            $('.vapp-menu-sub').not($(this).next('.vapp-menu-sub')).slideUp();
+            $(this).next('.vapp-menu-sub').slideToggle();
+        });
+    });
+</script>
+<!-- end 左侧菜单 -->

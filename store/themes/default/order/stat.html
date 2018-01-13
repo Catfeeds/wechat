@@ -1,0 +1,76 @@
+{template 'common/header'}
+<style type="text/css">
+    .row > div{
+        padding: 0 5px 0 10px;
+        margin-bottom: 10px;
+    }
+    .row > div:nth-child(2n){
+        padding: 0 10px 0 5px;
+    }
+    .row .item{
+        color: #ffffff;
+        height: 100px;
+        text-align: left;
+        text-indent: 10px;
+        font-size: 21px;
+        line-height: 100px;
+    }
+</style>
+<div class="page-content">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="item" style="background: skyblue">
+                待发货：￥{$li1}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="item"style="background: yellowgreen">
+                待付款：￥{$li2}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="item" style="background: blueviolet">
+                已发货：￥{$li3}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="item" style="background: violet">
+                已退款：￥{$li4}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="item" style="background: turquoise">
+                已完成：￥{$li5}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="item" style="background: teal">
+                已提现：￥{$li6}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="item" style="background: chocolate">
+                总收入：￥{$li7}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="item" style="background: yellowgreen">
+                未提现：￥{$li8}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="item"style="background: coral">
+                提现中：￥{$li9}
+            </div>
+        </div>
+    </div>
+</div>
+{template 'common/footer'}

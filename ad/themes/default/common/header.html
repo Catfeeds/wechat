@@ -1,0 +1,91 @@
+{template 'common/header-base'}
+<!-- begin 商家主容器-->
+	<div class="page-account">
+		{template 'common/menu'}
+		<!-- begin 右侧内容 -->
+		<div class="account-panel">
+			<!-- begin 顶部导航栏 -->
+			<div class="account-nav">
+				<span class="nav-toggle nav-show" title="关闭左侧菜单">关闭左侧菜单</span>
+				<div class="account-info">
+					<div class="manager-account">
+						<span>账号：{$_W['ad_username']}&nbsp;<i class="icon iconfont icon-unfold"></i></span>
+						<ul>
+							<li><a href="{php echo url('user/logout');}">退出</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<script type="text/javascript">
+				require([],function(){
+					$('.nav-toggle').bind('click',function(){
+						if($(this).hasClass('nav-show')){
+							$('.account-menu').hide();
+							$('.account-panel').css('margin-left','0');
+							$(this).removeClass('nav-show').addClass('nav-hide').attr('title','展开左侧菜单').html('展开左侧菜单');
+						}else{
+							$('.account-menu').show();
+							$('.account-panel').css('margin-left','230px');
+							$(this).removeClass('nav-hide').addClass('nav-show').attr('title','关闭左侧菜单').html('关闭左侧菜单');
+						}
+					});
+
+					$('.shop-account').bind('mouseover',function(){
+						$(this).css('background','#203544');
+						$('.shop-account ul').css('width','100%').show();
+						$(this).find('i').removeClass('icon-unfold').addClass('icon-fold');
+					});
+
+					$('.shop-account').bind('mouseout',function(){
+						$(this).css('background','transparent');
+						$('.shop-account ul').hide();
+						$(this).find('i').removeClass('icon-fold').addClass('icon-unfold');
+					});
+
+					$('.manager-account').bind('mouseover',function(){
+						$(this).css('background','#203544');
+						$('.manager-account ul').css('width','100%').show();
+						$(this).find('i').removeClass('icon-unfold').addClass('icon-fold');
+					});
+
+					$('.manager-account').bind('mouseout',function(){
+						$(this).css('background','transparent');
+						$('.manager-account ul').hide();
+						$(this).find('i').removeClass('icon-fold').addClass('icon-unfold');
+					});
+				});
+			</script>
+			<!-- end 顶部导航栏-->
+
+			<!-- begin 右侧内容部分 -->
+			<div class="account-body">
+				<div class="account-main">
+					{if defined('IN_MESSAGE')}
+					<div class="jumbotron clearfix alert alert-{$label}">
+						<div class="row">
+							<div class="col-xs-12 col-sm-3 col-lg-2">
+								<i class="fa fa-5x fa-{if $label=='success'}check-circle{/if}{if $label=='danger'}times-circle{/if}{if $label=='info'}info-circle{/if}{if $label=='warning'}exclamation-triangle{/if}"></i>
+							</div>
+							<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10">
+								{if is_array($msg)}
+								<h2>MYSQL 错误：</h2>
+								<p>{php echo cutstr($msg['sql'], 300, 1);}</p>
+								<p><b>{$msg['error'][0]} {$msg['error'][1]}：</b>{$msg['error'][2]}</p>
+								{else}
+								<h2>{$caption}</h2>
+								<p>{$msg}</p>
+								{/if}
+								{if $redirect}
+								<p><a href="{$redirect}">如果你的浏览器没有自动跳转，请点击此链接</a></p>
+								<script type="text/javascript">
+									setTimeout(function () {
+										location.href = "{$redirect}";
+									}, 3000);
+								</script>
+								{else}
+								<p>[<a href="javascript:history.go(-1);">点击这里返回上一页</a>] &nbsp; [<a href="./?refresh">首页</a>]</p>
+								{/if}
+							</div>
+						</div>
+					</div>
+					{/if}

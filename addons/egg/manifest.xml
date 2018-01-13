@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns="http://wx.51muma.com" versionCode="0.6">
+	<application setting="false">
+		<name><![CDATA[壳圆]]></name>
+		<identifie><![CDATA[egg]]></identifie>
+		<version><![CDATA[1.0.4]]></version>
+		<type><![CDATA[app]]></type>
+		<ability><![CDATA[壳圆，微信营销专家]]></ability>
+		<description><![CDATA[壳圆，微信营销专家，吸粉，文章转发、分享、教程]]></description>
+		<author><![CDATA[慕马科技]]></author>
+		<url><![CDATA[http://wx.51muma.com/]]></url>
+	</application>
+	<platform>
+		<subscribes>
+		</subscribes>
+		<handles>
+		</handles>
+		<rule embed="false" />
+		<card embed="false" />
+	</platform>
+	<bindings>
+		<cover>
+			<entry title="手机端入口" do="index" state="" direct="false" />
+			<entry title="API接口入口" do="api" state="" direct="false" />
+		</cover>
+		<menu>
+			<entry title="参数设置" do="config" state="" direct="false" />
+			<entry title="设备管理" do="device" state="" direct="false" />
+			<entry title="推广管理" do="ad" state="" direct="false" />
+			<entry title="公司管理" do="company" state="" direct="false" />
+			<entry title="加粉管理" do="fans" state="" direct="false" />
+			<entry title="文章管理" do="article" state="" direct="false" />
+			<entry title="分享管理" do="share" state="" direct="false" />
+			<entry title="教程管理" do="study" state="" direct="false" />
+			<entry title="代理管理" do="agent" state="" direct="false" />
+			<entry title="轮播管理" do="slide" state="" direct="false" />
+		</menu>
+	</bindings>
+	<permissions>
+	</permissions>
+	<install><![CDATA[]]></install>
+	<uninstall><![CDATA[]]></uninstall>
+	<upgrade><![CDATA[]]></upgrade>
+</manifest>

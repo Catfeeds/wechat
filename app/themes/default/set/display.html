@@ -1,0 +1,104 @@
+{template 'common/header-oto'}
+<link rel="stylesheet" href="{$_W['siteroot']}app/resource/css/set.css?v={STYLE_VERSION}">
+<div class="page-set">
+    <div class="set-header">
+        <i class="icon iconfont icon-fanhui back" onclick="history.go('-1')"></i>
+        设置
+    </div>
+    <div style="width: 100%;height: 50px;"></div>
+    <div class="set-item">
+        <div class="set-menu">
+            <ul>
+                <li>
+                    <a href="{php echo url('set/mobile/display');}">
+                        <span><i class="icon iconfont icon-shoujihao1" style="color: turquoise;"></i>&nbsp;绑定手机号</span>
+                        <span class="direct-right">{$member_info['mobile']}&nbsp;<i class="icon iconfont icon-right icon-xiangyou"></i></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{php echo url('set/password/display');}">
+                        <span><i class="icon iconfont icon-mima1" style="color: green"></i>&nbsp;设置密码</span>
+                        <span class="direct-right"><i class="icon iconfont icon-right icon-xiangyou"></i></span>
+                    </a>
+                </li>
+                <li>
+                    <div class="avatar">
+                        <span><i class="icon iconfont icon-touxiangshangchuan" style="color: blueviolet"></i>&nbsp;头像</span>
+                        <span class="direct-right"><i class="icon iconfont icon-right icon-xiangyou"></i></span>
+                        <img src="{$avatar}">
+                        <form  method="post" enctype="multipart/form-data" id="avatar_form">
+                            <input type="file" name="avatar" accept="image/*">
+                        </form>
+                    </div>
+                </li>
+                <li>
+                    <a href="{php echo url('set/credit2/display');}">
+                        <span><i class="icon iconfont icon-zhifu2" style="color: coral"></i>&nbsp;余额支付密码</span>
+                        <span class="direct-right"><i class="icon iconfont icon-right icon-xiangyou"></i></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{php echo url('set/address/display');}">
+                        <span><i class="icon iconfont icon-icon" style="color: violet"></i>&nbsp;收货地址</span>
+                        <span class="direct-right"><i class="icon iconfont icon-right icon-xiangyou"></i></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="set-item">
+        <div class="set-menu">
+            <ul>
+                <li>
+                    <a href="{php echo url('set/location/display');}">
+                        <span><i class="icon iconfont icon-icon" style="color: red"></i>&nbsp;所在地（消费凭据）</span>
+                        <span class="direct-right">{$member_info['city']}<i class="icon iconfont icon-right icon-xiangyou"></i></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{php echo url('set/withdraw/display');}">
+                        <span><i class="icon iconfont icon-yue" style="color: saddlebrown"></i>&nbsp;提现账户</span>
+                        <span class="direct-right">提现资金入账账户<i class="icon iconfont icon-right icon-xiangyou"></i></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <a class="logout-btn" href="{php echo url('auth/logout');}">退出登录</a>
+</div>
+<script type="text/javascript">
+    require([],function(){
+        /* 申请 */
+        $('input[name="avatar"]').bind('change',function(){
+            var file = $(this).val();
+            if(file == ''){
+                util.toast('请选择上传文件','','error');
+                return false;
+            }
+            $('.js-toast-loading').show();
+            util.loading();
+            var formData = new FormData($( "#avatar_form" )[0]);
+            $.ajax({
+                url: window.location.href ,
+                type: 'POST',
+                data: formData,
+                dataType: "json",
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (ret) {
+                    $('.js-toast-loading').hide();
+                    util.toast(ret.message,ret.redirect,'success');
+                    return true;
+                },
+                error: function () {
+                    $('.js-toast-loading').hide();
+                    util.toast('网络连接错误！请重试！','','error');
+                    return false;
+                }
+            });
+        });
+    });
+</script>
+{template 'common/footer-oto'}

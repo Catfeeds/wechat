@@ -1,0 +1,93 @@
+{template 'common/header'}
+<style type="text/css">
+	.page-focus{}
+	.page-focus .focus-header{
+		height: 50px;
+		background: #06c1ae;
+		line-height: 50px;
+		text-align: center;
+		color: #ffffff;
+		font-size: 14px;
+		font-weight: 400;
+		position: relative;
+	}
+	.focus-header i{
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 50px;
+		height: 50px;
+		display: block;
+		line-height: 50px;
+		text-align: center;
+		font-size: 21px;
+	}
+	.focus-content{
+		padding: 10px 0;
+	}
+	.focus-image{
+		width: 210px;
+		height: 210px;
+		margin: 0 auto;
+		padding: 5px;
+		border: 1px solid #eee;
+	}
+	.focus-image img{
+		width: 200px;
+		height: 200px;
+	}
+	.focus-desc{
+		margin-top: 10px;
+		padding: 15px;
+	}
+	.focus-desc ul{
+		padding: 0;
+		margin: 0;
+	}
+	.focus-desc ul li{
+		font-size: 14px;
+		line-height: 25px;
+		list-style: none;
+		color: #333333;
+		margin-top: 10px;
+	}
+	.focus-desc ul li:first-child{
+		text-indent: 30px;
+		font-size: 14px;
+		color: #000000!important;
+	}
+</style>
+<div class="page-focus">
+	<div class="focus-header">
+		<i class="fa fa-angle-left" onclick="history.go('-1')"></i>
+		{if $do == 'forget'}找回密码{else}注册须知{/if}
+	</div>
+	<div class="focus-content">
+		<div class="focus-image">
+			<img src="{php echo tomedia('qrcode_'.$_W['acid'].'.jpg');}">
+		</div>
+		<div class="focus-desc">
+			{if $do == 'forget'}
+			<ul>
+				<li>1.找回密码，需要微信关注公众号，识别二维码或搜索公众号：<b style="color: red">{$uniaccount['name']}</b></li>
+				<li>2.进入个人中心，设置里，进行密码设置即可</li>
+			</ul>
+			{else}
+			<ul>
+				<li>为了手机网页和微信账号的统一，注册需要您进行以下操作，给您带来的不便，敬请谅解！祝您生活愉快！</li>
+				<li>1.长按上面的二维码，保存到手机，打开微信，识别相册里的二维码，关注公众号</li>
+				<li>2.关注公众号，进入个人中心，设置里，完成手机号或者邮箱绑定</li>
+				<li>3.绑定完成后，需要设置您的登录密码</li>
+				<li>4.在网页中登录输入绑定的手机号或邮箱和密码，即可登录</li>
+				<li>5.如果未看到二维码，可打开微信搜索公众号：<b style="color: red">{$uniaccount['name']}</b>，进行关注</li>
+			</ul>
+			{/if}
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+
+	});
+</script>
+{template 'common/footer'}

@@ -1,0 +1,74 @@
+{template 'common/header-oto'}
+<link rel="stylesheet" href="{$_W['siteroot']}app/resource/css/mobile.css?v={STYLE_VERSION}">
+<div class="page-mobile">
+    <div class="mobile-header">
+        <i class="icon iconfont icon-fanhui back" onclick="history.go('-1')"></i>
+        绑定手机号码
+    </div>
+    <div style="width: 100%;height: 50px;"></div>
+    {if $do == 'display'}
+    <form id="set-mobile-form">
+        <div class="mobile-mobile">
+            <i class="icon iconfont icon-shoujihao1"></i>
+            <input type="text" name="mobile" placeholder="请输入您的手机号">
+        </div>
+        <div class="mobile-verify">
+            <i class="icon iconfont icon-shoujihao1"></i>
+            <input type="text" name="code" maxlength="8" placeholder="请输入您的验证码">
+            <button class="js-sms" type="button">获取验证码</button>
+        </div>
+        <div class="mobile-footer js-set-mobile">
+            立即绑定
+        </div>
+    </form>
+    {/if}
+</div>
+<script type="text/javascript">
+    $(function(){
+        //获取验证码
+        var send_status = 0;
+        var time = 30;
+        $('.js-sms').click(function(){
+            var obj = $('.js-sms');
+            if(send_status == 1){
+                return false;
+            }
+            $.post(
+                    "{php echo url('utility/sms/send');}",
+                    {mobile:$('input[name="mobile"]').val()},
+                    function(ret){
+                        if(ret.type == 'success'){
+                            send_status = 1;
+                            var iInterval = setInterval(function(){
+                                time --;
+                                obj.html('重新发送('+time+')');
+                                if(time <= 0){
+                                    time = 30;
+                                    send_status = 0;
+                                    obj.html('获取验证码');
+                                    clearInterval(iInterval)
+                                }
+                            },1000);
+                        }else{
+                            alert(ret.message);
+                        }
+                    },'json'
+
+            );
+        });
+
+        /* 绑定手机号码 */
+        $('.js-set-mobile').bind('click',function(){
+            $.post(
+                    window.location.href,
+                    $('#set-mobile-form').serialize(),
+                    function(ret){
+                        util.toast(ret.message,ret.redirect,ret.type);
+                        return false;
+                    },'json'
+            );
+        });
+
+    });
+</script>
+{template 'common/footer-oto'}

@@ -1,0 +1,208 @@
+{template 'common/header'}
+<div class="servicer-tab">
+    <ul>
+        <li {if $do == 'display'}class="active"{/if}>
+        <a href="{php echo url('store/apply/display');}">商家申请记录</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    {if $do == 'display'}
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选</div>
+        <div class="panel-body">
+            <form method="get" action="./index.php" class="form-horizontal" role="form">
+                <input type="hidden" name="c" value="store" />
+                <input type="hidden" name="a" value="apply" />
+                <input type="hidden" name="do" value="display" />
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入关键词，联系人、联系电话、店主会员ID、推荐人会员ID" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">申请时间</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        {php echo tpl_form_field_daterange('createtime', array('starttime' => date('Y-m-d', $starttime), 'endtime' => date('Y-m-d', $endtime),));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">地址</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {php echo tpl_form_field_district('area',array('province' =>$province, 'city' => $city,'district' => $district));}
+                        <span class="help-block">系统将自动定位到您所管辖的区域，管辖区外的地区将会失效</span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">审核状态</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="is_check[]" value="{CHECK_PASS}" {if in_array(CHECK_PASS,$is_check)}checked{/if}>
+                            通过
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="is_check[]" value="{CHECK_NOT_PASS}" {if in_array(CHECK_NOT_PASS,$is_check)}checked{/if}>
+                            未通过
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                        <button type="submit" name="submit" value="搜索" class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                        <input class="btn btn-primary" type="submit" name="export_submit" id="export_submit" value="导出">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form method="post" class="form-horizontal">
+        <input type="hidden" name="op" value="post" />
+        <input type="hidden" name="ac" value="delete" />
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th style="width: 80px">序号</th>
+                        <th>基本信息</th>
+                        <th>店铺信息</th>
+                        <th>照片信息(点击查看)</th>
+                        <th>时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $li}
+                    <tr>
+                        <td>{$li['id']}</td>
+                        <td style="line-height: 25px;">
+                            会员ID：{$li['uid']}<br>
+                            联系人：{$li['contacts']}<br>
+                            联系电话：{$li['tel']}
+                        </td>
+                        <td  style="line-height: 25px;">
+                            名称：{$li['store_name']}<br>
+                            经营内容：{$li['manage_content']}<br>
+                            地址：{$li['province']}-{$li['city']}-{$li['district']}{$li['address']}
+                        </td>
+                        <td class="images-boxs" style="cursor: pointer">
+                            {if !empty($li['business_license'])}
+                            <img data-title="营业执照" style="width: 80px;height: 80px;" src="{php echo tomedia($li['business_license']);}">
+                            <img data-title="店面照片" style="width: 80px;height: 80px;" src="{php echo tomedia($li['store_thumb']);}">
+                            {/if}
+                            <img data-title="身份证反面" style="width: 80px;height: 80px;"  src="{php echo tomedia($li['identity_card_01']);}">
+                            <img data-title="身份证正面" style="width: 80px;height: 80px;"  src="{php echo tomedia($li['identity_card_02']);}">
+                        </td>
+                        <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                        <td class="check-btns">
+                            <button data-id="{$li['id']}" type="button" class="btn btn-default check"><i class="fa {if $li['is_check'] == 1}fa-check-square active{else}fa-square-o{/if}"></i> 通过</button>
+                            <button data-id="{$li['id']}" type="button" class="btn btn-default delete">删除</button>
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+    <!-- 图片展示框 -->
+    <div class="modal fade" id="images-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body" style="height: 500px;overflow-y: scroll">
+                    <img style="width: 100%;height: auto" src="">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pre-btn">上一张</button>
+                    <button type="button" class="btn btn-default next-btn">下一张</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 图片展示框 -->
+    <script type="text/javascript">
+        require(['bootstrap'],function(){
+            /* 删除 */
+            $('.delete').bind('click',function(){
+                var id = $(this).attr('data-id');
+                if(confirm('确定要删除序号为：'+id+'的记录吗？')){
+                    $.post(
+                            window.location.href,
+                            {
+                                ac:'delete',
+                                id:id
+                            },
+                            function(ret){
+                                util.message(ret.message,ret.redirect,ret.type);
+                            },'json'
+                    );
+                }
+            });
+
+            /* 图片展示 */
+            var images = null;
+            var images_num = 0;
+            var images_index = 0;
+            $('.images-boxs').bind('click',function(){
+                images = $(this).find('img');
+                images_num = images.length;
+                images_index = 0;
+                $('.modal-title').html($(images[images_index]).attr('data-title'));
+                $('.modal-body img').attr('src',$(images[images_index]).attr('src'));
+                $('#images-modal').modal('show');
+            });
+            $('.pre-btn').bind('click',function(){
+                if(--images_index < 0){
+                    images_index = images_num-1;
+                }
+                $('.modal-title').html($(images[images_index]).attr('data-title'));
+                $('.modal-body img').attr('src',$(images[images_index]).attr('src'));
+            });
+            $('.next-btn').bind('click',function(){
+                if(++images_index > images_num-1){
+                    images_index = 0;
+                }
+                $('.modal-title').html($(images[images_index]).attr('data-title'));
+                $('.modal-body img').attr('src',$(images[images_index]).attr('src'));
+            });
+
+            /* 审核 */
+            $('.check').bind('click',function(){
+                var is_check = 0;
+                var id = Math.floor($(this).attr('data-id').trim());
+                if($(this).find('i').hasClass('fa-square-o')){
+                    $(this).find('i').removeClass('fa-square-o').addClass('fa-check-square active');
+                    is_check = 1;
+                }else{
+                    $(this).find('i').removeClass('fa-check-square').addClass('fa-square-o');
+                    is_check = 0;
+                }
+                $.post(
+                        window.location.href,
+                        {
+                            id:id,
+                            is_check:is_check
+                        },
+                        function(ret){
+                            if(ret.type == 'success'){
+                                util.message(ret.message,'','success');
+                                return true;
+                            }
+                            util.message(ret.message,'','error');
+                            return false;
+                        },'json'
+                );
+            });
+        });
+    </script>
+    {/if}
+</div>
+{template 'common/footer'}

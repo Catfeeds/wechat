@@ -1,0 +1,187 @@
+{template 'common/header'}
+<div class="platform-tab">
+    <ul>
+        <li {if $op == 'display'}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('company',array('op'=>'display'));}">公司列表</a>
+        </li>
+        <li {if $op == 'post' && empty($item)}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('company',array('op'=>'post'));}">添加公司</a>
+        </li>
+        {if $op == 'post' && !empty($item)}
+        <li class="active">
+            <a href="{php echo $this->createWebUrl('company',array('op'=>'post','id'=>$item['id']));}">修改公司</a>
+        </li>
+        {/if}
+    </ul>
+</div>
+<div class="page-content">
+    {if $op == 'display'}
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选</div>
+        <div class="panel-body">
+            <form method="get" action="./index.php" class="form-horizontal" role="form">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="op" value="display" />
+                <input type="hidden" name="do" value="company" />
+                <input type="hidden" name="m" value="egg" />
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入关键词，名称、电话、联系人" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">添加时间</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        {php echo tpl_form_field_daterange('createtime', array('starttime' => date('Y-m-d', $starttime), 'endtime' => date('Y-m-d', $endtime),));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                        <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form method="post" class="form-horizontal" id="post_delete_company">
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>删?</th>
+                        <th>名称</th>
+                        <th>联系人</th>
+                        <th>手机号</th>
+                        <th>省份</th>
+                        <th>城市</th>
+                        <th>描述</th>
+                        <th>添加时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $li}
+                    <tr>
+                        <td><input type="checkbox" name="ids[]" value="{$li['id']}"></td>
+                        <td>{$li['name']}</td>
+                        <td>{$li['contacts']}</td>
+                        <td>{$li['mobile']}</td>
+                        <td>{$li['province']}</td>
+                        <td>{$li['city']}</td>
+                        <td>{$li['desc']}</td>
+                        <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                        <td>
+                            <a href="{php echo $this->createWebUrl('company',array('op'=>'post','id'=>$li['id']));}" title="编辑"><i class="fa fa-edit"></i>&nbsp;编辑</a>
+                        </td>
+                    </tr>
+                    {/loop}
+                    {if !empty($list) && is_array($list)}
+                    <tr>
+                        <td><input type="checkbox" onclick="var ck = this.checked;$('#post_delete_company').find('input').each(function(){this.checked = ck});"></td>
+                        <input name="token" type="hidden" value="{$_W['token']}" />
+                        <td colspan="8">
+                            <button type="button" name="submit" class="btn btn-primary">删除</button>
+                        </td>
+                    </tr>
+                    {/if}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+    <script type="text/javascript">
+        require(['bootstrap'], function(){
+            $('button[name="submit"]').bind('click',function() {
+                if (confirm('删除后不可恢复，您确定删除吗？')) {
+                    if ($(":checkbox[name='ids[]']:checked").size() > 0) {
+                        $.post(
+                                window.location.href,
+                                $('#post_delete_company').serialize(),
+                                function (ret) {
+                                    util.message(ret.message, ret.redirect, ret.type);
+                                }, 'json'
+                        );
+                    }
+                    util.message('没有选择要删除的公司信息！', '', 'error');
+                    return false;
+                }
+            });
+        });
+    </script>
+    {elseif $op == 'post'}
+    <div class="main">
+        <form method="post" class="form-horizontal form" id="post_company_form">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    添加公司
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>名称</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" name="name" value="{$item['name']}" placeholder="请输入公司名称"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">联系人</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" name="contacts" value="{$item['contacts']}" placeholder="请输入联系人"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">联系方式</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" name="mobile" value="{$item['mobile']}" placeholder="请输入联系方式"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">省份</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" name="province" value="{$item['province']}" placeholder="请输入省份"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">城市</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" name="city" value="{$item['city']}" placeholder="请输入城市"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">描述</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <textarea class="form-control" name="desc" placeholder="请输入描述">{$item['desc']}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-xs-12 col-sm-offset-2">
+                            <input type="hidden" name="id" value="{$item['id']}">
+                            <button type="button" name="submit" class="btn btn-primary js-push-company">提交</button>
+                            <input type="hidden" name="token" value="$_W['token']">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        require(['util'],function(util){
+            //添加公司
+            $('.js-push-company').click(function(){
+                $.post(
+                        window.location.href,
+                        $('#post_company_form').serialize(),
+                        function(ret){
+                            util.message(ret.message,ret.redirect,ret.type);
+                        },'json'
+                );
+            });
+        });
+    </script>
+    {/if}
+</div>
+{template 'common/footer'}

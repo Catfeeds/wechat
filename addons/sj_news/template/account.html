@@ -1,0 +1,221 @@
+{template 'common/header'}
+<div class="platform-tab">
+    <ul>
+        <li {if $op == 'display'}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('account',array('op'=>'display'));}">账号列表</a>
+        </li>
+        {if $op == 'post' && !empty($item)}
+        <li class="active">
+            <a href="{php echo $this->createWebUrl('account',array('op'=>'post','id'=>$item['id']));}">修改账号</a>
+        </li>
+        {/if}
+        <li {if $op == 'post' && empty($item)}class="active"{/if}>
+        <a href="{php echo $this->createWebUrl('account',array('op'=>'post'));}">添加账号</a>
+        </li>
+    </ul>
+</ul>
+</div>
+<div class="page-content">
+{if $op == 'display'}
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选</div>
+        <div class="panel-body">
+            <form method="get"  action="./index.php" class="form-horizontal" role="form">
+                <input type="hidden" name="c" value="site" />
+                <input type="hidden" name="a" value="entry" />
+                <input type="hidden" name="op" value="display" />
+                <input type="hidden" name="do" value="account" />
+                <input type="hidden" name="m" value="sj_news" />
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入用户名" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">状态</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="is_check[]" value="{CHECK_PASS}" {if in_array(CHECK_PASS,$is_check)}checked{/if}>正常
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="is_check[]" value="{CHECK_NOT_PASS}" {if in_array(CHECK_NOT_PASS,$is_check)}checked{/if}> 禁用
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label" for="repassword">地区</label>
+                    <div class="col-xs-12 col-sm-8 col-md-6">
+                        {php echo tpl_form_field_district('area', array('province' => $_GPC['area']['province'], 'city' => $_GPC['area']['city'], 'district' => $_GPC['area']['district'] ));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">类型</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="type[]" value="0" {if in_array(0,$_GPC['type'])}checked{/if}>地级市管理员
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="type[]" value="1" {if in_array(1,$_GPC['type'])}checked{/if}>超级管理员
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                        <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                        <input class="btn btn-primary" type="submit" name="export_submit" id="export_submit" value="导出">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form method="post" class="form-horizontal" id="account_form">
+        <input type="hidden" name="ac" value="delete" />
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover js-account-box">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>删除</th>
+                        <th>账号</th>
+                        <th>状态</th>
+                        <th>类型</th>
+                        <th>所属地区</th>
+                        <th>添加时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $li}
+                    <tr>
+                        <td><input type="checkbox" name="ids[]" value="{$li['id']}"></td>
+                        <td>{$li['username']}</td>
+                        <td>
+                            {if $li['is_check'] == CHECK_PASS}
+                            <span class="label label-success">正常</span>
+                            {else}
+                            <span class="label label-default">禁用</span>
+                            {/if}
+                        </td>
+                        <td>
+                            {if $li['type'] == 1}
+                            <span class="label label-success">超级管理员</span>
+                            {else}
+                            <span class="label label-danger">地级市管理员</span>
+                            {/if}
+                        </td>
+                        <td>
+                            {$li['province']} {$li['city']} {$li['district']}
+                        </td>
+                        <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                        <td><a href="{php echo $this->createWebUrl('account',array('op'=>'post','id'=>$li['id']));}">编辑</a></td>
+                    </tr>
+                    {/loop}
+                    {if !empty($list) && is_array($list)}
+                    <tr>
+                        <td><input class="js-check" type="checkbox"></td>
+                        <input name="token" type="hidden" value="{$_W['token']}" />
+                        <td colspan="6"><button type="button" name="submit" class="btn btn-primary">删除</button></td>
+                    </tr>
+                    {/if}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+    <script type="text/javascript">
+        require(['bootstrap'], function(){
+            /* 选中 */
+            $('.js-check').bind('click',function(){
+                var ck = this.checked;
+                $('.js-account-box :checkbox').each(function(index,obj){
+                    this.checked = ck;
+                });
+            });
+
+            /* 删除 */
+            $('button[name="submit"]').bind('click',function() {
+                if (confirm('删除后不可恢复，您确定删除吗？')) {
+                    if ($(":checkbox[name='ids[]']:checked").size() > 0) {
+                        $.post(
+                                window.location.href,
+                                $('#account_form').serialize(),
+                                function (ret) {
+                                    util.message(ret.message, ret.redirect, ret.type);
+                                    return false;
+                                }, 'json'
+                        );
+                    }
+                    util.message('没有选择要删除的账号！', '', 'error');
+                    return false;
+                }
+            });
+        });
+    </script>
+{elseif $op == 'post'}
+    <form class="form-horizontal form" method="post" id="post_form">
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label" for="username"><span class="text-danger">*</span>账号</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                <input class="form-control" type="text" name="username" id="username" placeholder="请输管理员登录账号" value="{$item['username']}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">类型</label>
+            <div class="col-sm-9 col-xs-12">
+                <label class="radio-inline">
+                    <input type="radio" name="type" value="0" checked>
+                    地级市管理员
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="type" value="1">
+                    超级管理员
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label" for="password"><span class="text-danger">*</span>密码</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                <input class="form-control" type="password" name="password" id="password" placeholder="请输管理员登录密码" value="{$item['uid']}">
+                <span class="help-block">修改信息时，不填写时，密码为原密码。如需修改密码，在这里填写新密码</span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label" for="repassword"><span class="text-danger">*</span>确认密码</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                <input class="form-control" type="password" name="repassword" id="repassword" placeholder="请输管理员登录密码" value="{$item['uid']}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>地区</label>
+            <div class="col-xs-12 col-sm-8 col-md-6">
+                {php echo tpl_form_field_district('area', array('province' => $item['province'], 'city' => $item['city'], 'district' => $item['district'] ));}
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-xs-12 col-sm-2 control-label"></label>
+            <div class="col-sm-9 col-xs-12">
+                <input type="hidden" name="id" value="{$item['id']}">
+                <input type="hidden" name="token" value="{$_W['token']}">
+                <input name="submit" type="button" value="提交" class="btn btn-primary">
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+        require([],function(){
+            $('input[name="submit"]').bind('click',function(){
+                $.post(
+                        window.location.href,
+                        $('#post_form').serialize(),
+                        function(ret){
+                            util.message(ret.message,ret.redirect,ret.type);
+                        },'json'
+                );
+            });
+        });
+    </script>
+{/if}
+</div>
+{template 'common/footer'}

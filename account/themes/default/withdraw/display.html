@@ -1,0 +1,678 @@
+{template 'common/header'}
+<div class="account-tab">
+    <ul>
+        <li {if $do == 'display'}class="active"{/if}>
+        <a href="{php echo url('withdraw/display/display');}">商家结算</a>
+        </li>
+        <li {if $do == 'mc_withdraw'}class="active"{/if}>
+        <a href="{php echo url('withdraw/display/mc_withdraw');}">方圆宝/分销提现/开店提现</a>
+        </li>
+        <li {if $do == 'person'}class="active"{/if}>
+        <a href="{php echo url('withdraw/display/person');}">收款二维码/二手货结算</a>
+        </li>
+    </ul>
+</div>
+<div class="page-content">
+    {if $do == 'display'}
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选
+            <span style="float: right">合计{$total}条记录 - 结算金额共计￥{$total_balance_money}元</span>
+        </div>
+        <div class="panel-body">
+            <form method="get" action="./index.php" class="form-horizontal" role="form">
+                <input type="hidden" name="c" value="withdraw" />
+                <input type="hidden" name="a" value="display" />
+                <input type="hidden" name="do" value="display" />
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="商家名称关键字" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">地区</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {php echo tpl_form_field_district('area',array('province' => $province, 'city' => $city,'district' => $district));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">申请时间</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        {php echo tpl_form_field_daterange('createtime', array('starttime' => date('Y-m-d', $starttime), 'endtime' => date('Y-m-d', $endtime),));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">审核状态</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="is_check[]" value="{CHECK_PASS}" {if in_array(CHECK_PASS,$is_check)}checked{/if}>
+                            已通过
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="is_check[]" value="{CHECK_NOT_PASS}" {if in_array(CHECK_NOT_PASS,$is_check)}checked{/if}>
+                            未通过
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">结算状态</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="status[]" value="{IS_STATUS}" {if in_array(IS_STATUS,$status)}checked{/if}>
+                            已结算
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="status[]" value="{NO_STATUS}" {if in_array(NO_STATUS,$status)}checked{/if}>
+                            未结算
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                        <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                        <input class="btn btn-primary" type="submit" name="export_submit" id="export_submit" value="导出">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form class="form-horizontal">
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>店铺ID</th>
+                        <th>店铺名称</th>
+                        <th>申请信息</th>
+                        <th>结算账户信息</th>
+                        <th>审核状态</th>
+                        <th>结算状态</th>
+                        <th>申请时间</th>
+                        <th>结算凭证(点击查看)</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $li}
+                    <tr>
+                        <td>{$li['store_id']}</td>
+                        <td>{$li['title']}</td>
+                        <td>
+                            姓名：{$li['username']}<br>
+                            电话：{$li['tel']}<br>
+                            结算金额：<span style="color: red">￥{$li['money']}</span>
+                        <td>
+                            {if !empty( $li['withdraw_account'])}
+                            姓名:{$li['withdraw_account']['realname']}<br>
+                            银行卡号:{$li['withdraw_account']['bank_no']}<br>
+                            开户行:{$li['withdraw_account']['bank_address']}
+                            {/if}
+                        </td>
+                        <td>
+                            {if $li['is_check'] == CHECK_PASS}
+                            <label class="label label-success">已审核</label>
+                            {else}
+                            <label class="label label-default">未审核</label>
+                            {/if}
+                        </td>
+                        <td>
+                            {if $li['status'] == IS_STATUS}
+                            <label class="label label-success">已结算</label>
+                            {else}
+                            <label class="label label-default">未结算</label>
+                            {/if}
+                        </td>
+                        <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                        <td class="js-open-thumb" data-src="{php echo tomedia($li['thumb']);}">
+                            {if !empty($li['thumb'])}
+                            <img style="width: 80px;height:80px;" src="{php echo tomedia($li['thumb']);}">
+                            {else}
+                            {/if}
+                        </td>
+                        <td>
+                            <button data-bank="{$li['withdraw_account']['bank_no']}" data-id="{$li['id']}" data-money="{$li['money']}" data-title="{$li['title']}" type="button" class="btn btn-sm btn-primary js-balance-btn">结算</button>
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+    <!-- begin 结算modal-->
+    <div class="modal fade in" id="storeBalanceModal" tabindex="-1" role="dialog" aria-labelledby="storeBalanceModalLabel" aria-hidden="false">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="storeBalanceModalLabel">结算确认</h4></div>
+                <div class="modal-body">
+                    <form style="margin-top:5%" class="form-horizontal" role="form" id="storeBalanceModalForm">
+                        <input type="hidden" name="id" id="storeBalanceModalId">
+                        <div class="form-group">
+                            <label class=" col-sm-3  control-label">店铺名称</label>
+                            <div class="col-sm-9">
+                                <p class="form-control-static" id="storeBalanceModalStoreTitle"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">结算金额</label>
+                            <div class="col-sm-9">
+                                <p class="form-control-static" id="storeBalanceModalMoney"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">银行卡号</label>
+                            <div class="col-sm-9">
+                                <p class="form-control-static" id="storeBalanceModalBankNo"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">上传结算凭证</label>
+                            <div class="col-sm-9">
+                                {php echo tpl_form_field_image('thumb');}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" id="storeBalanceModalBtn">确认结算</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade in" id="storeBalanceThumbModal" tabindex="-1" role="dialog" aria-labelledby="storeBalanceThumbModalLabel" aria-hidden="false">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="storeBalanceThumbModalLabel">结算凭证</h4></div>
+                    <div class="modal-body">
+                        <img style="width:100%;height:auto;" id="storeBalanceThumbSrc">
+                    </div>
+            </div>
+        </div>
+    </div>
+    <!-- end 结算modal -->
+    <script type="text/javascript">
+        require(['util'],function(){
+            /* 结算提交 */
+            $('#storeBalanceModalBtn').bind('click',function(){
+                var obj = $(this);
+                obj.html('结算中,请稍等').attr('disabled','disabled');
+                $.post(
+                    window.location.href,
+                    $('#storeBalanceModalForm').serialize(),
+                   function(ret){
+                       obj.html('确认结算').removeAttr('disabled');
+                       util.message(ret.message,ret.redirect,ret.type);
+                   },'json'
+                );
+            });
+
+            /* 结算确认 */
+            $('.js-balance-btn').bind('click',function(){
+                $('#storeBalanceModalId').val($(this).attr('data-id'));
+                $('#storeBalanceModalStoreTitle').html($(this).attr('data-title'));
+                $('#storeBalanceModalMoney').html('￥'+$(this).attr('data-money'));
+                $('#storeBalanceModalBankNo').html($(this).attr('data-bank'));
+                $('#storeBalanceModal').modal('show');
+            });
+
+            /* 查看凭证 */
+            $('.js-open-thumb').bind('click',function(){
+                var src = $(this).attr('data-src');
+                if(src!= '' && src != 'undefined'){
+                    $('#storeBalanceThumbSrc').attr('src',src);
+                    $('#storeBalanceThumbModal').modal('show');
+                }
+            });
+        });
+    </script>
+    {elseif $do == 'mc_withdraw'}
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选
+            <span style="float: right">合计{$total}条记录 - 结算金额共计￥{$total_withdraw_money}元</span>
+        </div>
+        <div class="panel-body">
+            <form method="get" action="./index.php" class="form-horizontal" role="form">
+                <input type="hidden" name="c" value="withdraw" />
+                <input type="hidden" name="a" value="display" />
+                <input type="hidden" name="do" value="mc_withdraw" />
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="会员ID、昵称、姓名" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">地区</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {php echo tpl_form_field_district('area',array('province' => $province, 'city' => $city,'district' => $district));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">申请时间</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        {php echo tpl_form_field_daterange('createtime', array('starttime' => date('Y-m-d', $starttime), 'endtime' => date('Y-m-d', $endtime),));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">审核状态</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="is_check[]" value="{CHECK_PASS}" {if in_array(CHECK_PASS,$is_check)}checked{/if}>
+                            已通过
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="is_check[]" value="{CHECK_NOT_PASS}" {if in_array(CHECK_NOT_PASS,$is_check)}checked{/if}>
+                            未通过
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">结算状态</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="status[]" value="{IS_STATUS}" {if in_array(IS_STATUS,$status)}checked{/if}>
+                            已结算
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="status[]" value="{NO_STATUS}" {if in_array(NO_STATUS,$status)}checked{/if}>
+                            未结算
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                        <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                        <input class="btn btn-primary" type="submit" name="export_submit" id="export_submit" value="导出">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form class="form-horizontal">
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>会员ID</th>
+                        <th>申请人信息</th>
+                        <th>提现账号信息</th>
+                        <th>审核状态</th>
+                        <th>结算状态</th>
+                        <th>申请时间</th>
+                        <th>结算凭证(点击查看)</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $li}
+                    <tr>
+                        <td>{$li['uid']}</td>
+                        <td>
+                            昵称/姓名：{$li['nickname']}/{$li['realname']}<br>
+                            申请人:{$li['username']}<br>
+                            电话：{$li['tel']}<br>
+                            结算金额：<span style="color: red">￥{$li['money']}</span>
+                        </td>
+                        <td>
+                            {if !empty( $li['withdraw_account'])}
+                            姓名:{$li['withdraw_account']['realname']}<br>
+                            银行卡号:{$li['withdraw_account']['bank_no']}<br>
+                            开户行:{$li['withdraw_account']['bank_address']}
+                            {/if}
+                        </td>
+                        <td>
+                            {if $li['is_check'] == CHECK_PASS}
+                            <label class="label label-success">已审核</label>
+                            {else}
+                            <label class="label label-default">未审核</label>
+                            {/if}
+                        </td>
+                        <td>
+                            {if $li['status'] == IS_STATUS}
+                            <label class="label label-success">已结算</label>
+                            {else}
+                            <label class="label label-default">未结算</label>
+                            {/if}
+                        </td>
+                        <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                        <td class="js-open-thumb" data-src="{php echo tomedia($li['thumb']);}">
+                            {if !empty($li['thumb'])}
+                            <img style="width: 80px;height:80px;" src="{php echo tomedia($li['thumb']);}">
+                            {else}
+                            {/if}
+                        </td>
+                        <td>
+                            <button data-bank="{$li['withdraw_account']['bank_no']}" data-id="{$li['id']}" data-money="{$li['money']}" data-title="{$li['nickname']}/{$li['realname']}" type="button" class="btn btn-sm btn-primary js-balance-btn">结算</button>
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+    <!-- begin 结算modal-->
+    <div class="modal fade in" id="mcWithdrawModal" tabindex="-1" role="dialog" aria-labelledby="mcWithdrawModalLabel" aria-hidden="false">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="mcWithdrawModalLabel">结算确认</h4></div>
+                <div class="modal-body">
+                    <form style="margin-top:5%" class="form-horizontal" role="form" id="mcWithdrawModalForm">
+                        <input type="hidden" name="id" id="mcWithdrawModalId">
+                        <div class="form-group">
+                            <label class=" col-sm-3  control-label">会员昵称/姓名</label>
+                            <div class="col-sm-9">
+                                <p class="form-control-static" id="mcWithdrawModalTitle"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">结算金额</label>
+                            <div class="col-sm-9">
+                                <p class="form-control-static" id="mcWithdrawModalMoney"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">银行卡号</label>
+                            <div class="col-sm-9">
+                                <p class="form-control-static" id="mcWithdrawModalBankNo"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">上传结算凭证</label>
+                            <div class="col-sm-9">
+                                {php echo tpl_form_field_image('thumb');}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" id="mcWithdrawModalBtn">确认结算</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade in" id="mcWithdrawThumbModal" tabindex="-1" role="dialog" aria-labelledby="mcWithdrawThumbModalLabel" aria-hidden="false">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="mcWithdrawThumbModalLabel">结算凭证</h4></div>
+                <div class="modal-body">
+                    <img style="width:100%;height:auto;" id="mcWithdrawThumbSrc">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end 结算modal -->
+    <script type="text/javascript">
+        require(['util'],function(){
+            /* 结算提交 */
+            $('#mcWithdrawModalBtn').bind('click',function(){
+                var obj = $(this);
+                obj.html('结算中,请稍等').attr('disabled','disabled');
+                $.post(
+                        window.location.href,
+                        $('#mcWithdrawModalForm').serialize(),
+                        function(ret){
+                            obj.html('确认结算').removeAttr('disabled');
+                            util.message(ret.message,ret.redirect,ret.type);
+                        },'json'
+                );
+            });
+
+            /* 结算确认 */
+            $('.js-balance-btn').bind('click',function(){
+                $('#mcWithdrawModalId').val($(this).attr('data-id'));
+                $('#mcWithdrawModalTitle').html($(this).attr('data-title'));
+                $('#mcWithdrawModalMoney').html('￥'+$(this).attr('data-money'));
+                $('#mcWithdrawModalBankNo').html($(this).attr('data-bank'));
+                $('#mcWithdrawModal').modal('show');
+            });
+
+            /* 查看凭证 */
+            $('.js-open-thumb').bind('click',function(){
+                var src = $(this).attr('data-src');
+                if(src!= '' && src != 'undefined'){
+                    $('#mcWithdrawThumbSrc').attr('src',src);
+                    $('#mcWithdrawThumbModal').modal('show');
+                }
+            });
+        });
+    </script>
+    {elseif $do == 'person'}
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选
+            <span style="float: right">合计{$total}条记录 - 结算金额共计￥{$total_withdraw_money}元</span>
+        </div>
+        <div class="panel-body">
+            <form method="get" action="./index.php" class="form-horizontal" role="form">
+                <input type="hidden" name="c" value="withdraw" />
+                <input type="hidden" name="a" value="display" />
+                <input type="hidden" name="do" value="person" />
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="会员ID、昵称、姓名" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">地区</label>
+                    <div class="col-sm-8 col-xs-12">
+                        {php echo tpl_form_field_district('area',array('province' => $province, 'city' => $city,'district' => $district));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">申请时间</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        {php echo tpl_form_field_daterange('createtime', array('starttime' => date('Y-m-d', $starttime), 'endtime' => date('Y-m-d', $endtime),));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">审核状态</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="is_check[]" value="{CHECK_PASS}" {if in_array(CHECK_PASS,$is_check)}checked{/if}>
+                            已通过
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="is_check[]" value="{CHECK_NOT_PASS}" {if in_array(CHECK_NOT_PASS,$is_check)}checked{/if}>
+                            未通过
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">结算状态</label>
+                    <div class="col-sm-9 col-xs-12">
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="status[]" value="{IS_STATUS}" {if in_array(IS_STATUS,$status)}checked{/if}>
+                            已结算
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="status[]" value="{NO_STATUS}" {if in_array(NO_STATUS,$status)}checked{/if}>
+                            未结算
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                        <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                        <input class="btn btn-primary" type="submit" name="export_submit" id="export_submit" value="导出">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form class="form-horizontal">
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>会员ID</th>
+                        <th>申请人信息</th>
+                        <th>提现账号信息</th>
+                        <th>审核状态</th>
+                        <th>结算状态</th>
+                        <th>申请时间</th>
+                        <th>结算凭证(点击查看)</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $li}
+                    <tr>
+                        <td>{$li['uid']}</td>
+                        <td>
+                            昵称/姓名：{$li['nickname']}/{$li['realname']}<br>
+                            申请人:{$li['username']}<br>
+                            电话：{$li['tel']}<br>
+                            结算金额：<span style="color: red">￥{$li['money']}</span>
+                        </td>
+                        <td>
+                            {if !empty( $li['withdraw_account'])}
+                            姓名:{$li['withdraw_account']['realname']}<br>
+                            银行卡号:{$li['withdraw_account']['bank_no']}<br>
+                            开户行:{$li['withdraw_account']['bank_address']}
+                            {/if}
+                        </td>
+                        <td>
+                            {if $li['is_check'] == CHECK_PASS}
+                            <label class="label label-success">已审核</label>
+                            {else}
+                            <label class="label label-default">未审核</label>
+                            {/if}
+                        </td>
+                        <td>
+                            {if $li['status'] == IS_STATUS}
+                            <label class="label label-success">已结算</label>
+                            {else}
+                            <label class="label label-default">未结算</label>
+                            {/if}
+                        </td>
+                        <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                        <td class="js-open-thumb" data-src="{php echo tomedia($li['thumb']);}">
+                            {if !empty($li['thumb'])}
+                            <img style="width: 80px;height:80px;" src="{php echo tomedia($li['thumb']);}">
+                            {else}
+                            {/if}
+                        </td>
+                        <td>
+                            <button data-bank="{$li['withdraw_account']['bank_no']}" data-id="{$li['id']}" data-money="{$li['money']}" data-title="{$li['nickname']}/{$li['realname']}" type="button" class="btn btn-sm btn-primary js-balance-btn">结算</button>
+                        </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+    <!-- begin 结算modal-->
+    <div class="modal fade in" id="personModal" tabindex="-1" role="dialog" aria-labelledby="personModalLabel" aria-hidden="false">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="personModalLabel">结算确认</h4></div>
+                <div class="modal-body">
+                    <form style="margin-top:5%" class="form-horizontal" role="form" id="personModalForm">
+                        <input type="hidden" name="id" id="personModalId">
+                        <div class="form-group">
+                            <label class=" col-sm-3  control-label">会员昵称/姓名</label>
+                            <div class="col-sm-9">
+                                <p class="form-control-static" id="personModalTitle"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">结算金额</label>
+                            <div class="col-sm-9">
+                                <p class="form-control-static" id="personModalMoney"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">银行卡号</label>
+                            <div class="col-sm-9">
+                                <p class="form-control-static" id="personModalBankNo"></p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label no-padding-right">上传结算凭证</label>
+                            <div class="col-sm-9">
+                                {php echo tpl_form_field_image('thumb');}
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" id="personModalBtn">确认结算</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade in" id="personThumbModal" tabindex="-1" role="dialog" aria-labelledby="personThumbModalLabel" aria-hidden="false">
+        <div class="modal-dialog modal-md" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="personThumbModalLabel">结算凭证</h4></div>
+                <div class="modal-body">
+                    <img style="width:100%;height:auto;" id="personThumbSrc">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- end 结算modal -->
+    <script type="text/javascript">
+        require(['util'],function(){
+            /* 结算提交 */
+            $('#personModalBtn').bind('click',function(){
+                var obj = $(this);
+                obj.html('结算中,请稍等').attr('disabled','disabled');
+                $.post(
+                        window.location.href,
+                        $('#personModalForm').serialize(),
+                        function(ret){
+                            obj.html('确认结算').removeAttr('disabled');
+                            util.message(ret.message,ret.redirect,ret.type);
+                        },'json'
+                );
+            });
+
+            /* 结算确认 */
+            $('.js-balance-btn').bind('click',function(){
+                $('#personModalId').val($(this).attr('data-id'));
+                $('#personModalTitle').html($(this).attr('data-title'));
+                $('#personModalMoney').html('￥'+$(this).attr('data-money'));
+                $('#personModalBankNo').html($(this).attr('data-bank'));
+                $('#personModal').modal('show');
+            });
+
+            /* 查看凭证 */
+            $('.js-open-thumb').bind('click',function(){
+                var src = $(this).attr('data-src');
+                if(src!= '' && src != 'undefined'){
+                    $('#personThumbSrc').attr('src',src);
+                    $('#personThumbModal').modal('show');
+                }
+            });
+        });
+    </script>
+    {/if}
+</div>
+{template 'common/footer'}

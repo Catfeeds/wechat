@@ -1,0 +1,29 @@
+<div style="width: 100%;height: 60px;"></div>
+<div class="page-nav">
+    <div class="nav-box">
+        <a class="nav-item" href="{php echo url('agent/display/display');}">
+            <ul class="{if $do == 'display'}active{/if}">
+                <li class="nav-icon"><i class="icon iconfont {if $do == 'display'}icon-yue{else}icon-yue01{/if}"></i></li>
+                <li class="nav-title">商家结算</li>
+            </ul>
+        </a>
+        <a class="nav-item" href="{php echo url('agent/display/person');}">
+            <ul  class="{if $do == 'person'}active{/if}">
+                <li class="nav-icon"><i class="icon iconfont {if $do == 'person'}icon-erweima2{else}icon-erweima1{/if}"></i></li>
+                <li class="nav-title">二维码结算</li>
+            </ul>
+        </a>
+        <a class="nav-item" href="{php echo url('agent/display/servicer');}">
+            <ul class="{if $do == 'servicer'}active{/if}">
+                <li class="nav-icon"><i class="icon iconfont {if $do == 'servicer'}icon-tongzhi{else}icon-tongzhi1{/if}"></i></li>
+                <li class="nav-title">客服管理</li>
+            </ul>
+        </a>
+        <a class="nav-item" href="{php echo url('agent/display/withdraw');}">
+            <ul class="{if $do == 'withdraw'}active{/if}">
+                <li class="nav-icon"><i class="icon iconfont {if $do == 'withdraw'}icon-zhifu2{else}icon-zhifu{/if}"></i></li>
+                <li class="nav-title">我要提现</li>
+            </ul>
+        </a>
+    </div>
+</div>

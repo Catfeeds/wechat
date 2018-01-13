@@ -1,0 +1,41 @@
+{php define('MUI', true);}
+{template 'common/header'}
+<link rel="stylesheet" href="{$_W['siteroot']}app/resource/css/codelogin.css">
+<div class="page-codelogin">
+	{if $do == 'display'}
+		<div class="codelogin-top">
+			<img src="/assets/common/images/agent-logo.png">
+		</div>
+		<div class="codelogin-desc">
+			你确认要发送登录申请到<br>公众号：{$_W['account']['name']}吗？
+		</div>
+		<div class="codelogin-buttons">
+			<button data-cancel="{CANCEL_NO}" class="js-push">确定</button>
+			<button data-cancel="{CANCEL_YES}" class="js-push" >取消</button>
+		</div>
+	{/if}
+</div>
+<script type="text/javascript">
+	require([],function(){
+		/* 提交 */
+		$('.js-push').bind('click',function(){
+			var is_cancel = $(this).attr('data-cancel');
+			$('.js-toast-loading').show();
+			util.loading();
+			$.post(
+				window.location.href,
+					{
+						is_cancel:is_cancel
+					},
+					function(ret){
+						$('.js-toast-loading').hide();
+						util.toast(ret.message,ret.redirect,ret.type);
+						if(ret.type == 'success'){
+							$('.js-push').attr('disabled','disabled');
+						}
+					},'json'
+			);
+		});
+	});
+</script>
+{template 'common/footer'}

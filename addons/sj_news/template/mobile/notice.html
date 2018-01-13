@@ -1,0 +1,23 @@
+{template 'common/header-sj-news'}
+<link rel="stylesheet" href="{ASSETS_URL}/sj_news/css/notice.css?v={STYLE_VERSION}">
+<div class="page-notice">
+    <div class="notice-header">
+        <span style="cursor: pointer;" onclick="history.back()">&lt;返回</span>
+        <span>公告列表</span>
+        <span style="cursor: pointer;right: 5px;" class="js-notice" onclick="location.href='{php echo $this->createMobileUrl('index');}'">首页</span>
+    </div>
+    <div style="height: 45px"></div>
+    <div class="notice-list">
+        {loop $list $li}
+        <a class="notice-item" href="{php echo $this->createMobileUrl('notice',array('op'=>'detail','id'=>$li['id']));}">
+            <p>{if empty($li['looked_uid'])}<i></i>{/if}{$li['title']}</p>
+            <div class="bottom">
+                <span>{$li['look_num']}&nbsp;浏览&nbsp;{php echo date('Y年m月d日',$li['createtime']);}</span>
+                <span>查看详情&gt;&gt;</span>
+            </div>
+        </a>
+        {/loop}
+    </div>
+    {template 'common/nav-sj'}
+</div>
+{template 'common/footer-sj-news'}

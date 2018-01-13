@@ -1,0 +1,125 @@
+{template 'common/header-oto'}
+<link rel="stylesheet" href="{$_W['siteroot']}app/resource/css/credit3.css?v={STYLE_VERSION}">
+<div class="page-credit3">
+    <div class="credit3-header">
+        <i class="icon iconfont icon-fanhui back" onclick="history.go('-1')"></i>
+        佣金明细
+    </div>
+    <form role="form" method="post" id="post-credit3-form">
+        <input type="hidden" name="page" value="{$page}">
+        <input type="hidden" name="type" value="{$type}">
+    </form>
+    <div class="credit3-tabs">
+        <span class="active">全部</span>
+        <span>收入</span>
+        <span>支出</span>
+    </div>
+    <div style="width: 100%;height: 100px;"></div>
+    <div class="credit3-list">
+        {if !empty($list) && is_array($list)}
+        {loop $list $item}
+        <div class="credit3-item">
+            <div class="item-header">
+                日期：{php echo date('Y-m-d H:i:s',$item['createtime']);}
+                <span class="label label-{if $item['num'] >0}success{else}danger{/if}">{if $item['num'] >0}收入{else}支出{/if}</span>
+            </div>
+            <div class="item-desc">
+                <span>{$item['remark']}</span>
+                <span>{if $item['num']>0}+{$item['num']}{else}{$item['num']}{/if}</span>
+            </div>
+        </div>
+        {/loop}
+        {else}
+        <div class="no-data" style="margin-top: 5px">
+            <div class="no-data-tips-box">
+                <i class="icon iconfont icon-ma"></i>
+            </div>
+            <div class="no-data-tips">没有找到积分使用记录</div>
+        </div>
+        {/if}
+    </div>
+    <div class="ajax-more">加载更多&gt;&gt;</div>
+</div>
+<script type="text/javascript">
+    require(['util'],function(util){
+        /* 切换*/
+        $('.credit3-tabs span').bind('click',function(){
+            var obj = $('.credit3-tabs span');
+            obj.removeClass('active');
+            $(this).addClass('active');
+            var index = obj.index(this);
+            $('input[name="page"]').val('1');
+            $('input[name="type"]').val(index);
+            $('.js-toast-loading').show();
+            util.loading();
+            $.post(
+                    window.location.href,
+                    $('#post-credit3-form').serialize(),
+                    function(ret){
+                        $('.js-toast-loading').hide();
+                        if(ret.type == 'success'){
+                            $('.no-data').remove();
+                            var html = '';
+                            $.each(ret.message,function(index,item){
+                                html += '' +
+                                        '<div class="credit3-item">' +
+                                        '<div class="item-header">' +
+                                        '日期：'+item['createtime']+
+                                        '<span class="label label-'+item['span_class']+'">'+item['span_desc']+'</span>'+
+                                        '</div>'+
+                                        '<div class="item-desc">'+
+                                        '<span>'+item['remark']+'</span>'+
+                                        '<span>'+item['num']+'</span>'+
+                                        '</div>'+
+                                        '</div>';
+                            });
+                            $('.credit3-list').html(html);
+                        }else{
+                            util.toast(ret.message,ret.redirect,ret.type);
+                            $('.credit3-list').html('<div class="no-data" style="margin-top: 5px"> <div class="no-data-tips-box"> <i class="icon iconfont icon-ma"></i> </div> <div class="no-data-tips">没有找到积分使用记录</div> </div>');
+                        }
+                    },'json'
+            );
+        });
+
+        /* 加载更多 */
+        $('.ajax-more').bind('click',function(){
+            var page_obj = $('input[name="page"]');
+            if(parseInt(page_obj.val()) < 2){
+                page_obj.val('2');
+            }
+            util.loading();
+            $.post(
+                    window.location.href,
+                    $('#post-credit3-form').serialize(),
+                    function(ret){
+                        $('.js-toast-loading').hide();
+                        if(ret.type == 'success'){
+                            $('.no-data').remove();
+                            var html = '';
+                            $.each(ret.message,function(index,item){
+                                html += '' +
+                                        '<div class="credit3-item">' +
+                                        '<div class="item-header">' +
+                                        '日期：'+item['createtime']+
+                                        '<span class="label label-'+item['span_class']+'">'+item['span_desc']+'</span>'+
+                                        '</div>'+
+                                        '<div class="item-desc">'+
+                                        '<span>'+item['remark']+'</span>'+
+                                        '<span>'+item['num']+'</span>'+
+                                        '</div>'+
+                                        '</div>';
+                            });
+                            $('.credit3-list').append(html);
+                            page_obj.val(parseInt(page_obj.val())+1);
+                        }else{
+                            util.toast(ret.message,ret.redirect,ret.type);
+                        }
+                    },'json'
+            );
+
+        });
+
+    });
+</script>
+{template 'common/footer-oto'}

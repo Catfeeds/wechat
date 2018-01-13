@@ -1,0 +1,168 @@
+{template 'common/header'}
+<div class="store-tab">
+    <ul>
+        <li {if $do != 'post'}class="active"{/if}>
+        <a href="{php echo url('balance/account/display');}">账号列表</a>
+        </li>
+        <li {if $do == 'post' && empty($item)}class="active"{/if}>
+        <a href="{php echo url('balance/account/post');}">添加账号</a>
+        </li>
+        {if $do == 'post' && !empty($item)}
+        <li  class="active">
+        <a href="{php echo url('balance/account/display');}">修改账号</a>
+        </li>
+        {/if}
+    </ul>
+</div>
+<div class="page-content">
+    {if $do == 'display'}
+    <form method="post" class="form-horizontal" id="delete_account_form">
+        <input type="hidden" name="ac" value="delete" />
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>删?</th>
+                        <th>商家负责人</th>
+                        <th>电话</th>
+                        <th>提现方式</th>
+                        <th>账号信息</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $li}
+                    <tr>
+                        <td><input type="checkbox" name="ids[]" value="{$li['id']}"></td>
+                        <td>{$li['username']}</td>
+                        <td>{$li['tel']}</td>
+                        <td>{if $li['method'] == STORE_BALANCE_TYPE_BANK}银行卡{else}支付宝{/if}</td>
+                        <td>
+                            账号：{$li['info']['no']}<br>
+                            {if $li['method'] == STORE_BALANCE_TYPE_BANK}
+                            开户行：{$li['info']['bank']}<br>
+                            {/if}
+                            账户姓名：{$li['info']['name']}
+                        </td>
+                        <td>
+                            <a href="{php echo url('balance/account/post',array('id'=>$li['id']));}" title="编辑"><i class="fa fa-edit"></i>&nbsp;编辑</a>
+                        </td>
+                    </tr>
+                    {/loop}
+                    {if !empty($list) && is_array($list)}
+                    <tr>
+                        <td><input type="checkbox" name="" onclick="var ck = this.checked;$(':checkbox').each(function(){this.checked = ck});"></td>
+                        <input name="token" type="hidden" value="{$_W['token']}" />
+                        <td colspan="6"><button type="button" name="submit" class="btn btn-primary">删除</button></td>
+                    </tr>
+                    {/if}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+    <script type="text/javascript">
+        require(['bootstrap'], function(){
+            $('button[name="submit"]').bind('click',function() {
+                if (confirm('删除后不可恢复，您确定删除吗？')) {
+                    if ($(":checkbox[name='ids[]']:checked").size() > 0) {
+                        $.post(
+                                "{php echo url('balance/account/post');}",
+                                $('#delete_account_form').serialize(),
+                                function (ret) {
+                                    util.message(ret.message, ret.redirect, ret.type);
+                                    return false;
+                                }, 'json'
+                        );
+                    }
+                    util.message('没有选择要删除的账户！', '', 'error');
+                    return false;
+                }
+            });
+        });
+    </script>
+{elseif $do == 'post'}
+    <div class="main">
+        <form method="post" class="form-horizontal form" id="post_account_form">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    结算账号信息
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>负责人姓名</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" name="username" value="{$item['username']}" placeholder="请输入负责人姓名">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>联系方式</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" class="form-control" name="tel" value="{$item['tel']}" placeholder="请输入联系方式">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label">提现方式</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <select class="form-control" name="method">
+                                <option {if $item['method'] != STORE_BALANCE_TYPE_BANK}selected{/if} value="{STORE_BALANCE_TYPE_ALIPAY}">支付宝</option>
+                                <option {if $item['method'] == STORE_BALANCE_TYPE_BANK}selected{/if} value="{STORE_BALANCE_TYPE_BANK}">银行卡</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>账号</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" name="account[no]"  class="form-control" placeholder="请输入账号" value="{$item['info']['no']}"/>
+                        </div>
+                    </div>
+                    <div class="form-group js-bank" {if $item['method'] != STORE_BALANCE_TYPE_BANK}style='display:none'{/if}>
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>开户行</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" name="account[bank]"  class="form-control" placeholder="请输入开户行，如：建行、农行、邮政" value="{$item['info']['bank']}"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>账户姓名</label>
+                        <div class="col-sm-8 col-xs-12">
+                            <input type="text" name="account[name]"  class="form-control" placeholder="请输入账户姓名" value="{$item['info']['name']}"/>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-8 col-xs-12 col-sm-offset-2">
+                            <input type="hidden" name="id" value="{$item['id']}">
+                            <button type="button" name="submit" class="btn btn-primary">提交</button>
+                            <input type="hidden" name="token" value="$_W['token']">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        require(['util'],function(util){
+            $('select[name="method"]').change(function(){
+                var method = $(this).val();
+                if(method == "{STORE_BALANCE_TYPE_BANK}"){
+                    $('.js-bank').show();
+                }else{
+                    $('.js-bank').hide();
+                }
+            });
+
+            $('button[name="submit"]').bind('click',function(){
+                $.post(
+                    window.location.href,
+                    $('#post_account_form').serialize(),
+                    function(ret){
+                        util.message(ret.message,ret.redirect,ret.type);
+                    },'json'
+                );
+            });
+        });
+    </script>
+{/if}
+</div>
+{template 'common/footer'}

@@ -1,0 +1,185 @@
+{template 'common/header'}
+<style type="text/css">
+	.poster-panel{
+		color: {if !empty($item['poster']['color'])}{$item['poster']['color']}{else}#000000{/if};
+		position: relative;
+		width: 320px;
+		height: 505px;
+		background: url("{if !empty($item['poster']['bg'])}{php echo tomedia($item['poster']['bg']);}{else}/assets/common/images/qrcode_bg.jpg{/if}") 0 0 no-repeat scroll;
+		background-size: 100% 100%;
+		border: 1px solid silver;
+	}
+	.poster-panel > div{
+		cursor: move;
+	}
+	.poster-panel .nickname{
+		position: absolute;
+		left: {if !empty($item['poster']['nickname_left'])}{$item['poster']['nickname_left']}{else}104{/if}px;
+		top: {if !empty($item['poster']['nickname_top'])}{$item['poster']['nickname_top']}{else}23{/if}px;
+	}
+	.poster-panel .ad{
+		position: absolute;
+		left: {if !empty($item['poster']['ad_left'])}{$item['poster']['ad_left']}{else}104{/if}px;
+		top: {if !empty($item['poster']['ad_top'])}{$item['poster']['ad_top']}{else}50{/if}px;
+	}
+	.poster-panel .avatar{
+		width: {if !empty($item['poster']['avatar_size'])}{$item['poster']['avatar_size']}{else}80{/if}px;
+		height: {if !empty($item['poster']['avatar_size'])}{$item['poster']['avatar_size']}{else}80{/if}px;
+		position: absolute;
+		left: {if !empty($item['poster']['avatar_left'])}{$item['poster']['avatar_left']}{else}10{/if}px;
+		top: {if !empty($item['poster']['avatar_top'])}{$item['poster']['avatar_top']}{else}10{/if}px;
+		background: url("/attachment/images/global/default_avatar.png") 0 0 no-repeat scroll;
+		background-size: 100% 100%;
+	}
+
+	.poster-panel .code{
+		position: absolute;
+		left: {if !empty($item['poster']['code_left'])}{$item['poster']['code_left']}{else}96{/if}px;
+		top: {if !empty($item['poster']['code_top'])}{$item['poster']['code_top']}{else}330{/if}px;
+		width: {if !empty($item['poster']['code_size'])}{$item['poster']['code_size']}{else}120{/if}px;
+		height: {if !empty($item['poster']['code_size'])}{$item['poster']['code_size']}{else}120{/if}px;
+		background: url("/assets/common/images/code.gif") 0 0 no-repeat scroll;
+		background-size: 100% 100%;
+		display: flex;
+		display: -webkit-flex;
+		justify-content: space-around;
+		align-items: center;
+	}
+	.poster-panel .code img{
+		width: 40px;
+		height: 40px;
+	}
+</style>
+<script src="/assets/common/js/jquery.event.ue.js"></script>
+<script src="/assets/common/js/jquery.udraggable.js"></script>
+<div class="platform-tab">
+	<ul>
+		<li class="active"><a href="{php echo url('home/welcome/poster');}">海报设置</a></li>
+	</ul>
+</div>
+<div class="page-content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-4">
+				<div class="poster-panel">
+					<div class="nickname">
+						我是逆袭皇帝
+					</div>
+					<div class="ad">
+						我为慕马科技代言
+					</div>
+					<div class="avatar"></div>
+					<div class="code">
+						<img src="/attachment/images/global/default_avatar.png">
+					</div>
+				</div>
+			</div>
+			<div class="col-md-8">
+				<form class="form-horizontal form" id="post_poster_form">
+					<input id="avatar_left" type="hidden" name="poster[avatar_left]" value="{$item['poster']['avatar_left']}">
+					<input id="avatar_top" type="hidden" name="poster[avatar_top]" value="{$item['poster']['avatar_top']}">
+					<input id="nickname_left" type="hidden" name="poster[nickname_left]" value="{$item['poster']['nickname_left']}">
+					<input id="nickname_top" type="hidden" name="poster[nickname_top]" value="{$item['poster']['nickname_top']}">
+					<input id="ad_left" type="hidden" name="poster[ad_left]" value="{$item['poster']['ad_left']}">
+					<input id="ad_top" type="hidden" name="poster[ad_top]" value="{$item['poster']['ad_top']}">
+					<input id="code_left" type="hidden" name="poster[code_left]" value="{$item['poster']['code_left']}">
+					<input id="code_top" type="hidden" name="poster[code_top]" value="{$item['poster']['code_top']}">
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>广告语</label>
+						<div class="col-sm-8 col-xs-12">
+							<input type="text" class="form-control" name="poster[ad]" value="{$item['poster']['ad']}" placeholder="请输入广告语"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>字体颜色</label>
+						<div class="col-sm-8 col-xs-12">
+							{php echo tpl_form_field_color('poster[color]',!empty($item['poster']['color'])?$item['poster']['color']:'#000000');}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>字体大小</label>
+						<div class="col-sm-8 col-xs-12">
+							<input type="text" class="form-control" name="poster[size]" value="{if empty($item['poster']['size'])}14{else}{$item['poster']['size']}{/if}" placeholder="请输入字体大小"/>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 二维码头像</label>
+						<div class="col-sm-8 col-xs-12">
+							<label class="radio-inline">
+								<input type="radio" name="poster[is_display_avatar]" value="{DISPLAY_YES}" {if $item['poster']['is_display_avatar'] == OPEN_STATUS}checked{/if}>
+								显示
+							</label>
+							<label class="radio-inline">
+								<input type="radio" name="poster[is_display_avatar]" value="{DISPLAY_NO}" {if $item['poster']['is_display_avatar'] != OPEN_STATUS}checked{/if}>
+								隐藏
+							</label>
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>背景图片</label>
+						<div class="col-sm-8 col-xs-12">
+							{php echo tpl_form_field_image('poster[bg]',$item['poster']['bg']);}
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="col-xs-12 col-sm-3 col-md-2 control-label">尺寸</label>
+						<div class="col-sm-8 col-xs-12">
+							<div class="input-group" data-item="1">
+								<span class="input-group-addon">头像</span>
+								<input type="text" name="poster[avatar_size]" value="{$item['poster']['avatar_size']}" class="form-control" placeholder="请输入头像尺寸">
+								<span class="input-group-addon">二维码</span>
+								<input type="text" name="poster[code_size]" value="{$item['poster']['code_size']}" class="form-control" placeholder="请输入二维码尺寸">
+							</div>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-8 col-md-8 col-xs-12 col-sm-offset-2 col-sm-offset-2">
+							<button type="button" name="submit" class="btn btn-primary">提交</button>
+							<input type="hidden" name="token" value="{$_W['token']}" />
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function(){
+		/* 显示隐藏头像 */
+		$('input[name="poster[is_display_avatar]"]').bind('click',function(){
+			if($(this).val() == "{DISPLAY_YES}"){
+				$('.code img').show();
+			}else{
+				$('.code img').hide();
+			}
+		});
+
+		/* 提交 */
+		$('button[name="submit"]').bind('click',function(){
+			$('#avatar_left').val($('.avatar').position().left);
+			$('#avatar_top').val($('.avatar').position().top);
+			$('#nickname_left').val($('.nickname').position().left);
+			$('#nickname_top').val($('.nickname').position().top);
+			$('#ad_left').val($('.ad').position().left);
+			$('#ad_top').val($('.ad').position().top);
+			$('#code_left').val($('.code').position().left);
+			$('#code_top').val($('.code').position().top);
+			$.post(
+					window.location.href,
+					$('#post_poster_form').serialize(),
+					function(ret){
+						alert(ret.message);
+						if(ret.type == 'success'){
+							window.location.reload();
+						}
+					},'json'
+			);
+		});
+
+		/* 拖拽 */
+		$('.poster-panel > div').udraggable({
+			containment: 'parent'
+		});
+	});
+</script>
+{template 'common/footer'}
