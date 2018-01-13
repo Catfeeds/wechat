@@ -19,6 +19,8 @@ if($op == 'display'){
     }
     if(!empty($_W['location']['city'])){
         $where .= " AND (city='{$_W['location']['city']}' OR city='' OR ISNULL(city) OR city='太原市')";
+    }else{
+        $where .= " AND city='太原市'";
     }
     if(!empty($keyword)){
         $where .= " AND title LIKE '%{$keyword}%'";

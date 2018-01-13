@@ -7,9 +7,14 @@ if($op == 'display'){
     $pindex = ($page-1)*$psize;
     $cid = floor(trim($_GPC['cid']));
     $keyword = trim($_GPC['keyword']);
-    $where = "uniacid='{$_W['uniacid']}' AND (is_display=1 OR type=0)";
+    $where = "uniacid='{$_W['uniacid']}' AND ((type IN (2,3) AND is_display!='0') OR (type=1 AND is_display='2') OR type=0)";
     if(!empty($cid)){
         $where .= " AND cid='{$cid}'";
+    }
+    if(!empty($_W['location']['city'])){
+        $where .= " AND (city='{$_W['location']['city']}' OR city='' OR ISNULL(city) OR city='太原市')";
+    }else{
+        $where .= " AND city='太原市'";
     }
     if(!empty($keyword)){
         $where .= " AND title LIKE '%{$keyword}%'";

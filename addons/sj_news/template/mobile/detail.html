@@ -101,8 +101,8 @@
         <div class="focus-box">
             <p>目前<span style="color: red;padding: 0 5px;">{$members_total}</span>人已经关注加入我们</p>
             <div class="imgs">
-                {loop $members $ms}
-                <img onerror="this.src='/assets/sj_news/img/read.JPG'" src="{php echo tomedia($ms['avatar']);}">
+                {loop $members $ms_index $ms}
+                <img onerror="this.src='/assets/sj_news/img/face/{php echo $ms_index+1;}.jpg'" src="{php echo tomedia($ms['avatar']);}">
                 {/loop}
             </div>
         </div>
