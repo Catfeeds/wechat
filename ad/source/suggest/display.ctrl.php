@@ -22,7 +22,7 @@ if($do == 'display'){
         $where .= " AND (name LIKE '%{$keyword}%' OR content LIKE '%{$keyword}%')";
     }
     if($_W['ad_type'] != 1){
-        $where .= " AND uid IN (SELECT uid FROM ".tablename('mc_members')." WHERE uniacid='{$_W['uniacid']}' AND province='{$_W['province']}' AND city='{$_W['city']}')";
+        $where .= " AND province='{$_W['province']}' AND city='{$_W['city']}'";
     }
     $list = pdo_fetchall("SELECT * FROM ".tablename('sj_news_suggest')." WHERE {$where} ORDER BY id DESC LIMIT {$pindex},{$psize}");
     $pager = pagination(pdo_fetchcolumn("SELECT COUNT(1) FROM ".tablename('sj_news_suggest')." WHERE {$where}"),$page,$psize);
