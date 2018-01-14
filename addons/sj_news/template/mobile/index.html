@@ -76,28 +76,24 @@
             {loop $list $li_index $li}
             <!-- 广告区域 -->
             {if $li_index%5 == 0 && !empty($ad2s[$li_index%5]['link'])}
-                <section class="has_action">
-                    <a href="{php echo $ad2s[$li_index%5]['link'];}" class="article_link clearfix ">
-                        <div class="item_detail">
-                            <h3 class="dotdot line3">{php echo $ad2s[$li_index%5]['desc'];}</h3>
-                            <div class="list_image">
-                                <ul class="clearfix">
-                                    <li class="list_img_holder">
-                                        <div class="box-img">
-                                            <div class="cover-img" style="background-image: url('{php echo $ad2s[$li_index%5]['thumb'];}')"></div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="item_info">
-                                <div>
-                                    <span class="gg_label space">广告</span>
-                                    <span class="time">{php echo date('Y-m-d',$li['createtime']);}</span>
-                                </div>
+            <section class="middle_mode has_action">
+                <a href="{php echo $ad2s[$li_index%5]['link'];}" class="article_link clearfix">
+                    <div class="item_detail desc">
+                        <h3 class="dotdot line3 image-margin-right">{php echo $ad2s[$li_index%5]['desc'];}</h3>
+                        <div class="item_info">
+                            <div>
+                                <span class="gg_label space">广告</span>
+                                <span class="time">{php echo date('Y-m-d',$li['createtime']);}</span>
                             </div>
                         </div>
-                    </a>
-                </section>
+                    </div>
+                    <div class="list_img_holder">
+                        <div class="box-img">
+                            <div class="cover-img" style="background-image: url('{php echo $ad2s[$li_index%5]['thumb'];}')"></div>
+                        </div>
+                    </div>
+                </a>
+            </section>
             {/if}
             <!-- 广告区域 -->
             {if !empty($li['audio_src']) || !empty($li['video_src'])}
