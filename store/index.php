@@ -8,6 +8,7 @@ require '../framework/bootstrap.inc.php';
 require IA_ROOT . '/store/common/bootstrap.sys.inc.php';
 load()->store('common');
 load()->store('template');
+load()->func('check');
 if (empty($_W['isfounder']) && !empty($_W['user']) && $_W['user']['status'] == 1) {
 	message('您的账号正在审核或是已经被系统禁止，请联系网站管理员解决！');
 }

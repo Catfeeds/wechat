@@ -20,6 +20,9 @@ if($do == 'display'){
     if(!check_data($store)){
         message('商家信息不存在','','error');
     }
+
+
+
     //获取平台设置的结算比例
     $balance_rate = 0;
     $config = pdo_get('distribution_config',array(
@@ -33,12 +36,12 @@ if($do == 'display'){
     }
 
     //已成功提现的佣金
-    $total_withdraw_success = pdo_fetchcolumn("SELECT SUM(money) FROM ".tablename('store_balance_apply')." WHERE uniacid='{$_W['uniacid']}' AND store_id='{$store['id']}' AND status=".IS_STATUS);
+    $total_withdraw_success = pdo_fetchcolumn("SELECT SUM(money) FROM ".tablename('store_balance_apply')." WHERE uniacid='{$_W['uniacid']}' AND store_id ='{$store['id']}' AND status=".IS_STATUS);
     if(empty($total_withdraw_success)){
         $total_withdraw_success = 0;
     }
     //提现中的佣金
-    $total_withdraw_deal = pdo_fetchcolumn("SELECT SUM(money) FROM ".tablename('store_balance_apply')." WHERE uniacid='{$_W['uniacid']}' AND store_id='{$store['id']}' AND status=".NO_STATUS);
+    $total_withdraw_deal = pdo_fetchcolumn("SELECT SUM(money) FROM ".tablename('store_balance_apply')." WHERE uniacid='{$_W['uniacid']}' AND store_id ='{$store['id']}' AND status=".NO_STATUS);
     if(empty($total_withdraw_deal)){
         $total_withdraw_deal = 0;
     }
@@ -46,13 +49,13 @@ if($do == 'display'){
     $total_withdraw_money = 0;
 
     //2017年12月31之前的收入
-    $total_order_pay_1 = pdo_fetchcolumn("SELECT SUM(pay_total_price) FROM ".tablename('order_list')." WHERE uniacid='{$_W['uniacid']}' AND store_id ='{$store_info['id']}' AND createtime<=1514735999 AND pay_status=".PAY_YES);
-    $total_offline_pay_1 = pdo_fetchcolumn("SELECT SUM(money) FROM ".tablename('order_offline')." WHERE uniacid='{$_W['uniacid']}' AND store_id ='{$store_info['id']}' AND createtime<=1514735999 AND pay_status=".PAY_YES);
+    $total_order_pay_1 = pdo_fetchcolumn("SELECT SUM(pay_total_price) FROM ".tablename('order_list')." WHERE uniacid='{$_W['uniacid']}' AND store_id ='{$store['id']}' AND createtime<=1514735999 AND pay_status=".PAY_YES);
+    $total_offline_pay_1 = pdo_fetchcolumn("SELECT SUM(money) FROM ".tablename('order_offline')." WHERE uniacid='{$_W['uniacid']}' AND store_id ='{$store['id']}' AND createtime<=1514735999 AND pay_status=".PAY_YES);
     $total_withdraw_money += (($total_order_pay_1 + $total_offline_pay_1)*0.9);
 
     //2017年12月31之后的收入
-    $total_order_pay_2 = pdo_fetchcolumn("SELECT SUM(pay_total_price) FROM ".tablename('order_list')." WHERE uniacid='{$_W['uniacid']}' AND store_id ='{$store_info['id']}' AND createtime>1514735999 AND pay_status=".PAY_YES);
-    $total_offline_pay_2 = pdo_fetchcolumn("SELECT SUM(money) FROM ".tablename('order_offline')." WHERE uniacid='{$_W['uniacid']}' AND store_id ='{$store_info['id']}' AND createtime>1514735999 AND pay_status=".PAY_YES);
+    $total_order_pay_2 = pdo_fetchcolumn("SELECT SUM(pay_total_price) FROM ".tablename('order_list')." WHERE uniacid='{$_W['uniacid']}' AND store_id ='{$store['id']}' AND createtime>1514735999 AND pay_status=".PAY_YES);
+    $total_offline_pay_2 = pdo_fetchcolumn("SELECT SUM(money) FROM ".tablename('order_offline')." WHERE uniacid='{$_W['uniacid']}' AND store_id ='{$store['id']}' AND createtime>1514735999 AND pay_status=".PAY_YES);
     $total_withdraw_money += (($total_order_pay_2 + $total_offline_pay_2)*$balance_rate);
 
     //总的提现金额，2017年12月31日之前，时间戳：1514735999
@@ -60,7 +63,12 @@ if($do == 'display'){
         $total_withdraw_money = 0;
     }
 
+
+
     $can_withdraw_money = $total_withdraw_money - ($total_withdraw_success+$total_withdraw_deal);
+
+
+
     $list = StoreModel::getStoreBalanceAccountList();
     if($_W['isajax']){
         $id = floor(trim($_GPC['account_id']));
