@@ -28,10 +28,7 @@ if($op == 'display'){
     }
     $total = pdo_fetchcolumn("SELECT COUNT(1) FROM ".tablename('sj_news_list')." WHERE {$where}");
     $pager = mobilePagination($total,$page,$psize);
-
-    $ad2Count = 0;
     if(check_data($list)){
-        $ad2Count = floor(count($list)/5);
         foreach($list as $k => &$v){
             $v['category'] = $categories[$v['cid']]['title'];
             $v['href'] = $this->createMobileUrl('detail',array('id'=>$v['id']));
@@ -87,7 +84,9 @@ if($op == 'display'){
 
     //间隙广告，每5条一个广告
     $ad2s = pdo_fetchall("SELECT * FROM ".tablename('sj_news_ad')." WHERE uniacid='{$_W['uniacid']}' AND package_id IN (3,4) AND is_display='1' AND last_time>".TIMESTAMP." ORDER BY look_num ASC LIMIT 0,{$ad2Count}");
+    $adCount = 0;
     if(check_data($ad2s)){
+        $adCount = count($ad2s);
         foreach($ad2s as $k2 => &$ad2){
             $ad2['thumb'] = tomedia($ad2['thumb']);
             pdo_update('sj_news_ad',array(
