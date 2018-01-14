@@ -129,7 +129,7 @@ if($op == 'display'){
     }else{
         $ad = pdo_fetch("SELECT * FROM ".tablename('sj_news_ad')." WHERE uniacid='{$_W['uniacid']}'{$adWhere} AND package_id IN (5,6) AND is_display='1' AND last_time>".TIMESTAMP." ORDER BY look_num ASC LIMIT 0,1");
     }
-    if(!empty($ad) && is_array($ad)){
+    if(check_data($ad)){
         pdo_update('sj_news_ad',array(
             'look_num' => $ad['look_num']+1,
             'updatetime' => TIMESTAMP
