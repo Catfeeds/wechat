@@ -27,6 +27,8 @@ $orderStatusArr = array(
     5 => '平台已退款',
     6 => '买家已关闭'
 );
+$pay_credit1 = $_GPC['pay_credit1'];
+$pay_methods = $_GPC['pay_methods'];
 if($do == 'display'){
     $psize = 15;
     $pindex = (max(1,floor(trim($_GPC['page'])))-1)*$psize;
@@ -38,6 +40,9 @@ if($do == 'display'){
     $city = $_GPC['area']['city'];
     $district = $_GPC['area']['district'];
     $where = "a.uniacid='{$_W['uniacid']}' AND a.createtime BETWEEN {$starttime} AND {$endtime}";
+    if(check_data($pay_methods)){
+        $where .= " AND a.pay_method IN (".implode(',',$pay_methods).")";
+    }
     if(!empty($uid)){
         $where .= " AND a.uid='{$uid}'";
     }
@@ -80,6 +85,9 @@ if($do == 'display'){
     $district = $_GPC['area']['district'];
     list($starttime,$endtime) = getStartTimeEndTimeByGPC('createtime');
     $where = "a.uniacid='{$_W['uniacid']}' AND a.createtime BETWEEN {$starttime} AND {$endtime}";
+    if(check_data($pay_methods)){
+        $where .= " AND a.pay_method IN (".implode(',',$pay_methods).")";
+    }
     if(!empty($province)){
         $where .= " AND b.province='{$province}'";
     }
@@ -119,6 +127,9 @@ if($do == 'display'){
     $city = $_GPC['area']['city'];
     $district = $_GPC['area']['district'];
     $where = "a.uniacid='{$_W['uniacid']}' AND a.createtime BETWEEN {$starttime} AND {$endtime}";
+    if(check_data($pay_methods)){
+        $where .= " AND a.pay_method IN (".implode(',',$pay_methods).")";
+    }
     $where2 = "uniacid='{$_W['uniacid']}'";
     if(!empty($province)){
         $where2 .= " AND province='{$province}'";
@@ -152,6 +163,9 @@ if($do == 'display'){
     $city = $_GPC['area']['city'];
     $district = $_GPC['area']['district'];
     $where = "a.uniacid='{$_W['uniacid']}' AND a.createtime BETWEEN {$starttime} AND {$endtime}";
+    if(check_data($pay_methods)){
+        $where .= " AND a.pay_method IN (".implode(',',$pay_methods).")";
+    }
     $where2 = "uniacid='{$_W['uniacid']}'";
     if(!empty($province)){
         $where2 .= " AND province='{$province}'";
