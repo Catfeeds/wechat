@@ -77,7 +77,7 @@
             <!-- 广告区域 -->
             {if $li_index%5 == 0 && !empty($ad2s[$li_index%5]['link'])}
                 <section class="middle_mode has_action">
-                    <a href="{$ad2s[($li_index+1)%5]['link']}" class="article_link clearfix">
+                    <a href="{php echo $ad2s[$li_index%5]['link'];}" class="article_link clearfix">
                         <img style="width: 100%;height: auto" src="{php echo $ad2s[$li_index%5]['thumb'];}">
                         <div class="item_detail desc">
                             <div class="item_info">
