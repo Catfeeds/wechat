@@ -61,6 +61,11 @@ if($do == 'display'){
         $error = array(
             'title' => '请输入文章标题',
             'cid' => '请选择分类',
+            'author' => '请输入编辑名称',
+            'from' => '请输入来源',
+            'bianshen' => '请输入编审名称',
+            'tgemail' => '请输入投稿邮箱',
+            'swhotline' => '请输入商务热线',
             'detail' => '请输入文章详情',
         );
         foreach($error as $k => $message){
