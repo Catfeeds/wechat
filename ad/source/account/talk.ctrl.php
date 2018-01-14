@@ -21,6 +21,9 @@ if($do == 'display'){
     if(!empty($keyword)){
         $where .= " AND content LIKE '%{$keyword}%'";
     }
+    if($_W['ad_type'] != 1){
+        $where .= " AND news_id IN (SELECT id FROM ".tablename('sj_news_list')." WHERE uniacid='{$_W['uniacid']}' AND province='{$_W['province']}' AND city='{$_W['city']}')";
+    }
     $list = pdo_fetchall("SELECT * FROM ".tablename('sj_news_talk')." WHERE {$where} ORDER BY id DESC LIMIT {$pindex},{$psize}");
     $pager = pagination(pdo_fetchcolumn("SELECT COUNT(1) FROM ".tablename('sj_news_talk')." WHERE {$where}"),$page,$psize);
 }
