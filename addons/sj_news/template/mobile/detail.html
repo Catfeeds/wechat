@@ -58,14 +58,7 @@
             <span>来源：{$item['from']}</span>
             {else}
             <span>
-                作者：
-                {if !empty($item['nickname'])}
-                    {$item['nickname']}
-                {elseif !empty($item['realname'])}
-                    {$item['realname']}
-                {else}
-                    会员{$item['uid']}
-                {/if}
+                作者：{$item['nickname']}
             </span>
 
         </div>
