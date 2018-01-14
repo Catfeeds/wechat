@@ -78,7 +78,9 @@
             {if $li_index%5 == 0 && !empty($ad2s[$li_index%5]['link'])}
                 <section class="middle_mode has_action">
                     <a href="{php echo $ad2s[$li_index%5]['link'];}" class="article_link clearfix">
-                        <img style="width: 100%;height: auto" src="{php echo $ad2s[$li_index%5]['thumb'];}">
+                        <div class="box-img">
+                            <div class="cover-img" style="background-image: url('{php echo $ad2s[$li_index%5]['thumb'];}')"></div>
+                        </div>
                         <div class="item_detail desc">
                             <div class="item_info">
                                 <div>
