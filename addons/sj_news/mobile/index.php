@@ -102,7 +102,6 @@ if($op == 'display'){
             ));
         }
     }
-    print_r($ad1s);
 
 }
 include $this->template('index');
