@@ -70,11 +70,18 @@
             <span>切换城市</span>
         </a>
         <div class="swiper-wrapper">
+            {loop $ad1s $ad1}
+            <a class="swiper-slide" {if !empty($ad1['link'])} href="{$ad1['link']}"{/if}>
+            <img src="{php echo tomedia($ad1['thumb']);}">
+            </a>
+            {/loop}
+            {if empty($ad1s)}
             {loop $slides $slide}
             <a class="swiper-slide" {if !empty($slide['link'])} href="{$slide['link']}"{/if}>
             <img src="{php echo tomedia($slide['thumb']);}">
             </a>
             {/loop}
+            {/if}
         </div>
         <!-- Add Pagination -->
         <div class="swiper-pagination swiper-pagination-1"></div>
