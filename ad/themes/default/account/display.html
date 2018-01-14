@@ -144,32 +144,32 @@
             <div class="form-group">
                 <label class="col-xs-12 col-sm-3 col-md-2 control-label">地区</label>
                 <div class="col-xs-12 col-sm-8 col-md-6">
-                    {php echo tpl_form_field_district('area', array('province' => $_GPC['area']['province'], 'city' => $_GPC['area']['city'], 'district' => $_GPC['area']['district'] ));}
+                    {php echo tpl_form_field_district('area', array('province' => $item['province'], 'city' => $item['city'], 'district' => $item['district'] ));}
                 </div>
             </div>
             {/if}
             <div class="form-group">
                 <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>编辑</label>
                 <div class="col-sm-8 col-xs-12">
-                    <input type="text" maxlength="20" class="form-control" name="author" placeholder="请输入编辑名称"/>
+                    <input type="text" maxlength="20" class="form-control" name="author" value="{$item['author']}" placeholder="请输入编辑名称"/>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>编审</label>
                 <div class="col-sm-8 col-xs-12">
-                    <input type="text" maxlength="20" class="form-control" name="bianshen" placeholder="请输入编审名称"/>
+                    <input type="text" maxlength="20" class="form-control" name="bianshen" value="{$item['bianshen']}" placeholder="请输入编审名称"/>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>投稿邮箱</label>
                 <div class="col-sm-8 col-xs-12">
-                    <input type="text" maxlength="20" class="form-control" name="tgemail" placeholder="请输入投稿邮箱"/>
+                    <input type="text" maxlength="20" class="form-control" name="tgemail" value="{$item['tgemail']}" placeholder="请输入投稿邮箱"/>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>商务热线</label>
                 <div class="col-sm-8 col-xs-12">
-                    <input type="text" maxlength="20" class="form-control" name="swhotline" placeholder="请输入商务热线"/>
+                    <input type="text" maxlength="20" class="form-control" name="swhotline" value="{$item['swhotline']}" placeholder="请输入商务热线"/>
                 </div>
             </div>
             <div class="form-group">
