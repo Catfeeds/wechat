@@ -57,16 +57,7 @@
             <span>编审：{$item['bianshen']}</span>
             <span>来源：{$item['from']}</span>
             {else}
-            <span>
-                作者：
-                {if !empty()}
-                    {$item['nickname']}
-                {elseif !empty($item['realname'])}
-                    {$item['realname']}
-                {else}
-                    会员{$item['uid']}
-                {/if}
-            </span>
+            <span>{$item['nickname']}</span>
             {/if}
         </div>
         <div class="content">
