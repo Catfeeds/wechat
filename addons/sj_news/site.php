@@ -48,6 +48,7 @@ class Sj_newsModuleSite extends WeModuleSite {
 	 */
 	private function _mobile($function){
 		global $_GPC, $_W;
+        checkauth();
 		$_share['imgUrl'] = "{$_W['siteroot']}assets/sj_news/img/sjnews.jpg";
 		$_share['title'] = "新晋传媒";
 		if(!isset($_SESSION)){
@@ -73,7 +74,6 @@ class Sj_newsModuleSite extends WeModuleSite {
 			message("文件：{$file}不存在！", '', 'error');
 		}
 		$op = trim($_GPC['op']) ? trim($_GPC['op']) : 'display';
-		//checkauth();
 		include_once $file;
 	}
 }
