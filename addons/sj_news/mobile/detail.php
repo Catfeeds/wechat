@@ -119,11 +119,15 @@ if($op == 'display'){
     }
 
     //获取一则广告，根据浏览量最小排序
+    $adWhere = "";
+    if(!empty($_W['location']['city'])){
+        $adWhere = " AND city='{$_W['location']['city']}'";
+    }
     if($item['type'] == 0){
         //如果是官方专题
-        $ad = pdo_fetch("SELECT * FROM ".tablename('sj_news_ad')." WHERE uniacid='{$_W['uniacid']}' AND package_id IN (7,8) AND is_display='1' AND last_time>".TIMESTAMP." ORDER BY look_num ASC LIMIT 0,1");
+        $ad = pdo_fetch("SELECT * FROM ".tablename('sj_news_ad')." WHERE uniacid='{$_W['uniacid']}'{$adWhere} AND package_id IN (7,8) AND is_display='1' AND last_time>".TIMESTAMP." ORDER BY look_num ASC LIMIT 0,1");
     }else{
-        $ad = pdo_fetch("SELECT * FROM ".tablename('sj_news_ad')." WHERE uniacid='{$_W['uniacid']}' AND package_id IN (5,6) AND is_display='1' AND last_time>".TIMESTAMP." ORDER BY look_num ASC LIMIT 0,1");
+        $ad = pdo_fetch("SELECT * FROM ".tablename('sj_news_ad')." WHERE uniacid='{$_W['uniacid']}'{$adWhere} AND package_id IN (5,6) AND is_display='1' AND last_time>".TIMESTAMP." ORDER BY look_num ASC LIMIT 0,1");
     }
     if(!empty($ad) && is_array($ad)){
         pdo_update('sj_news_ad',array(
