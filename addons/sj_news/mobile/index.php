@@ -3,7 +3,7 @@ if($op == 'display'){
     $slides = pdo_fetchall("SELECT * FROM ".tablename('sj_news_slide')." WHERE uniacid='{$_W['uniacid']}' AND is_display='1' AND type='0' ORDER BY id DESC LIMIT 0,100");
     $categories = pdo_fetchall("SELECT * FROM ".tablename('sj_news_category')." WHERE uniacid='{$_W['uniacid']}' AND is_display='1' ORDER BY order_by DESC",array(),'id');
     $page = getApartPageNo('page');
-    $psize = 20;
+    $psize = 50;
     $pindex = ($page-1)*$psize;
     $cid = floor(trim($_GPC['cid']));
     $keyword = trim($_GPC['keyword']);
