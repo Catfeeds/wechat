@@ -75,21 +75,20 @@
         <div class="list_content">
             {loop $list $li_index $li}
             <!-- 广告区域 -->
-            {if $li_index%5 == 0 && !empty($ad2s[$li_index%5]['link'])}
+            {if $li_index%5 == 0 && !empty($ad2s[$li_index/5]['link'])}
             <section class="middle_mode has_action" style="position: relative">
-                <a href="{php echo $ad2s[$li_index%5]['link'];}" class="article_link clearfix">
+                <a href="{php echo $ad2s[$li_index/5]['link'];}" class="article_link clearfix">
                     <div class="item_detail desc">
-                        <h3 class="dotdot line3 image-margin-right">{php echo $ad2s[$li_index%5]['desc'];}</h3>
+                        <h3 class="dotdot line3 image-margin-right">{php echo $ad2s[$li_index/5]['desc'];}</h3>
                         <div class="item_info">
                             <div style="position: absolute;bottom: 5px;">
                                 <span class="gg_label space">广告</span>
-                                <span class="time">{php echo date('Y-m-d',$li['createtime']);}</span>
                             </div>
                         </div>
                     </div>
                     <div class="list_img_holder">
                         <div class="box-img">
-                            <div class="cover-img" style="background-image: url('{php echo $ad2s[$li_index%5]['thumb'];}')"></div>
+                            <div class="cover-img" style="background-image: url('{php echo $ad2s[$li_index/5]['thumb'];}')"></div>
                         </div>
                     </div>
                 </a>
