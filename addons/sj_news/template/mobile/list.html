@@ -1,69 +1,76 @@
 {template 'common/header-sj-news'}
 <link rel="stylesheet" href="{$_W['siteroot']}app/resource/components/swiper/swiper.min.css">
 <style type="text/css">
+    /* swiper */
+    .swiper-container {
+        width: 100%;
+        height: 100%;
+        background: #ffffff;
+    }
+    .swiper-slide {
+        text-align: center;
+        font-size: 18px;
+        background: #fff;
+
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+    }
+    .swiper-container{
+        background: #ffffff;
+    }
+    .swiper-container .swiper-slide{
+        height: auto!important;
+    }
+    .swiper-container .swiper-slide img{
+        width: 100%;
+        height: auto;
+        min-height: 100px;
+        max-height: 150px;
+    }
     .box-img{height:100px;width:100%;border:1px solid #eee;}
     .cover-img{width:100%;height:100%;background-size:cover;background-position:50%;}
+    section{position: relative;}
+    .tag-bottom{position: absolute;bottom: 0;}
 </style>
 <link rel="stylesheet" href="{ASSETS_URL}/sj_news/css/index.css?v={STYLE_VERSION}">
 <link rel="stylesheet" href="{ASSETS_URL}/sj_news/css/a.css?v={STYLE_VERSION}">
 <div class="page-index">
     {template 'common/category-sj-news'}
-    <div  style="margin-top: 10px;"  id="pageletListContent" class="feed-list-container">
+    <div style="margin-top: 10px;" id="pageletListContent" class="feed-list-container">
         <!-- react-empty: 33 -->
         <div class="list_content">
             {loop $list $li_index $li}
             <!-- 广告区域 -->
-            {if ($li_index+1)%6 == 0}
-            {if true}
-            <section class="has_action">
-                <a href="{php echo $this->createMobileUrl('detail',array('id'=>$li['id']));}" class="article_link clearfix ">
-                    <div class="item_detail">
-                        <h3 class="dotdot line3">{$li['title']}</h3>
-                        <div class="list_image">
-                            <ul class="clearfix">
-                                {loop $li['thumbs'] $thumb}
-                                <li class="list_img_holder">
-                                    <div class="box-img">
-                                        <div class="cover-img" style="background-image: url('{$thumb}')"></div>
-                                    </div>
-                                    <!--<img onerror="this.src='/assets/sj_news/img/err_imgs/{php echo rand(1,21);}.jpg'" src="{$thumb}">-->
-                                </li>
-                                {/loop}
-                            </ul>
-                        </div>
-                        <div class="item_info">
-                            <div>
-                                <span class="gg_label space">广告</span>
-                                <span class="src space">{$li['category']}</span>
-                                <span class="cmt space">评论&nbsp;{$li['talk_num']}</span>
-                                <span class="time">{php echo date('Y-m-d',$li['createtime']);}</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </section>
-            {else}
+            {if $li_index%5 == 0 && !empty($ad2s[($li_index/5)%($adCount)])}
             <section class="middle_mode has_action">
-                <a href="{php echo $this->createMobileUrl('detail',array('id'=>$li['id']));}" class="article_link clearfix">
+                <a href="{php echo $ad2s[($li_index/5)%($adCount)]['link'];}" class="article_link clearfix">
                     <div class="item_detail desc">
-                        <h3 class="dotdot line3 image-margin-right">{$li['title']}</h3>
+                        <h3 class="dotdot line3 image-margin-right">{php echo $ad2s[($li_index/5)%($adCount)]['title'];}</h3>
                         <div class="item_info">
-                            <div>
+                            <div class="tag-bottom">
                                 <span class="gg_label space">广告</span>
-                                <span class="src space">{$li['category']}</span>
-                                <span class="cmt space">评论&nbsp;{$li['talk_num']}</span>
-                                <span class="time">{php echo date('Y-m-d',$li['createtime']);}</span>
+                                <span class="city_label space">{php echo $ad2s[($li_index/5)%($adCount)]['industry'];}</span>
                             </div>
                         </div>
                     </div>
                     <div class="list_img_holder">
                         <div class="box-img">
-                            <div class="cover-img" style="background-image: url('{$li['thumb']}')"></div>
+                            <div class="cover-img" style="background-image: url('{php echo $ad2s[($li_index/5)%($adCount)]['thumb'];}')"></div>
                         </div>
                     </div>
                 </a>
             </section>
-            {/if}
             {/if}
             <!-- 广告区域 -->
             {if !empty($li['audio_src']) || !empty($li['video_src'])}
@@ -71,18 +78,18 @@
             <section class="has_action">
                 <a href="{php echo $this->createMobileUrl('detail',array('id'=>$li['id']));}" class="article_link clearfix channel__video">
                     <div class="item_detail">
-                        <div class="list_img_holder_large">
+                        <div class="list_img_holder_large" style="margin-bottom: 10px;">
                             <div class="video_mask"></div>
                             <h3 class="dotdot line3">{$li['title']}</h3>
                             <div style="width:100%;height:120px;background-size:cover;background-position:50%;background-image: url('{if empty($li['thumb'])}/assets/sj_news/img/err_imgs/video.png{else}{$li['thumb']}{/if}')"></div>
                             <span class="video-btn"></span>
                         </div>
                         <div class="item_info">
-                            <div>
+                            <div class="tag-bottom">
                                 <span class="src space">{$li['category']}</span>
                                 <span class="cmt space">评论&nbsp;{$li['talk_num']}</span>
                                 <span class="time">{php echo date('Y-m-d',$li['createtime']);}</span>
-                                <span data-id="6481057487108702733" class="dislike-news fr"></span>
+                                <span class="dislike-news fr"></span>
                             </div>
                         </div>
                     </div>
@@ -96,13 +103,17 @@
                     <div class="item_detail">
                         <h3 class="dotdot line3">{$li['title']}</h3>
                         <div class="item_info">
-                            <div>
+                            <div class="tag-bottom">
                                 {if $li['type'] == 0}
-                                        <span class="city_label space">
-                                            {if !empty($li['city'])}
-                                               {php echo str_replace('市','',$li['city']);}
+                                <span class="city_label space">
+                                            {if $li['is_admin'] == 1}
+                                               报社
                                             {else}
-                                                太原
+                                                {if !empty($li['city'])}
+                                                    {php echo str_replace('市','',$li['city']);}
+                                                {else}
+                                                    报社
+                                                {/if}
                                             {/if}
                                         </span>
                                 {/if}
@@ -125,13 +136,17 @@
                     <div class="item_detail desc">
                         <h3 class="dotdot line3 image-margin-right">{$li['title']}</h3>
                         <div class="item_info">
-                            <div>
+                            <div class="tag-bottom">
                                 {if $li['type'] == 0}
-                                        <span class="city_label space">
-                                            {if !empty($li['city'])}
-                                               {php echo str_replace('市','',$li['city']);}
+                                <span class="city_label space">
+                                           {if $li['is_admin'] == 1}
+                                               报社
                                             {else}
-                                                太原
+                                                {if !empty($li['city'])}
+                                                    {php echo str_replace('市','',$li['city']);}
+                                                {else}
+                                                    报社
+                                                {/if}
                                             {/if}
                                         </span>
                                 {/if}
@@ -171,13 +186,17 @@
                             </ul>
                         </div>
                         <div class="item_info">
-                            <div>
+                            <div class="tag-bottom">
                                 {if $li['type'] == 0}
-                                        <span class="city_label space">
-                                            {if !empty($li['city'])}
-                                               {php echo str_replace('市','',$li['city']);}
+                                <span class="city_label space">
+                                           {if $li['is_admin'] == 1}
+                                               报社
                                             {else}
-                                                太原
+                                                {if !empty($li['city'])}
+                                                    {php echo str_replace('市','',$li['city']);}
+                                                {else}
+                                                    报社
+                                                {/if}
                                             {/if}
                                         </span>
                                 {/if}
