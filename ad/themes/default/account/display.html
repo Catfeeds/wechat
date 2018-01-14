@@ -62,6 +62,7 @@
                             <th>删?</th>
                             <th>标题</th>
                             <th>分类</th>
+                            <th>地区</th>
                             <th>简介</th>
                             <th>浏览量</th>
                             <th>点赞数</th>
@@ -75,6 +76,7 @@
                             <td><input type="checkbox" name="ids[]" value="{$li['id']}"></td>
                             <td>{$li['title']}</td>
                             <td><span class="label label-success">{$categories[$li['cid']]['title']}</span></td>
+                            <td>{$li['province']}{$li['city']}</td>
                             <td>{$li['desc']}</td>
                             <td>{$li['look_num']}</td>
                             <td>{$li['zan_num']}</td>

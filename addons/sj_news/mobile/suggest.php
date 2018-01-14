@@ -16,6 +16,8 @@ if($op == 'display'){
             'name' => trim($_GPC['name']),
             'mobile' => trim($_GPC['mobile']),
             'content' => $_GPC['content'],
+            'province' => $_W['location']['province'],
+            'city' => $_W['location']['city'],
             'ip' => CLIENT_IP,
             'createtime' => TIMESTAMP
         );
