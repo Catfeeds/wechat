@@ -25,7 +25,7 @@ if($do == 'display'){
         $where .= " AND a.news_id IN (SELECT id FROM ".tablename('sj_news_list')." WHERE uniacid='{$_W['uniacid']}' AND province='{$_W['province']}' AND city='{$_W['city']}')";
     }
     $list = pdo_fetchall("SELECT a.*,b.province,b.city FROM ".tablename('sj_news_talk')." a LEFT JOIN ".tablename('sj_news_list')." b ON a.news_id=b.id WHERE {$where} ORDER BY a.id DESC LIMIT {$pindex},{$psize}");
-    $pager = pagination(pdo_fetchcolumn("SELECT COUNT(1) FROM ".tablename('sj_news_talk')." WHERE {$where}"),$page,$psize);
+    $pager = pagination(pdo_fetchcolumn("SELECT COUNT(a.id) FROM ".tablename('sj_news_talk')." a WHERE {$where}"),$page,$psize);
 }
 
 if($do == 'post'){
