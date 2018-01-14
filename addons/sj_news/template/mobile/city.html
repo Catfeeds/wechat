@@ -88,62 +88,29 @@
             });
         });
     </script>
-    <div style="margin-top: 10px;"  id="pageletListContent" class="feed-list-container">
+    <div style="margin-top: 10px;" id="pageletListContent" class="feed-list-container">
         <!-- react-empty: 33 -->
         <div class="list_content">
             {loop $list $li_index $li}
             <!-- 广告区域 -->
-            {if ($li_index+1)%6 == 0}
-            {if true}
-            <section class="has_action">
-                <a href="{php echo $this->createMobileUrl('detail',array('id'=>$li['id']));}" class="article_link clearfix ">
-                    <div class="item_detail">
-                        <h3 class="dotdot line3">{$li['title']}</h3>
-                        <div class="list_image">
-                            <ul class="clearfix">
-                                {loop $li['thumbs'] $thumb}
-                                <li class="list_img_holder">
-                                    <div class="box-img">
-                                        <div class="cover-img" style="background-image: url('{$thumb}')"></div>
-                                    </div>
-                                    <!--<img onerror="this.src='/assets/sj_news/img/err_imgs/{php echo rand(1,21);}.jpg'" src="{$thumb}">-->
-                                </li>
-                                {/loop}
-                            </ul>
-                        </div>
-                        <div class="item_info">
-                            <div>
-                                <span class="gg_label space">广告</span>
-                                <span class="src space">{$li['category']}</span>
-                                <span class="cmt space">评论&nbsp;{$li['talk_num']}</span>
-                                <span class="time">{php echo date('Y-m-d',$li['createtime']);}</span>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </section>
-            {else}
-            <section class="middle_mode has_action">
-                <a href="{php echo $this->createMobileUrl('detail',array('id'=>$li['id']));}" class="article_link clearfix">
+            {if $li_index%5 == 0 && !empty($ad2s[($li_index/5)%($adCount)])}
+            <section class="middle_mode has_action" style="position: relative">
+                <a href="{php echo $ad2s[($li_index/5)%($adCount)]['link'];}" class="article_link clearfix">
                     <div class="item_detail desc">
-                        <h3 class="dotdot line3 image-margin-right">{$li['title']}</h3>
+                        <h3 class="dotdot line3 image-margin-right">{php echo $ad2s[($li_index/5)%($adCount)]['desc'];}</h3>
                         <div class="item_info">
-                            <div>
+                            <div style="position: absolute;bottom: 5px;">
                                 <span class="gg_label space">广告</span>
-                                <span class="src space">{$li['category']}</span>
-                                <span class="cmt space">评论&nbsp;{$li['talk_num']}</span>
-                                <span class="time">{php echo date('Y-m-d',$li['createtime']);}</span>
                             </div>
                         </div>
                     </div>
                     <div class="list_img_holder">
                         <div class="box-img">
-                            <div class="cover-img" style="background-image: url('{$li['thumb']}')"></div>
+                            <div class="cover-img" style="background-image: url('{php echo $ad2s[($li_index/5)%($adCount)]['thumb'];}')"></div>
                         </div>
                     </div>
                 </a>
             </section>
-            {/if}
             {/if}
             <!-- 广告区域 -->
             {if !empty($li['audio_src']) || !empty($li['video_src'])}
@@ -178,7 +145,7 @@
                         <div class="item_info">
                             <div>
                                 {if $li['type'] == 0}
-                                        <span class="city_label space">
+                                <span class="city_label space">
                                             {if !empty($li['city'])}
                                                {php echo str_replace('市','',$li['city']);}
                                             {else}
@@ -207,7 +174,7 @@
                         <div class="item_info">
                             <div>
                                 {if $li['type'] == 0}
-                                        <span class="city_label space">
+                                <span class="city_label space">
                                             {if !empty($li['city'])}
                                                {php echo str_replace('市','',$li['city']);}
                                             {else}
@@ -253,7 +220,7 @@
                         <div class="item_info">
                             <div>
                                 {if $li['type'] == 0}
-                                        <span class="city_label space">
+                                <span class="city_label space">
                                             {if !empty($li['city'])}
                                                {php echo str_replace('市','',$li['city']);}
                                             {else}
