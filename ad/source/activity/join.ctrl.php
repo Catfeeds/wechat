@@ -30,6 +30,9 @@ if($do == 'display'){
     if(!empty($_GPC['area']['district'])){
         $where .= " AND b.district='{$_GPC['area']['district']}'";
     }
+    if($_W['ad_type'] != 1){
+        $where .= " AND a.province='{$_W['province']}' AND a.city='{$_W['city']}'";
+    }
     if(!empty($_GPC['export'])){
         $list = pdo_fetchall("SELECT a.*,b.title,b.province,b.city FROM ".tablename('sj_news_activity_join')." a LEFT JOIN ".tablename('sj_news_activity')." b ON a.activity_id=b.id WHERE {$where} ORDER BY id DESC");
         if(!check_data($list)){

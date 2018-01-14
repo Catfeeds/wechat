@@ -18,6 +18,9 @@ if($do == 'display'){
     $pindex = ($page-1)*$psize;
     $keyword = trim($_GPC['keyword']);
     $where = "uniacid='{$_W['uniacid']}'";
+    if($_W['ad_type'] != 1){
+        $where .= " AND province='{$_W['province']}' AND city='{$_W['city']}'";
+    }
     if(!empty($keyword)){
         $where .= " AND title LIKE '%{$keyword}%'";
     }

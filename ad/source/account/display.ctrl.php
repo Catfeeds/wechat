@@ -20,6 +20,9 @@ if($do == 'display'){
     $category_id = floor(trim($_GPC['category_id']));
     $keyword = trim($_GPC['keyword']);
     $where = "uniacid='{$_W['uniacid']}' AND type='0'";
+    if($_W['ad_type'] != 1){
+        $where .= " AND province='{$_W['province']}' AND city='{$_W['city']}'";
+    }
     if(!empty($keyword)){
         $where .= " AND title LIKE '%{$keyword}%'";
     }
