@@ -52,9 +52,9 @@ if($do == 'display'){
             'audio_src' => trim($_GPC['audio_src']),
             'thumbs' => check_data($_GPC['thumbs'])?iserializer($_GPC['thumbs']):'',
             'detail' => $_GPC['detail'],
-            'province' => $_W['ad_type'] == 1?$_GPC['area']['province']:$_W['location']['province'],
-            'city' =>  $_W['ad_type'] == 1?$_GPC['area']['city']:$_W['location']['city'],
-            'district' =>  $_W['ad_type'] == 1?$_GPC['area']['district']:$_W['location']['district'],
+            'province' => $_W['ad_type'] == 1?$_GPC['area']['province']:$_W['province'],
+            'city' =>  $_W['ad_type'] == 1?$_GPC['area']['city']:$_W['city'],
+            'district' =>  $_W['ad_type'] == 1?$_GPC['area']['district']:$_W['district'],
             'look_num' => floor(trim($_GPC['look_num'])),
             'zan_num' => floor(trim($_GPC['zan_num']))
         );
