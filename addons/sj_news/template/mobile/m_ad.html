@@ -13,7 +13,7 @@
             <div class="top">
                 <ul>
                     <li class="title">{$li['title']}</li>
-                    <li class="date">{php echo date('Y-m-d H:i',$li['createtime']);}&nbsp;&nbsp;&nbsp;<span style="color: #0baefd">浏览：{$li['look_num']]}</span></li>
+                    <li class="date">{php echo date('Y-m-d H:i',$li['createtime']);}&nbsp;&nbsp;&nbsp;<span style="color: #0baefd">浏览：{$li['look_num']}</span></li>
                 </ul>
                 {if $li['is_display'] == 1}
                     <span class="status" style="color: green;">已审核{if $li['renew_is_check'] == 1}&nbsp;|&nbsp;续费中{/if}&nbsp;|&nbsp;{$li['package_name']}</span>
