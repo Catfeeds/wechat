@@ -149,9 +149,27 @@
             </div>
             {/if}
             <div class="form-group">
-                <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>作者</label>
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>编辑</label>
                 <div class="col-sm-8 col-xs-12">
-                    <input type="text" maxlength="20" class="form-control" name="author" placeholder="请输入作者名称"/>
+                    <input type="text" maxlength="20" class="form-control" name="author" placeholder="请输入编辑名称"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>编审</label>
+                <div class="col-sm-8 col-xs-12">
+                    <input type="text" maxlength="20" class="form-control" name="bianshen" placeholder="请输入编审名称"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>投稿邮箱</label>
+                <div class="col-sm-8 col-xs-12">
+                    <input type="text" maxlength="20" class="form-control" name="tgemail" placeholder="请输入投稿邮箱"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>商务热线</label>
+                <div class="col-sm-8 col-xs-12">
+                    <input type="text" maxlength="20" class="form-control" name="swhotline" placeholder="请输入商务热线"/>
                 </div>
             </div>
             <div class="form-group">
@@ -160,16 +178,16 @@
                     <input type="text" class="form-control" maxlength="20" name="from" value="{$item['from']}" placeholder="请输入文章来源"/>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-xs-12 col-sm-3 col-md-2 control-label">文章链接地址</label>
-                <div class="col-xs-12 col-sm-8">
-                    <div class="input-group">
-                        <input type="text" class="form-control js-article-url" placeholder="请输入以http://或https://开头的完整的文章链接地址">
-                        <span class="input-group-addon js-curl-btn" style="cursor: pointer">立即抓取</span>
-                    </div>
-                    <span class="help-block">请输入以http://或https://开头的完整的文章链接地址（声音类别或者视频，请自己手动上传）</span>
-                </div>
-            </div>
+            <!--<div class="form-group">-->
+                <!--<label class="col-xs-12 col-sm-3 col-md-2 control-label">文章链接地址</label>-->
+                <!--<div class="col-xs-12 col-sm-8">-->
+                    <!--<div class="input-group">-->
+                        <!--<input type="text" class="form-control js-article-url" placeholder="请输入以http://或https://开头的完整的文章链接地址">-->
+                        <!--<span class="input-group-addon js-curl-btn" style="cursor: pointer">立即抓取</span>-->
+                    <!--</div>-->
+                    <!--<span class="help-block">请输入以http://或https://开头的完整的文章链接地址（声音类别或者视频，请自己手动上传）</span>-->
+                <!--</div>-->
+            <!--</div>-->
             <div class="form-group">
                 <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>音频文件</label>
                 <div class="col-sm-8 col-xs-12">
@@ -184,12 +202,12 @@
                     <span class="help-block">当选择声音类别的时候请，上传音频文件；其他类别可不上传，若上传，则作为背景音乐</span>
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>文章简介</label>
-                <div class="col-sm-8 col-xs-12">
-                    <textarea class="form-control" name="desc" placeholder="请输入文章简介">{$item['desc']}</textarea>
-                </div>
-            </div>
+            <!--<div class="form-group">-->
+                <!--<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>文章简介</label>-->
+                <!--<div class="col-sm-8 col-xs-12">-->
+                    <!--<textarea class="form-control" name="desc" placeholder="请输入文章简介">{$item['desc']}</textarea>-->
+                <!--</div>-->
+            <!--</div>-->
             <div class="form-group">
                 <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>文章缩略图</label>
                 <div class="col-sm-8 col-xs-12">

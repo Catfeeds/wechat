@@ -32,6 +32,11 @@
     .zy_timeline {
         margin-left: 10px;
     }
+    .tags-1{}
+    .tags-1 span{
+        border: 1px solid silver;
+        margin: 5px 5px 0 0;
+    }
 </style>
 <div class="page-detail">
     <div class="detail-header">
@@ -44,7 +49,11 @@
         <div class="title"> {$item['title']}</div>
         <div class="desc">
             <span>{php echo date('Y年m月d日 H:i',$item['createtime']);}</span>
-            <span style="max-width: 120px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{$item['author']}</span>
+        </div>
+        <div class="tags-1">
+            <span>编辑：{$item['author']}</span>
+            <span>编审：{$item['bianshen']}</span>
+            <span>来源：{$item['from']}</span>
         </div>
         <div class="content">
             <p>
@@ -77,6 +86,10 @@
                 });
             </script>
             {/if}
+        </div>
+        <div class="tags-1">
+            <span>投稿邮箱：{$item['tgemail']}</span>
+            <span>商务热线：{$item['swhotline']}</span>
         </div>
         <div class="look-num" data-id="{$item['id']}">
             <span><i class="iconfont icon-liulan1"></i>{$item['look_num']}</span>
@@ -148,7 +161,6 @@
 <div id="mcover"><img src="/assets/loan/images/share_tip.png"></div>
 <script type="text/javascript">
     require(['util'],function(util){
-
         $('.js-ops').bind('click',function(){
             var base = $(this);
             var id = base.parent().attr('data-id');
