@@ -40,6 +40,7 @@
                         <tr>
                             <th>删?</th>
                             <th>会员ID</th>
+                            <th>地区</th>
                             <th>内容</th>
                             <th>状态</th>
                             <th>添加时间</th>
@@ -51,6 +52,7 @@
                         <tr>
                             <td><input type="checkbox" name="ids[]" value="{$li['id']}"></td>
                             <td>{$li['uid']}</td>
+                            <td>{$li['province']}{$li['city']}</td>
                             <td>{php echo htmlspecialchars_decode($li['content']);}</td>
                             <td>
                                 {if $li['is_display'] == 1}

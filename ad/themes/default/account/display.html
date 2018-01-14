@@ -75,7 +75,13 @@
                             <td><input type="checkbox" name="ids[]" value="{$li['id']}"></td>
                             <td>{$li['title']}</td>
                             <td><span class="label label-success">{$categories[$li['cid']]['title']}</span></td>
-                            <td>{$li['province']}{$li['city']}</td>
+                            <td>
+                                {if $li['is_admin'] == 1}
+                                报社
+                                {else}
+                                    {$li['province']}{$li['city']}
+                                {/if}
+                            </td>
                             <td>{$li['look_num']}</td>
                             <td>{$li['zan_num']}</td>
                             <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
