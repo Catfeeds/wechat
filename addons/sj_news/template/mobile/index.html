@@ -76,17 +76,23 @@
             {loop $list $li_index $li}
             <!-- 广告区域 -->
             {if $li_index%5 == 0 && !empty($ad2s[$li_index%5]['link'])}
-                <section class="middle_mode has_action">
-                    <a href="{php echo $ad2s[$li_index%5]['link'];}" class="article_link clearfix">
-                        <div class="box-img">
-                            <div class="cover-img" style="background-image: url('{php echo $ad2s[$li_index%5]['thumb'];}')"></div>
-                        </div>
-                        <div class="item_detail desc">
+                <section class="has_action">
+                    <a href="{php echo $ad2s[$li_index%5]['link'];}" class="article_link clearfix ">
+                        <div class="item_detail">
+                            <h3 class="dotdot line3">{php echo $ad2s[$li_index%5]['desc'];}</h3>
+                            <div class="list_image">
+                                <ul class="clearfix">
+                                    <li class="list_img_holder">
+                                        <div class="box-img">
+                                            <div class="cover-img" style="background-image: url('{php echo $ad2s[$li_index%5]['thumb'];}')"></div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
                             <div class="item_info">
                                 <div>
                                     <span class="gg_label space">广告</span>
-                                    <span class="cmt space">浏览&nbsp;{php echo $ad2s[($li_index+1)%5]['look_num'];}</span>
-                                    <span class="time">{php echo date('Y-m-d',$ad2s[$li_index%5]['createtime']);}</span>
+                                    <span class="time">{php echo date('Y-m-d',$li['createtime']);}</span>
                                 </div>
                             </div>
                         </div>
