@@ -131,10 +131,14 @@
                                     <div>
                                         {if $li['type'] == 0}
                                         <span class="city_label space">
-                                            {if !empty($li['city'])}
-                                               {php echo str_replace('市','',$li['city']);}
+                                            {if $li['is_admin'] == 1}
+                                               报社
                                             {else}
-                                                报社
+                                                {if !empty($li['city'])}
+                                                    {php echo str_replace('市','',$li['city']);}
+                                                {else}
+                                                    报社
+                                                {/if}
                                             {/if}
                                         </span>
                                         {/if}
@@ -160,10 +164,14 @@
                                     <div>
                                         {if $li['type'] == 0}
                                         <span class="city_label space">
-                                            {if !empty($li['city'])}
-                                               {php echo str_replace('市','',$li['city']);}
+                                           {if $li['is_admin'] == 1}
+                                               报社
                                             {else}
-                                                报社
+                                                {if !empty($li['city'])}
+                                                    {php echo str_replace('市','',$li['city']);}
+                                                {else}
+                                                    报社
+                                                {/if}
                                             {/if}
                                         </span>
                                         {/if}
@@ -206,10 +214,14 @@
                                     <div>
                                         {if $li['type'] == 0}
                                         <span class="city_label space">
-                                            {if !empty($li['city'])}
-                                               {php echo str_replace('市','',$li['city']);}
+                                           {if $li['is_admin'] == 1}
+                                               报社
                                             {else}
-                                                报社
+                                                {if !empty($li['city'])}
+                                                    {php echo str_replace('市','',$li['city']);}
+                                                {else}
+                                                    报社
+                                                {/if}
                                             {/if}
                                         </span>
                                         {/if}

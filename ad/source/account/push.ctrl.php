@@ -85,6 +85,7 @@ if($do == 'display'){
         }
 
         if($_W['ad_type'] == 1){
+            $data['is_admin'] = 1;
             //超级管理员
             $data['is_check2'] = floor(trim($_GPC['is_check2'])) == 1?1:0;
             if($data['is_check2'] == 1 && $item['is_check1'] != 1){
