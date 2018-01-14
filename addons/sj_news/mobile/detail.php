@@ -5,8 +5,8 @@ load()->func('check');
 load()->func('notice');
 if($op == 'display'){
     $id = floor(trim($_GPC['id']));
-    $where = "uniacid='{$_W['uniacid']}' AND id='{$id}'";
-    $item = pdo_fetch("SELECT * FROM ".tablename('sj_news_list')." WHERE {$where}");
+    $where = "a.uniacid='{$_W['uniacid']}' AND a.id='{$id}'";
+    $item = pdo_fetch("SELECT a.*,b.nickname,b.realname FROM ".tablename('sj_news_list')." a LEFT JOIN ".tablename('mc_members')." b ON a.uid=b.uid WHERE {$where}");
     $_share['title'] = $item['title'];
     if(!empty($item['detail'])){
         $item['detail'] = htmlspecialchars_decode($item['detail']);
