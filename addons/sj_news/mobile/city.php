@@ -73,8 +73,13 @@ if($op == 'display'){
         message($list,'','success');
     }
 
+    $adWhere = "";
+    if(!empty($_W['location']['city'])){
+        $adWhere = " AND city='{$_W['location']['city']}'";
+    }
+
     //轮播广告
-    $ad1s = pdo_fetchall("SELECT * FROM ".tablename('sj_news_ad')." WHERE uniacid='{$_W['uniacid']}' AND package_id IN (1,2) AND is_display='1' AND last_time>".TIMESTAMP." ORDER BY look_num ASC LIMIT 0,5");
+    $ad1s = pdo_fetchall("SELECT * FROM ".tablename('sj_news_ad')." WHERE uniacid='{$_W['uniacid']}'{$adWhere} AND package_id IN (1,2) AND is_display='1' AND last_time>".TIMESTAMP." ORDER BY look_num ASC LIMIT 0,5");
     if(check_data($ad1s)){
         foreach($ad1s as $k1 => &$ad1){
             $ad1['thumb'] = tomedia($ad1['thumb']);
@@ -89,7 +94,7 @@ if($op == 'display'){
     }
 
     //间隙广告，每5条一个广告
-    $ad2s = pdo_fetchall("SELECT * FROM ".tablename('sj_news_ad')." WHERE uniacid='{$_W['uniacid']}' AND package_id IN (3,4) AND is_display='1' AND last_time>".TIMESTAMP." ORDER BY look_num ASC LIMIT 0,10");
+    $ad2s = pdo_fetchall("SELECT * FROM ".tablename('sj_news_ad')." WHERE uniacid='{$_W['uniacid']}'{$adWhere} AND package_id IN (3,4) AND is_display='1' AND last_time>".TIMESTAMP." ORDER BY look_num ASC LIMIT 0,10");
     $adCount = 0;
     if(check_data($ad2s)){
         $adCount = count($ad2s);
