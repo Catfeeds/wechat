@@ -68,8 +68,10 @@ if($op == 'display'){
     }
 
     //轮播广告
+    $getCount = 0;
     $ad1s = pdo_fetchall("SELECT * FROM ".tablename('sj_news_ad')." WHERE uniacid='{$_W['uniacid']}' AND package_id IN (1,2) AND is_display='1' AND last_time>".TIMESTAMP." ORDER BY look_num ASC LIMIT 0,5");
     if(check_data($ad1s)){
+        $getCount = floor(count($list)/5);
         foreach($ad1s as $k1 => &$ad1){
             $ad1['thumb'] = tomedia($ad1['thumb']);
             pdo_update('sj_news_ad',array(
@@ -83,7 +85,7 @@ if($op == 'display'){
     }
 
     //间隙广告，每5条一个广告
-    $ad2s = pdo_fetchall("SELECT * FROM ".tablename('sj_news_ad')." WHERE uniacid='{$_W['uniacid']}' AND package_id IN (3,4) AND is_display='1' AND last_time>".TIMESTAMP." ORDER BY look_num ASC LIMIT 0,{$ad2Count}");
+    $ad2s = pdo_fetchall("SELECT * FROM ".tablename('sj_news_ad')." WHERE uniacid='{$_W['uniacid']}' AND package_id IN (3,4) AND is_display='1' AND last_time>".TIMESTAMP." ORDER BY look_num ASC LIMIT 0,{$getCount}");
     $adCount = 0;
     if(check_data($ad2s)){
         $adCount = count($ad2s);
