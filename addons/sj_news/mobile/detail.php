@@ -140,7 +140,7 @@ if($op == 'display'){
     }
 
     //获取会员列表
-    $members = pdo_fetchall("SELECT * FROM ".tablename('mc_members')." WHERE uniacid='{$_W['uniacid']}' ORDER BY uid DESC LIMIT 0,14");
+    $members = pdo_fetchall("SELECT * FROM ".tablename('mc_members')." WHERE uniacid='{$_W['uniacid']}' ORDER BY uid ASC LIMIT 0,14");
     $members_total = pdo_fetchcolumn("SELECT COUNT(1) FROM ".tablename('mc_members')." WHERE uniacid='{$_W['uniacid']}'");
 }
 
