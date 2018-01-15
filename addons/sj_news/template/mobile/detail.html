@@ -110,6 +110,12 @@
                 <img src="{php echo tomedia($ad['thumb']);}">
             </a>
         </div>
+        <div class="item_info">
+            <div class="tag-bottom">
+                <span class="gg_label space">广告</span>
+                <span class="city_label space">{php echo $ad['industry'];}</span>
+            </div>
+        </div>
         {else}
         <div class="ad-box">
             <a href="{php echo $this->createMobileUrl('ad');}">
