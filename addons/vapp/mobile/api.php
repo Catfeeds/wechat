@@ -80,8 +80,9 @@ if($op == 'push_pay'){
         );
         $aliquery['sign'] = alipay_getSign($aliquery,$setting['payment']['alipay']['secret']);
         $aliquery['format'] = "JSON";
-        $aliquery['timestamp'] =  urlencode(date("Y-m-d H:i:s"));
+        $aliquery['timestamp'] =  urlencode($aliquery['timestamp']);
         $aliquery['notify_url'] = urlencode("http://wx.51muma.com/payment/alipay/notify_url.php");
+        $aliquery['biz_content'] = urlencode($aliquery['biz_content']);
         $aliquery['body'] = $body;
         to_json(0,'返回支付宝参数',http_build_query($aliquery));
     }

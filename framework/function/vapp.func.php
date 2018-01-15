@@ -342,14 +342,11 @@ function alipay_getSign( $query = array() ,$privateKey,$sign_type = 'RSA2'){
     //私钥
     $private_id = openssl_pkey_get_private( $privateKey , $passphrase);
 
-
     // 签名
     $signature = '';
-
     if("RSA2"== $sign_type){
         openssl_sign($data, $signature, $private_id, OPENSSL_ALGO_SHA256 );
     }else{
-
         openssl_sign($data, $signature, $private_id, OPENSSL_ALGO_SHA1 );
     }
     openssl_free_key( $private_id );
