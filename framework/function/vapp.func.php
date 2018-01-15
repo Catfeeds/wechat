@@ -295,20 +295,11 @@ function pay_credit2_deal($uid,$password,$pay_info){
  * 查询参数排序 a-z
  */
 function alipay_buildQuery( $query ){
-    if ( !$query ) {
+    if (!check_data($query) ) {
         return null;
     }
-
-//将要 参数 排序
-    ksort( $query );
-
-    //重新组装参数
-    $params = array();
-    foreach($query as $key => $value){
-        $params[] = $key .'='. $value ;
-    }
-    $data = implode('&', $params);
-    return $data;
+    ksort($query);
+    return http_build_query($query);
 }
 
 

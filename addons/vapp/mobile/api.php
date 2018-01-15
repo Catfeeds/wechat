@@ -58,8 +58,7 @@ if($op == 'push_pay'){
         if($setting['payment']['alipay']['status'] != OPEN_STATUS){
             to_json(1,'支付宝支付未开启');
         }
-        //$body = md5('AliPayAuthKey'.$pay_info['out_trade_no']);
-        $body = "衣服";
+        $body = md5('AliPayAuthKey'.$pay_info['out_trade_no']);
 
         //基本参数
         $pay_query = json_encode(array(
@@ -79,7 +78,7 @@ if($op == 'push_pay'){
             "biz_content" 	=> $pay_query,
             "charset" 		=> "utf-8"
         );
-        $aliquery['sign'] = urlencode(alipay_getSign($aliquery,$setting['payment']['alipay']['secret']));
+        $aliquery['sign'] = alipay_getSign($aliquery,$setting['payment']['alipay']['secret']);
         $aliquery['format'] = "JSON";
         $aliquery['timestamp'] =  urlencode($aliquery['timestamp']);
         $aliquery['notify_url'] = urlencode("http://wx.51muma.com/payment/alipay/notify_url.php");
