@@ -42,7 +42,7 @@ if($do == 'display'){
     $district = $_GPC['area']['district'];
     $where = "a.uniacid='{$_W['uniacid']}' AND a.createtime BETWEEN {$starttime} AND {$endtime}";
     if(!empty($pay_credit1)){
-        $where .= " AND a.id IN (SELECT order_ids FROM ".tablename('pay_log')." WHERE uniacid='{$_W['uniacid']}' AND order_type=".ORDER_TYPE_OFFLINE.")";
+        $where .= " AND a.id IN (SELECT order_ids FROM ".tablename('pay_log')." WHERE uniacid='{$_W['uniacid']}' AND use_credit1>0 AND order_type=".ORDER_TYPE_OFFLINE.")";
     }
     if(!empty($pay_methods)){
         if(in_array(PAY_METHOD_WECHAT,$pay_methods)){
@@ -94,7 +94,7 @@ if($do == 'display'){
     list($starttime,$endtime) = getStartTimeEndTimeByGPC('createtime');
     $where = "a.uniacid='{$_W['uniacid']}' AND a.createtime BETWEEN {$starttime} AND {$endtime}";
     if(!empty($pay_credit1)){
-        $where .= " AND a.id IN (SELECT order_ids FROM ".tablename('pay_log')." WHERE uniacid='{$_W['uniacid']}' AND order_type=".ORDER_TYPE_OLD_FEE.")";
+        $where .= " AND a.id IN (SELECT order_ids FROM ".tablename('pay_log')." WHERE uniacid='{$_W['uniacid']}' AND use_credit1>0 AND order_type=".ORDER_TYPE_OLD_FEE.")";
     }
     if(!empty($province)){
         $where .= " AND b.province='{$province}'";
@@ -137,7 +137,7 @@ if($do == 'display'){
     $district = $_GPC['area']['district'];
     $where = "a.uniacid='{$_W['uniacid']}' AND a.createtime BETWEEN {$starttime} AND {$endtime}";
     if(!empty($pay_credit1)){
-        $where .= " AND a.id IN (SELECT order_ids FROM ".tablename('pay_log')." WHERE uniacid='{$_W['uniacid']}' AND order_type=".ORDER_TYPE_PERSON.")";
+        $where .= " AND a.id IN (SELECT order_ids FROM ".tablename('pay_log')." WHERE uniacid='{$_W['uniacid']}' AND use_credit1>0 AND order_type=".ORDER_TYPE_PERSON.")";
     }
     if(!empty($pay_methods)){
         if(in_array(PAY_METHOD_WECHAT,$pay_methods)){
@@ -180,7 +180,7 @@ if($do == 'display'){
     $district = $_GPC['area']['district'];
     $where = "a.uniacid='{$_W['uniacid']}' AND a.createtime BETWEEN {$starttime} AND {$endtime}";
     if(!empty($pay_credit1)){
-        $where .= " AND a.id IN (SELECT order_ids FROM ".tablename('pay_log')." WHERE uniacid='{$_W['uniacid']}' AND order_type=".ORDER_TYPE_DEVELOP_SHOP.")";
+        $where .= " AND a.id IN (SELECT order_ids FROM ".tablename('pay_log')." WHERE uniacid='{$_W['uniacid']}' AND use_credit1>0 AND order_type=".ORDER_TYPE_DEVELOP_SHOP.")";
     }
     if(!empty($pay_methods)){
         if(in_array(PAY_METHOD_WECHAT,$pay_methods)){
