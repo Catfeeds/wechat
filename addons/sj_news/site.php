@@ -48,7 +48,7 @@ class Sj_newsModuleSite extends WeModuleSite {
 	 */
 	private function _mobile($function){
 		global $_GPC, $_W;
-        checkauth();
+        //checkauth();
 		$_share['imgUrl'] = "{$_W['siteroot']}assets/sj_news/img/sjnews.jpg";
 		$_share['title'] = "新晋传媒";
 		if(!isset($_SESSION)){
