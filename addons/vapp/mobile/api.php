@@ -61,25 +61,24 @@ if($op == 'push_pay'){
         $body = md5('AliPayAuthKey'.$pay_info['out_trade_no']);
 
         //基本参数
-        $pay_query = json_encode(array(
-            'timeout_express' => "30m",
-            'product_code' => "QUICK_MSECURITY_PAY",
-            "total_amount" => $pay_info['pay_price'],
-            "subject" => '测试商品',
-            "body" => $body,
-            "out_trade_no" => $pay_info['out_trade_no']
-        ),JSON_UNESCAPED_UNICODE);
         $aliquery = array(
             "app_id" 		=> $setting['payment']['alipay']['partner'],
             "method" 		=> "alipay.trade.app.pay",
             "sign_type" 	=> "RSA2",
             "version" 		=> "1.0",
             "timestamp" 	=> date('Y-m-d H:i:s')  ,//yyyy-MM-dd HH:mm:ss
-            "biz_content" 	=> $pay_query,
-            "charset" 		=> "utf-8"
+            "biz_content" 	=> json_encode(array(
+                'timeout_express' => "30m",
+                'product_code' => "QUICK_MSECURITY_PAY",
+                "total_amount" => $pay_info['pay_price'],
+                "subject" => '测试商品',
+                "body" => $body,
+                "out_trade_no" => $pay_info['out_trade_no']
+            ),JSON_UNESCAPED_UNICODE),
+            "charset" => "utf-8"
         );
         $aliquery['sign'] = alipay_getSign($aliquery,$setting['payment']['alipay']['secret']);
-        $aliquery['format'] = "JSON";
+        $aliquery['format'] = "json";
         $aliquery['timestamp'] =  urlencode($aliquery['timestamp']);
         $aliquery['notify_url'] = urlencode("http://wx.51muma.com/payment/alipay/notify_url.php");
         $aliquery['biz_content'] = urlencode($aliquery['biz_content']);
