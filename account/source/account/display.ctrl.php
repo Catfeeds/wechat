@@ -27,6 +27,7 @@ $orderStatusArr = array(
     5 => '平台已退款',
     6 => '买家已关闭'
 );
+$total_use_credit1 = 0;
 $pay_credit1 = $_GPC['pay_credit1'];
 $pay_methods = $_GPC['pay_methods'];
 if($do == 'display'){
@@ -40,7 +41,13 @@ if($do == 'display'){
     $city = $_GPC['area']['city'];
     $district = $_GPC['area']['district'];
     $where = "a.uniacid='{$_W['uniacid']}' AND a.createtime BETWEEN {$starttime} AND {$endtime}";
-    if(check_data($pay_methods)){
+    if(!empty($pay_credit1)){
+        $where .= " AND a.id IN (SELECT order_ids FROM ".tablename('pay_log')." WHERE uniacid='{$_W['uniacid']}' AND order_type=".ORDER_TYPE_OFFLINE.")";
+    }
+    if(!empty($pay_methods)){
+        if(in_array(PAY_METHOD_WECHAT,$pay_methods)){
+            array_push($pay_methods,PAY_METHOD_FUIOU);
+        }
         $where .= " AND a.pay_method IN (".implode(',',$pay_methods).")";
     }
     if(!empty($uid)){
@@ -68,6 +75,7 @@ if($do == 'display'){
     $where .= " AND a.store_id IN (SELECT id FROM ".tablename('store_list')." WHERE {$store_where})";
     $total = pdo_fetchcolumn("SELECT COUNT(a.id) FROM ".tablename('order_offline')." a WHERE {$where}");
     $total_pay_price = pdo_fetchcolumn("SELECT SUM(a.money) FROM ".tablename('order_offline')." a WHERE {$where}");
+    $total_pay_credit1 = pdo_fetchcolumn("SELECT SUM(use_credit1) FROM ".tablename('pay_log')." WHERE uniacid='{$_W['uniacid']}' AND order_type=".ORDER_TYPE_OFFLINE." AND order_ids IN (SELECT id FROM ".tablename('order_offline')." a WHERE {$where})");
     $where .= " ORDER BY createtime DESC LIMIT {$pindex},{$psize}";
     $list = pdo_fetchall("SELECT a.*,b.title AS store_title,c.nickname,c.realname FROM ".tablename('order_offline')." a LEFT JOIN ".tablename('store_list')." b ON a.store_id=b.id LEFT JOIN ".tablename('mc_members')." c ON a.uid=c.uid WHERE {$where}");
     $pager = pagination($total,floor(trim($_GPC['page'])),$psize);
@@ -85,8 +93,8 @@ if($do == 'display'){
     $district = $_GPC['area']['district'];
     list($starttime,$endtime) = getStartTimeEndTimeByGPC('createtime');
     $where = "a.uniacid='{$_W['uniacid']}' AND a.createtime BETWEEN {$starttime} AND {$endtime}";
-    if(check_data($pay_methods)){
-        $where .= " AND a.pay_method IN (".implode(',',$pay_methods).")";
+    if(!empty($pay_credit1)){
+        $where .= " AND a.id IN (SELECT order_ids FROM ".tablename('pay_log')." WHERE uniacid='{$_W['uniacid']}' AND order_type=".ORDER_TYPE_OLD_FEE.")";
     }
     if(!empty($province)){
         $where .= " AND b.province='{$province}'";
@@ -101,19 +109,20 @@ if($do == 'display'){
         $where .= " AND (a.uid='{$keyword}' OR a.order_no LIKE '%{$keyword}%' OR b.nickname LIKE '%{$keyword}%' OR b.realname LIKE '%{$keyword}%')";
     }
     if(!empty($product)){
-        $where .= " AND product_key IN (".implode(',',$product).")";
+        $where .= " AND a.product_key IN (".implode(',',$product).")";
     }
     if(!empty($pay_status)){
-        $where .= " AND pay_status IN (".implode(',',$pay_status).")";
+        $where .= " AND a.pay_status IN (".implode(',',$pay_status).")";
     }
     if(!empty($pay_methods)){
         if(in_array(PAY_METHOD_WECHAT,$pay_methods)){
             array_push($pay_methods,PAY_METHOD_FUIOU);
         }
-        $where .= " AND pay_method IN (".implode(',',$pay_methods).")";
+        $where .= " AND a.pay_method IN (".implode(',',$pay_methods).")";
     }
     $total = pdo_fetchcolumn("SELECT COUNT(a.id) FROM ".tablename('fangyuanbao_user_order')." a LEFT JOIN ".tablename('mc_members')." b ON a.uid=b.uid WHERE {$where}");
     $total_pay_price = pdo_fetchcolumn("SELECT SUM(a.pay_price) FROM ".tablename('fangyuanbao_user_order')." a LEFT JOIN ".tablename('mc_members')." b ON a.uid=b.uid WHERE {$where}");
+    $total_pay_credit1 = pdo_fetchcolumn("SELECT SUM(use_credit1) FROM ".tablename('pay_log')." WHERE uniacid='{$_W['uniacid']}' AND order_type=".ORDER_TYPE_OLD_FEE." AND order_ids IN (SELECT id FROM ".tablename('fangyuanbao_user_order')." a WHERE {$where})");
     $where .=" ORDER BY createtime DESC LIMIT {$pindex},{$psize}";
     $list = pdo_fetchall("SELECT a.*,b.nickname,b.nickname FROM ".tablename('fangyuanbao_user_order')." a LEFT JOIN ".tablename('mc_members')." b ON a.uid=b.uid WHERE {$where}");
     $pager = pagination($total,$page,$psize);
@@ -127,7 +136,13 @@ if($do == 'display'){
     $city = $_GPC['area']['city'];
     $district = $_GPC['area']['district'];
     $where = "a.uniacid='{$_W['uniacid']}' AND a.createtime BETWEEN {$starttime} AND {$endtime}";
-    if(check_data($pay_methods)){
+    if(!empty($pay_credit1)){
+        $where .= " AND a.id IN (SELECT order_ids FROM ".tablename('pay_log')." WHERE uniacid='{$_W['uniacid']}' AND order_type=".ORDER_TYPE_PERSON.")";
+    }
+    if(!empty($pay_methods)){
+        if(in_array(PAY_METHOD_WECHAT,$pay_methods)){
+            array_push($pay_methods,PAY_METHOD_FUIOU);
+        }
         $where .= " AND a.pay_method IN (".implode(',',$pay_methods).")";
     }
     $where2 = "uniacid='{$_W['uniacid']}'";
@@ -149,6 +164,7 @@ if($do == 'display'){
     }
     $total = pdo_fetchcolumn("SELECT COUNT(a.id) FROM ".tablename('order_person')."a WHERE {$where}");
     $total_pay_price = pdo_fetchcolumn("SELECT SUM(a.money) FROM ".tablename('order_person')." a WHERE {$where}");
+    $total_pay_credit1 = pdo_fetchcolumn("SELECT SUM(use_credit1) FROM ".tablename('pay_log')." WHERE uniacid='{$_W['uniacid']}' AND order_type=".ORDER_TYPE_PERSON." AND order_ids IN (SELECT id FROM ".tablename('order_person')." a WHERE {$where})");
     $where .= " ORDER BY createtime DESC LIMIT {$pindex},{$psize}";
     $list = pdo_fetchall("SELECT a.*,b.nickname,b.realname FROM ".tablename('order_person')." a LEFT JOIN ".tablename('mc_members')." b ON a.pay_uid=b.uid WHERE {$where}");
     $pager = pagination($total,floor(trim($_GPC['page'])),$psize);
@@ -163,7 +179,13 @@ if($do == 'display'){
     $city = $_GPC['area']['city'];
     $district = $_GPC['area']['district'];
     $where = "a.uniacid='{$_W['uniacid']}' AND a.createtime BETWEEN {$starttime} AND {$endtime}";
-    if(check_data($pay_methods)){
+    if(!empty($pay_credit1)){
+        $where .= " AND a.id IN (SELECT order_ids FROM ".tablename('pay_log')." WHERE uniacid='{$_W['uniacid']}' AND order_type=".ORDER_TYPE_DEVELOP_SHOP.")";
+    }
+    if(!empty($pay_methods)){
+        if(in_array(PAY_METHOD_WECHAT,$pay_methods)){
+            array_push($pay_methods,PAY_METHOD_FUIOU);
+        }
         $where .= " AND a.pay_method IN (".implode(',',$pay_methods).")";
     }
     $where2 = "uniacid='{$_W['uniacid']}'";
@@ -189,8 +211,15 @@ if($do == 'display'){
     }
     $total = pdo_fetchcolumn("SELECT COUNT(a.id) FROM ".tablename('fangyuanbao_shop_order')."a WHERE {$where}");
     $total_pay_price = pdo_fetchcolumn("SELECT SUM(a.pay_price) FROM ".tablename('fangyuanbao_shop_order')." a WHERE {$where}");
+    $total_pay_credit1 = pdo_fetchcolumn("SELECT SUM(use_credit1) FROM ".tablename('pay_log')." WHERE uniacid='{$_W['uniacid']}' AND order_type=".ORDER_TYPE_DEVELOP_SHOP." AND order_ids IN (SELECT id FROM ".tablename('fangyuanbao_shop_order')." a WHERE {$where})");
     $where .= " ORDER BY createtime DESC LIMIT {$pindex},{$psize}";
     $list = pdo_fetchall("SELECT a.*,b.nickname,b.realname FROM ".tablename('fangyuanbao_shop_order')." a LEFT JOIN ".tablename('mc_members')." b ON a.uid=b.uid WHERE {$where}");
     $pager = pagination($total,floor(trim($_GPC['page'])),$psize);
+}
+if(empty($total_pay_price)){
+    $total_pay_price = 0;
+}
+if(empty($total_pay_credit1)){
+    $total_pay_credit1 = 0;
 }
 template('account/display');

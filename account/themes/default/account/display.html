@@ -19,7 +19,7 @@
     {if $do == 'display'}
     <div class="panel panel-info">
         <div class="panel-heading">筛选
-            <span style="float: right">合计{$total}单 - 商品共计￥{$total_pay_price}元 - 支付金额共计￥{$total_pay_price}元</span>
+            <span style="float: right">合计{$total}单 - 支付金额共计￥{$total_pay_price}元 - 支付总积分 {$total_pay_credit1}积分</span>
         </div>
         <div class="panel-body">
             <form method="get" action="./index.php" class="form-horizontal" role="form">
@@ -135,7 +135,7 @@
     {elseif $do == 'fee'}
     <div class="panel panel-info">
         <div class="panel-heading">筛选
-            <span style="float: right">合计{$total}单 - 支付金额共计￥{$total_pay_price}元</span>
+            <span style="float: right">合计{$total}单 - 支付金额共计￥{$total_pay_price}元 - 支付总积分 {$total_pay_credit1}积分</span>
         </div>
         <div class="panel-body">
             <form method="get" action="./index.php" class="form-horizontal" role="form">
@@ -183,13 +183,19 @@
                     <label class="col-xs-12 col-sm-3 col-md-2 control-label">支付方式</label>
                     <div class="col-sm-9 col-xs-12">
                         <label class="checkbox-inline">
-                            <input type="checkbox" name="pay_methods[]" value="{PAY_METHOD_WECHAT}" {if in_array(PAY_METHOD_WECHAT,$pay_methods)}checked{/if}> 微信
+                            <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_WECHAT,$pay_methods)}checked{/if} value="{PAY_METHOD_WECHAT}"> 微信支付
                         </label>
                         <label class="checkbox-inline">
-                            <input type="checkbox" name="pay_methods[]" value="{PAY_METHOD_ALIPAY}" {if in_array(PAY_METHOD_ALIPAY,$pay_methods)}checked{/if}> 支付宝
+                            <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_CREDIT,$pay_methods)}checked{/if} value="{PAY_METHOD_CREDIT}"> 余额支付
                         </label>
                         <label class="checkbox-inline">
-                            <input type="checkbox" name="pay_methods[]" value="{PAY_METHOD_CREDIT}" {if in_array(PAY_METHOD_CREDIT,$pay_methods)}checked{/if}> 余额
+                            <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_CASH,$pay_methods)}checked{/if} value="{PAY_METHOD_CASH}"> 货到付款
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_ALIPAY,$pay_methods)}checked{/if} value="{PAY_METHOD_ALIPAY}"> 支付宝
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_credit1" {if !empty($pay_credit1)}checked{/if} value="1"> 积分支付
                         </label>
                     </div>
                 </div>
@@ -270,7 +276,7 @@
     {elseif $do == 'person'}
     <div class="panel panel-info">
         <div class="panel-heading">筛选
-            <span style="float: right">合计{$total}单 - 商品共计￥{$total_pay_price}元 - 支付金额共计￥{$total_pay_price}元</span>
+            <span style="float: right">合计{$total}单 -  支付金额共计￥{$total_pay_price}元 - 支付总积分 {$total_pay_credit1}积分</span>
         </div>
         <div class="panel-body">
             <form method="get" action="./index.php" class="form-horizontal" role="form">
@@ -303,6 +309,9 @@
                         </label>
                         <label class="checkbox-inline">
                             <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_ALIPAY,$pay_methods)}checked{/if} value="{PAY_METHOD_ALIPAY}"> 支付宝
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_credit1" {if !empty($pay_credit1)}checked{/if} value="1"> 积分支付
                         </label>
                     </div>
                 </div>
@@ -377,7 +386,7 @@
     {elseif $do == 'shop'}
     <div class="panel panel-info">
         <div class="panel-heading">筛选
-            <span style="float: right">合计{$total}单 - 商品共计￥{$total_pay_price}元 - 支付金额共计￥{$total_pay_price}元</span>
+            <span style="float: right">合计{$total}单 - 支付金额共计￥{$total_pay_price}元 - 支付总积分 {$total_pay_credit1}积分</span>
         </div>
         <div class="panel-body">
             <form method="get" action="./index.php" class="form-horizontal" role="form">
@@ -419,6 +428,9 @@
                         </label>
                         <label class="checkbox-inline">
                             <input type="checkbox" name="pay_methods[]" {if in_array(PAY_METHOD_ALIPAY,$pay_methods)}checked{/if} value="{PAY_METHOD_ALIPAY}"> 支付宝
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="checkbox" name="pay_credit1" {if !empty($pay_credit1)}checked{/if} value="1"> 积分支付
                         </label>
                     </div>
                 </div>
