@@ -64,7 +64,7 @@ if($op == 'push_pay'){
         //基本参数
         $pay_query = json_encode(array(
             'timeout_express' => "30m",
-            'product_code' => "QUICK_MSECURITY_PAY",
+            'product_code' => "1000000",
             "total_amount" => $pay_info['pay_price'],
             "subject" => '测试商品',
             "body" => $body,
