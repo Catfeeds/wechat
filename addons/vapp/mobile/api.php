@@ -78,6 +78,7 @@ if($op == 'push_pay'){
             "biz_content" 	=> $pay_query,
             "charset" 		=> "utf-8"
         );
+        print_r($aliquery);
         $aliquery['sign'] = urlencode(alipay_getSign($aliquery,$setting['payment']['alipay']['secret']));
         $aliquery['format'] = "JSON";
         $aliquery['timestamp'] =  urlencode($aliquery['timestamp']);
