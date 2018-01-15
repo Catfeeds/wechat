@@ -102,7 +102,7 @@
         <div class="list_content">
             {loop $list $li_index $li}
             <!-- 广告区域 -->
-            {if $li_index%5 == 0 && !empty($ad2s[($li_index/5)%($adCount)])}
+            {if  $li_index!=0 && $li_index%5 == 0 && !empty($ad2s[($li_index/5)%($adCount)])}
             <section class="middle_mode has_action">
                 <a href="{php echo $ad2s[($li_index/5)%($adCount)]['link'];}" class="article_link clearfix">
                     <div class="item_detail desc">
