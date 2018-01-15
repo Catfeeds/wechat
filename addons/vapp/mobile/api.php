@@ -68,7 +68,7 @@ if($op == 'push_pay'){
             "subject" => '测试商品',
             "body" => $body,
             "out_trade_no" => $pay_info['out_trade_no']
-        ));
+        ),JSON_UNESCAPED_UNICODE);
         $aliquery = array(
             "app_id" 		=> $setting['payment']['alipay']['partner'],
             "method" 		=> "alipay.trade.app.pay",
