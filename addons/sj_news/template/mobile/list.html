@@ -53,20 +53,24 @@
             {loop $list $li_index $li}
             <!-- 广告区域 -->
             {if  $li_index!=0 && $li_index%5 == 0 && !empty($ad2s[($li_index/5)%($adCount)])}
-            <section class="middle_mode has_action">
-                <a href="{php echo $ad2s[($li_index/5)%($adCount)]['link'];}" class="article_link clearfix">
-                    <div class="item_detail desc">
-                        <h3 class="dotdot line3 image-margin-right">{php echo $ad2s[($li_index/5)%($adCount)]['title'];}</h3>
+            <section class="has_action">
+                <a href="{php echo $ad2s[($li_index/5)%($adCount)]['link'];}" class="article_link clearfix ">
+                    <div class="item_detail">
+                        <h3 class="dotdot line3">{php echo $ad2s[($li_index/5)%($adCount)]['title'];}</h3>
+                        <div class="list_image">
+                            <ul class="clearfix">
+                                <li class="list_img_holder">
+                                    <div class="box-img">
+                                        <div class="cover-img" style="background-image: url('{php echo $ad2s[($li_index/5)%($adCount)]['thumb'];}')"></div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                         <div class="item_info">
                             <div class="tag-bottom">
                                 <span class="gg_label space">广告</span>
                                 <span class="city_label space">{php echo $ad2s[($li_index/5)%($adCount)]['industry'];}</span>
                             </div>
-                        </div>
-                    </div>
-                    <div class="list_img_holder">
-                        <div class="box-img">
-                            <div class="cover-img" style="background-image: url('{php echo $ad2s[($li_index/5)%($adCount)]['thumb'];}')"></div>
                         </div>
                     </div>
                 </a>
