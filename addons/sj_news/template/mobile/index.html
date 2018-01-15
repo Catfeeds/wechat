@@ -42,6 +42,9 @@
     .cover-img{width:100%;height:100%;background-size:cover;background-position:50%;}
     section{position: relative;}
     .tag-bottom{position: absolute;bottom: 0;}
+    .item_info{
+        height: 30px;
+    }
 </style>
 <link rel="stylesheet" href="{ASSETS_URL}/sj_news/css/index.css?v={STYLE_VERSION}">
 <link rel="stylesheet" href="{ASSETS_URL}/sj_news/css/a.css?v={STYLE_VERSION}">
@@ -84,8 +87,10 @@
                 <a href="{php echo $ad2s[($li_index/5)%($adCount)]['link'];}" class="article_link clearfix ">
                     <div class="item_detail">
                         <h3 class="dotdot line3">{php echo $ad2s[($li_index/5)%($adCount)]['title'];}</h3>
-                        <div class="box-img">
-                            <div class="cover-img" style="background-image: url('{php echo $ad2s[($li_index/5)%($adCount)]['thumb'];}')"></div>
+                        <div style="height: 180px;">
+                            <div class="box-img" style="height: 100%">
+                                <div class="cover-img" style="background-image: url('{php echo $ad2s[($li_index/5)%($adCount)]['thumb'];}')"></div>
+                            </div>
                         </div>
                         <div class="item_info">
                             <div class="tag-bottom">
