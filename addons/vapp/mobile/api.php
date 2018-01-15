@@ -58,7 +58,8 @@ if($op == 'push_pay'){
         if($setting['payment']['alipay']['status'] != OPEN_STATUS){
             to_json(1,'支付宝支付未开启');
         }
-        $body = md5('AliPayAuthKey'.$pay_info['out_trade_no']);
+        //$body = md5('AliPayAuthKey'.$pay_info['out_trade_no']);
+        $body = "衣服";
 
         //基本参数
         $pay_query = json_encode(array(
