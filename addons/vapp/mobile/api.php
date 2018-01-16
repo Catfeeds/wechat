@@ -64,7 +64,7 @@ if($op == 'push_pay'){
         $aliquery = array(
             "app_id" 		=> $setting['payment']['alipay']['partner'],
             "method" 		=> "alipay.trade.app.pay",
-            "sign_type" 	=> "RSA2",
+            "sign_type" 	=> "RSA",
             "version" 		=> "1.0",
             "timestamp" 	=> date('Y-m-d H:i:s')  ,//yyyy-MM-dd HH:mm:ss
             "biz_content" 	=> json_encode(array(
@@ -74,7 +74,7 @@ if($op == 'push_pay'){
                 "subject" => '测试商品',
                 "body" => $body,
                 "out_trade_no" => $pay_info['out_trade_no']
-            ),JSON_UNESCAPED_UNICODE),
+            )),
             "charset" => "utf-8"
         );
         $aliquery['sign'] = alipay_getSign($aliquery,$setting['payment']['alipay']['secret']);
