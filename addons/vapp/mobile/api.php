@@ -59,6 +59,7 @@ if($op == 'push_pay'){
             to_json(1,'支付宝支付未开启');
         }
         include_once  IA_ROOT.'/addons/vapp/sdk/alipay-sdk-PHP/aop/AopClient.php';
+        include_once  IA_ROOT.'/addons/vapp/sdk/alipay-sdk-PHP/aop/request/AlipayTradeAppPayRequest.php';
         $aop = new AopClient;
         $aop->gatewayUrl = "https://openapi.alipay.com/gateway.do";
         $aop->appId = $setting['payment']['alipay']['partner'];
