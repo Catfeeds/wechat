@@ -82,7 +82,7 @@ if($op == 'push_pay'){
         $request->setBizContent($bizcontent);//这里和普通的接口调用不同，使用的是sdkExecute
         $response = $aop->sdkExecute($request);//htmlspecialchars是为了输出到页面时防止被浏览器将关键参数html转义，实际打印到日志以及http传输不会有这个问题
         //echo htmlspecialchars($response);//就是orderString 可以直接给客户端请求，无需再做处理。这里就是方便打印给你看，具体你直接可以在方法那里return出去，不用加htmlspecialchars，或者响应给app端让他拿着这串东西调起支付宝支付
-        to_json(0,'返回支付宝参数',http_build_query($response));
+        to_json(0,'返回支付宝参数',$response);
     }
     to_json(1,'支付方式选择错误');
 }
