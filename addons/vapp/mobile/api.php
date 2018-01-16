@@ -58,32 +58,30 @@ if($op == 'push_pay'){
         if($setting['payment']['alipay']['status'] != OPEN_STATUS){
             to_json(1,'支付宝支付未开启');
         }
-        $body = md5('AliPayAuthKey'.$pay_info['out_trade_no']);
-
-        //基本参数
-        $aliquery = array(
-            "app_id" 		=> $setting['payment']['alipay']['partner'],
-            "method" 		=> "alipay.trade.app.pay",
-            "sign_type" 	=> "RSA2",
-            "version" 		=> "1.0",
-            "timestamp" 	=> date('Y-m-d H:i:s')  ,//yyyy-MM-dd HH:mm:ss
-            "biz_content" 	=> json_encode(array(
-                'timeout_express' => "30m",
-                'product_code' => "QUICK_MSECURITY_PAY",
-                "total_amount" => $pay_info['pay_price'],
-                "subject" => '测试商品',
-                "body" => $body,
-                "out_trade_no" => $pay_info['out_trade_no']
-            )),
-            "charset" => "utf-8"
-        );
-        $aliquery['sign'] = alipay_getSign($aliquery,$setting['payment']['alipay']['secret']);
-        $aliquery['format'] = "json";
-        $aliquery['timestamp'] =  urlencode($aliquery['timestamp']);
-        $aliquery['notify_url'] = urlencode("http://wx.51muma.com/payment/alipay/notify_url.php");
-        $aliquery['biz_content'] = urlencode($aliquery['biz_content']);
-        $aliquery['body'] = urlencode($body);
-        to_json(0,'返回支付宝参数',http_build_query($aliquery));
+        include_once  IA_ROOT.'/addons/vapp/sdk/alipay-sdk-PHP/aop/AopClient.php';
+        $aop = new AopClient;
+        $aop->gatewayUrl = "https://openapi.alipay.com/gateway.do";
+        $aop->appId = $setting['payment']['alipay']['partner'];
+        $aop->rsaPrivateKey = $setting['payment']['alipay']['secret'];
+        $aop->format = "json";
+        $aop->charset = "UTF-8";
+        $aop->signType = "RSA2";
+        $aop->alipayrsaPublicKey = '';//对应填写//实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
+        $request = new AlipayTradeAppPayRequest();//SDK已经封装掉了公共参数，这里只需要传入业务参数
+        //********注意*************************下面除了body描述不是必填，其他必须有，否则失败
+        $bizcontent = json_encode(array(
+            'body'=>md5('AliPayAuthKey'.$pay_info['out_trade_no']),
+            'subject' => '百变APP线上线上支付',//支付的标题，
+            'out_trade_no' => $pay_info['out_trade_no'],//支付宝订单号必须是唯一的，不能在支付宝再次使用，必须重新生成，哪怕是同一个订单，不能重复。否则二次支付时候会失败，订单号可以在自己订单那里保持一致，但支付宝那里必须要唯一，具体处理自己操作！
+            'timeout_express' => '30m',//過期時間（分钟）
+            'total_amount' => round(floatval($pay_info['pay_price']),2),//金額最好能要保留小数点后两位数
+            'product_code' => 'QUICK_MSECURITY_PAY'
+        ));
+        $request->setNotifyUrl("http://wx.51muma.com/payment/alipay/notify_url.php");//你在应用那里设置的异步回调地址
+        $request->setBizContent($bizcontent);//这里和普通的接口调用不同，使用的是sdkExecute
+        $response = $aop->sdkExecute($request);//htmlspecialchars是为了输出到页面时防止被浏览器将关键参数html转义，实际打印到日志以及http传输不会有这个问题
+        //echo htmlspecialchars($response);//就是orderString 可以直接给客户端请求，无需再做处理。这里就是方便打印给你看，具体你直接可以在方法那里return出去，不用加htmlspecialchars，或者响应给app端让他拿着这串东西调起支付宝支付
+        to_json(0,'返回支付宝参数',http_build_query($response));
     }
     to_json(1,'支付方式选择错误');
 }
