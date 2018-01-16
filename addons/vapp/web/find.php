@@ -74,7 +74,7 @@ if($op == 'post'){
             $tip = "修改";
             $flag = pdo_update('vapp_find',$data,array(
                 'uniacid' => $_W['uniacid'],
-                'uid' => $id
+                'id' => $id
             ));
         }
         if(!$flag){
