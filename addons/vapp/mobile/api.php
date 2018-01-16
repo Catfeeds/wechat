@@ -64,7 +64,7 @@ if($op == 'push_pay'){
         $aliquery = array(
             "app_id" 		=> $setting['payment']['alipay']['partner'],
             "method" 		=> "alipay.trade.app.pay",
-            "sign_type" 	=> "RSA",
+            "sign_type" 	=> "RSA2",
             "version" 		=> "1.0",
             "timestamp" 	=> date('Y-m-d H:i:s')  ,//yyyy-MM-dd HH:mm:ss
             "biz_content" 	=> json_encode(array(
