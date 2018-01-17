@@ -8,7 +8,7 @@ if($op == "get_lives"){
     $page = getApartPageNo();
     $psize = 21;
     $pindex = ($page-1)*$psize;
-    $lives = pdo_fetchall("SELECT a.id,a.url,a.thumb,a.status,b.mobile,b.realname,b.nickname FROM ".tablename('vapp_live')." a LEFT JOIN ".tablename('vapp_member')." b ON a.uid=b.uid ORDER BY a.order_by DESC,a.status DESC LIMIT {$pindex},{$psize}");
+    $lives = pdo_fetchall("SELECT a.id,a.url,a.thumb,a.look_num,a.status,b.mobile,b.realname,b.nickname FROM ".tablename('vapp_live')." a LEFT JOIN ".tablename('vapp_member')." b ON a.uid=b.uid ORDER BY a.order_by DESC,a.status DESC LIMIT {$pindex},{$psize}");
     if(check_data($lives)){
         foreach ($lives as $k => &$v){
             $v['thumb'] = tomedia($v['thumb']);
