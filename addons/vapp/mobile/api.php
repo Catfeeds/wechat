@@ -18,7 +18,7 @@ if($op == 'get_live_config'){
         to_json(1,'设置信息不存在');
     }
     $config['thumb'] = tomedia($config['thumb']);
-    to_json(0,'返回设置的信息');
+    to_json(0,'返回设置的信息',$config);
 }
 
 
@@ -60,6 +60,7 @@ if($op == 'set_live_config'){
             'uid' => $user_info['uid']
         ));
     }else{//添加
+        $data['createtime'] = TIMESTAMP;
         $data['uniacid'] = $_W['uniacid'];
         $data['uid'] = $user_info['uid'];
         $status = pdo_insert('vapp_live',$data);
