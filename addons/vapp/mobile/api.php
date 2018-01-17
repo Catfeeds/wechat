@@ -16,7 +16,7 @@ if($op == 'set_live_config'){
         'uid' => $user_info['uid']
     ));
     $data = array(
-        'upload' => trim($_GPC['upload']),
+        'thumb' => trim($_GPC['upload']),
         'url' => trim($_GPC['url']),
         'status' => floor(trim($_GPC['status'])) == 1?1:0
     );
@@ -24,7 +24,7 @@ if($op == 'set_live_config'){
         $data['upload'] = base64ToImage($data['upload']);
     }
     $error = array(
-        'upload' => '请上传直播封面图片',
+        'thumb' => '请上传直播封面图片',
         'url' => '请输入直播地址'
     );
     foreach($error as $k => $message){
