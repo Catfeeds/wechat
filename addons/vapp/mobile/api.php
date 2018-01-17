@@ -3,6 +3,56 @@
 //将ajax设为true，强制返回json的数据
 global $_W;
 
+
+//设置直播
+if($op == 'set_live_config'){
+    $user_info = auth_check($_GPC['token']);
+    if(!check_data($user_info)){
+        to_json(-1,'请先登录');
+    }
+    //获取设置的信息
+    $config = pdo_get('vapp_live',array(
+        'uniacid' => $_W['uniacid'],
+        'uid' => $user_info['uid']
+    ));
+    $data = array(
+        'upload' => trim($_GPC['upload']),
+        'url' => trim($_GPC['url']),
+        'status' => floor(trim($_GPC['status'])) == 1?1:0
+    );
+    if(!empty($data['upload'])){
+        $data['upload'] = base64ToImage($data['upload']);
+    }
+    $error = array(
+        'upload' => '请上传直播封面图片',
+        'url' => '请输入直播地址'
+    );
+    foreach($error as $k => $message){
+        if(empty($data[$k])){
+            if($k == 'upload' && check_data($config)){
+                continue;
+            }
+            to_json(1,$message);
+        }
+    }
+    if(check_data($config)){//修改
+        $data['updatetime'] = TIMESTAMP;
+        $status = pdo_update('vapp_live',$data,array(
+            'uniacid' => $_W['uniacid'],
+            'uid' => $user_info['uid']
+        ));
+    }else{//添加
+        $data['uniacid'] = $_W['uniacid'];
+        $data['uid'] = $user_info['uid'];
+        $status = pdo_insert('vapp_live',$data);
+    }
+    if(!$status){
+        to_json(1,"保存失败");
+    }
+    to_json(0,'设置成功');
+}
+
+
 //支付确认提交页面
 if($op == 'push_pay'){
     $user_info = auth_check($_GPC['token']);
