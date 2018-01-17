@@ -20,8 +20,8 @@ if($op == 'set_live_config'){
         'url' => trim($_GPC['url']),
         'status' => floor(trim($_GPC['status'])) == 1?1:0
     );
-    if(!empty($data['upload'])){
-        $data['upload'] = base64ToImage($data['upload']);
+    if(!empty($data['thumb'])){
+        $data['thumb'] = base64ToImage($data['thumb']);
     }
     $error = array(
         'thumb' => '请上传直播封面图片',
