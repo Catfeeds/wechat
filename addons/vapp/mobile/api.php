@@ -13,6 +13,11 @@ if($op == 'get_live_config'){
     $config = pdo_get('vapp_live',array(
         'uniacid' => $_W['uniacid'],
         'uid' => $user_info['uid']
+    ),array(
+        'id',
+        'thumb',
+        'status',
+        'url'
     ));
     if(!check_data($config)){
         to_json(1,'设置信息不存在');
