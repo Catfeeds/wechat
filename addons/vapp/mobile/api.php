@@ -17,6 +17,7 @@ if($op == 'get_live_config'){
     if(!check_data($config)){
         to_json(1,'设置信息不存在');
     }
+    $config['thumb'] = tomedia($config['thumb']);
     to_json(0,'返回设置的信息');
 }
 
