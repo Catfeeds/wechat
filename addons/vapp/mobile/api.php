@@ -3,6 +3,23 @@
 //将ajax设为true，强制返回json的数据
 global $_W;
 
+//获取设置的直播信息
+if($op == 'get_live_config'){
+    $user_info = auth_check($_GPC['token']);
+    if(!check_data($user_info)){
+        to_json(-1,'请先登录');
+    }
+    //获取设置的信息
+    $config = pdo_get('vapp_live',array(
+        'uniacid' => $_W['uniacid'],
+        'uid' => $user_info['uid']
+    ));
+    if(!check_data($config)){
+        to_json(1,'设置信息不存在');
+    }
+    to_json(0,'返回设置的信息');
+}
+
 
 //设置直播
 if($op == 'set_live_config'){
