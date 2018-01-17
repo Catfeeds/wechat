@@ -3,6 +3,23 @@
 //将ajax设为true，强制返回json的数据
 global $_W;
 
+//获取直播列表信息
+if($op == "get_lives"){
+    $page = getApartPageNo();
+    $psize = 21;
+    $pindex = ($page-1)*$psize;
+    $lives = pdo_fetchall("SELECT a.id,a.url,a.thumb,a.status,b.mobile,b.realname,b.nickname FROM ".tablename('vapp_live')." a LEFT JOIN ".tablename('vapp_member')." b ON a.uid=b.uid ORDER BY a.order_by DESC,a.status DESC LIMIT {$pindex},{$psize}");
+    if(check_data($lives)){
+        foreach ($lives as $k => &$v){
+            $v['thumb'] = tomedia($v['thumb']);
+            $v['show_name'] = (!!$v['nickname']?$v['nickname']:(!!$v['realname']?$v['realname']:$v['mobile']));
+        }
+        to_json(0,'返回直播信息列表',$lives);
+    }
+    to_json(1,'没有更多直播信息');
+}
+
+
 //获取设置的直播信息
 if($op == 'get_live_config'){
     $user_info = auth_check($_GPC['token']);
