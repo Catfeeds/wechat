@@ -7,7 +7,7 @@ if($op == 'display'){
     $pindex = ($page-1)*$psize;
     $cid = floor(trim($_GPC['cid']));
     $keyword = trim($_GPC['keyword']);
-    $where = "uniacid='{$_W['uniacid']}' AND ((type IN (2,3) AND is_display!='0') OR (type=1 AND is_display='2') OR type=0)";
+    $where = "uniacid='{$_W['uniacid']}' AND is_display='1'";
     if(!empty($cid)){
         $where .= " AND cid='{$cid}'";
     }
