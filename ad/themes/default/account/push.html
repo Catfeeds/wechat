@@ -124,8 +124,8 @@
                             <th>浏览量</th>
                             <th>点赞数</th>
                             <th>添加时间</th>
-                            <th>初级审核</th>
-                            <th>高级审核</th>
+                            <th>地级市审核</th>
+                            <th>报社审核</th>
                             <th>操作</th>
                         </tr>
                         </thead>
@@ -149,14 +149,14 @@
                             <td>{$li['zan_num']}</td>
                             <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
                             <td>
-                                {if $li['is_check1'] == 0}
+                                {if $li['is_check'] == 0}
                                 <span class="label label-default">未通过</span>
                                 {else}
                                 <span class="label label-success">已通过</span>
                                 {/if}
                             </td>
                             <td>
-                                {if $li['is_check2'] == 0}
+                                {if $li['is_display'] == 0}
                                 <span class="label label-default">未通过</span>
                                 {else}
                                 <span class="label label-success">已通过</span>
@@ -274,21 +274,21 @@
                     {if $_W['ad_type'] == 1}
                     <!-- 总后台审核 -->
                         <label class="radio-inline">
-                            <input type="radio" name="is_check2" value="1" {if $item['is_check2'] == 1}checked{/if}>
+                            <input type="radio" name="is_display" value="1" {if $item['is_display'] == 1}checked{/if}>
                             通过
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="is_check2" value="0" {if $item['is_check2'] == 0}checked{/if}>
+                            <input type="radio" name="is_display" value="0" {if $item['is_display'] == 0}checked{/if}>
                             不通过
                         </label>
                     {else}
                     <!-- 地级市审核 -->
                         <label class="radio-inline">
-                            <input type="radio" name="is_check1" value="1" {if $item['is_check1'] == 1}checked{/if}>
+                            <input type="radio" name="is_check" value="1" {if $item['is_check'] == 1}checked{/if}>
                             通过
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="is_check1" value="0" {if $item['is_check1'] == 0}checked{/if}>
+                            <input type="radio" name="is_check" value="0" {if $item['is_check'] == 0}checked{/if}>
                             不通过
                         </label>
                     {/if}

@@ -85,19 +85,14 @@ if($do == 'display'){
         }
 
         if($_W['ad_type'] == 1){
-            $data['is_admin'] = 1;
-            //超级管理员
-            $data['is_check2'] = floor(trim($_GPC['is_check2'])) == 1?1:0;
-            if($data['is_check2'] == 1 && $item['is_check1'] != 1){
-                message('地级市尚未审核','','error');
-            }
-            //显示状态
-            $data['is_display'] = 1;
+            //报社
+            $data['is_display'] = floor(trim($_GPC['is_display'])) == 1?1:0;
+            $data['is_check'] = 1;
         }else{
-            //地级市管理员
-            $data['is_check1'] = floor(trim($_GPC['is_check1'])) == 1?1:0;
-            if($data['is_check1'] == 1 && ($item['type'] == 2 ||  $item['type'] == 3)){
-                //$data['is_display'] = 1;
+            //地级市
+            $data['is_check'] = floor(trim($_GPC['is_check'])) == 1?1:0;
+            if($data['is_check'] != 1){
+                $data['is_display'] = 0;
             }
         }
 
