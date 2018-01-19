@@ -21,7 +21,8 @@ if($do == 'display'){
     $keyword = trim($_GPC['keyword']);
     $where = "uniacid='{$_W['uniacid']}' AND type='0'";
     if($_W['ad_type'] != 1){
-        $where .= " AND province='{$_W['province']}' AND city='{$_W['city']}'";
+        //如果是地级市管理员
+        $where .= " AND province='{$_W['province']}' AND city='{$_W['city']}' AND push_type<2";
     }
     if(!empty($keyword)){
         $where .= " AND title LIKE '%{$keyword}%'";
@@ -55,12 +56,28 @@ if($do == 'display'){
             'audio_src' => trim($_GPC['audio_src']),
             'thumbs' => check_data($_GPC['thumbs'])?iserializer($_GPC['thumbs']):'',
             'detail' => $_GPC['detail'],
-            'province' => $_W['ad_type'] == 1?$_GPC['area']['province']:$_W['province'],
-            'city' =>  $_W['ad_type'] == 1?$_GPC['area']['city']:$_W['city'],
-            'district' =>  $_W['ad_type'] == 1?$_GPC['area']['district']:$_W['district'],
             'look_num' => floor(trim($_GPC['look_num'])),
-            'zan_num' => floor(trim($_GPC['zan_num']))
+            'zan_num' => floor(trim($_GPC['zan_num'])),
         );
+        if($_W['ad_type'] == 1){
+            //报社
+            $data['province'] = $_GPC['area']['province'];
+            $data['city'] = $_GPC['area']['city'];
+            $data['district'] = $_GPC['area']['district'];
+            $data['push_type'] = 2;
+            $data['is_display'] = floor(trim($_GPC['is_display'])) == 1?1:0;
+            $data['is_check'] = 1;
+        }else{
+            //地级市
+            $data['province'] = $_W['province'];
+            $data['city'] = $_W['city'];
+            $data['district'] = $_W['district'];
+            $data['push_type'] = 1;
+            $data['is_check'] = floor(trim($_GPC['is_check'])) == 1?1:0;
+            if($data['is_check'] != 1){
+                $data['is_display'] = 0;
+            }
+        }
         $error = array(
             'title' => '请输入文章标题',
             'cid' => '请选择分类',
@@ -77,6 +94,7 @@ if($do == 'display'){
             }
         }
         if(empty($item)){ //插入数据
+            $data['ad_account_id'] = $_W['ad_id'];
             $data['uniacid'] = $_W['uniacid'];
             $data['createtime'] = TIMESTAMP;
             $status = pdo_insert('sj_news_list',$data);

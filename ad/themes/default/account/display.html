@@ -76,21 +76,20 @@
                             <td><input type="checkbox" name="ids[]" value="{$li['id']}"></td>
                             <td>{$li['title']}</td>
                              <td>
-                          		{if $li['is_check1'] == 1}
+                          		{if $li['is_check'] == 1}
                                		<span class="label label-success">地级市已审核</span>
                                {else}
                                		<span class="label label-default">地级市未审核</span>
                                {/if}
-                               
-                               {if $li['is_check2'] == 1}
-                               		<span class="label label-success">总平台已审核</span>
+                               {if $li['is_display'] == 1}
+                               		<span class="label label-success">报社已审核</span>
                                {else}
-                               		<span class="label label-default">总平台未审核</span>
+                               		<span class="label label-default">报社未审核</span>
                                {/if}
                           	</td>
                             <td><span class="label label-success">{$categories[$li['cid']]['title']}</span></td>
                             <td>
-                                {if $li['is_admin'] == 1}
+                                {if $li['push_type'] == 2}
                                 报社
                                 {else}
                                     {$li['province']}{$li['city']}
@@ -253,6 +252,35 @@
                     <input type="text" class="form-control" name="zan_num" value="{$item['zan_num']}" placeholder="请输入点赞数"/>
                 </div>
             </div>
+            {if $_W['ad_type'] == 1}
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">显示状态</label>
+                <div class="col-sm-9 col-xs-12">
+                    <label class="radio-inline">
+                        <input type="radio" name="is_display" value="1" {if $item['is_display'] == 1 || empty($item)}checked{/if}>
+                        显示
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="is_display" value="0" {if $item['is_display'] != 1 && !empty($item)}checked{/if}>
+                        隐藏
+                    </label>
+                </div>
+            </div>
+            {else}
+            <div class="form-group">
+                <label class="col-xs-12 col-sm-3 col-md-2 control-label">显示状态</label>
+                <div class="col-sm-9 col-xs-12">
+                    <label class="radio-inline">
+                        <input type="radio" name="is_check" value="1" {if $item['is_check'] == 1 || empty($item)}checked{/if}>
+                        显示
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="is_check" value="0" {if $item['is_check'] != 1 && !empty($item)}checked{/if}>
+                        隐藏
+                    </label>
+                </div>
+            </div>
+            {/if}
             <div class="form-group">
                 <div class="col-sm-8 col-md-8 col-xs-12 col-sm-offset-2 col-sm-offset-2">
                     <input type="hidden" name="id" value="{$item['id']}"/>

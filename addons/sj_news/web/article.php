@@ -52,7 +52,10 @@ if($op == 'display'){
             'zan_num' => floor(trim($_GPC['zan_num'])),
             'province' => $_GPC['area']['province'],
             'city' => $_GPC['area']['city'],
-            'district' => $_GPC['area']['district']
+            'district' => $_GPC['area']['district'],
+            'push_type' => 2,
+            'is_display' => 1,
+            'is_check' => 1
         );
         $error = array(
             'title' => '请输入文章标题',
