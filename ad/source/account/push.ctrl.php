@@ -44,9 +44,6 @@ if($do == 'display'){
         $district = $_W['district'];
         $where .= " AND province='{$province}' AND city='{$city}'";
     }
-    if(check_data($_GPC['is_display'])){
-        $where .= " AND is_display IN (".implode(',',$_GPC['is_display']).")";
-    }
     if(!empty($keyword)){
         $where .= " AND title LIKE '%{$keyword}%'";
     }

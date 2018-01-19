@@ -68,16 +68,12 @@
                         <label class="col-xs-12 col-sm-3 col-md-2 control-label">状态</label>
                         <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
                             <label class="checkbox-inline">
-                                <input type="checkbox" {if in_array(0,$_GPC['type'])}checked{/if} name="type[]" value="0">
+                                <input type="checkbox" {if in_array(0,$_GPC['is_display'])}checked{/if}  name="is_display[]" value="0">
                                 未审核
                             </label>
                             <label class="checkbox-inline">
-                                <input type="checkbox" {if in_array(1,$_GPC['type'])}checked{/if}  name="type[]" value="1">
-                                地级市已审核
-                            </label>
-                            <label class="checkbox-inline">
-                                <input type="checkbox" {if in_array(2,$_GPC['type'])}checked{/if}  name="type[]" value="2">
-                                总平台已审核
+                                <input type="checkbox" {if in_array(1,$_GPC['is_display'])}checked{/if}  name="is_display[]" value="1">
+                                已审核
                             </label>
                         </div>
                     </div>
@@ -86,12 +82,12 @@
                         <label class="col-xs-12 col-sm-3 col-md-2 control-label">状态</label>
                         <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
                             <label class="checkbox-inline">
-                                <input type="checkbox" {if in_array(1,$_GPC['is_display'])}checked{/if} name="is_display[]" value="1">
-                                已审核
+                                <input type="checkbox" {if in_array(1,$_GPC['is_check'])}checked{/if} name="is_check[]" value="0">
+                                未审核
                             </label>
                             <label class="checkbox-inline">
-                                <input type="checkbox" {if in_array(0,$_GPC['is_display'])}checked{/if}  name="is_display[]" value="0">
-                                未审核
+                                <input type="checkbox" {if in_array(0,$_GPC['is_check'])}checked{/if}  name="is_check[]" value="1">
+                                已审核
                             </label>
                         </div>
                     </div>
