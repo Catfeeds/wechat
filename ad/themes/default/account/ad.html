@@ -73,14 +73,14 @@
                         <td>{$li['province']}{$li['city']}{$li['district']}</td>
                         <td><span class="label label-primary">{$li['industry']}</span></td>
                         <td>
-                            {if $li['is_check1'] == 1}
+                            {if $li['is_check'] == 1}
                             <span class="label label-success">已审核</span>
                             {else}
                             <span class="label label-default">未审核</span>
                             {/if}
                         </td>
                         <td>
-                            {if $li['is_check2'] == 1}
+                            {if $li['is_display'] == 1}
                             <span class="label label-success">已审核</span>
                             {else}
                             <span class="label label-default">未审核</span>
@@ -117,113 +117,47 @@
     {elseif $do == 'post'}
     <form action="" method="post" class="form-horizontal form" id="post_form">
         <div class="form-group">
-            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>文章标题</label>
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>标题</label>
             <div class="col-sm-8 col-xs-12">
                 <input type="text" class="form-control" name="title" maxlength="255" value="{$item['title']}" placeholder="请输入文章标题"/>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-xs-12 col-sm-3 col-md-2 control-label">文章分类</label>
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>资质图片</label>
             <div class="col-sm-8 col-xs-12">
-                <select class="form-control" name="cid">
-                    <option value="0">全部分类</option>
-                    {loop $categories $category}
-                    <option {if $category['id'] == $item['cid']}selected{/if} value="{$category['id']}">{$category['title']}</option>
-                    {/loop}
-                </select>
-            </div>
-        </div>
-        {if $_W['ad_type'] == 1}
-        <div class="form-group">
-            <label class="col-xs-12 col-sm-3 col-md-2 control-label">地区</label>
-            <div class="col-xs-12 col-sm-8 col-md-6">
-                {php echo tpl_form_field_district('area', array('province' => $item['province'], 'city' => $item['city'], 'district' => $item['district'] ));}
-            </div>
-        </div>
-        {/if}
-        <div class="form-group">
-            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>编辑</label>
-            <div class="col-sm-8 col-xs-12">
-                <input type="text" maxlength="20" class="form-control" name="author" value="{$item['author']}" placeholder="请输入编辑名称"/>
+                {php echo tpl_form_field_image('qualifications',$item['qualifications']);}
+                <span class="help-block">建议宽高比例，3:1</span>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>编审</label>
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">描述</label>
             <div class="col-sm-8 col-xs-12">
-                <input type="text" maxlength="20" class="form-control" name="bianshen" value="{$item['bianshen']}" placeholder="请输入编审名称"/>
+                <textarea class="form-control" name="desc" placeholder="请输入描述">{$item['desc']}</textarea>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>投稿邮箱</label>
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>广告图片</label>
             <div class="col-sm-8 col-xs-12">
-                <input type="text" maxlength="20" class="form-control" name="tgemail" value="{$item['tgemail']}" placeholder="请输入投稿邮箱"/>
+                {php echo tpl_form_field_image('thumb',$item['thumb']);}
+                <span class="help-block">建议宽高比例，3:1</span>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>商务热线</label>
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label">链接地址</label>
             <div class="col-sm-8 col-xs-12">
-                <input type="text" maxlength="20" class="form-control" name="swhotline" value="{$item['swhotline']}" placeholder="请输入商务热线"/>
+                <textarea class="form-control" name="link" placeholder="请输入链接地址">{$item['link']}</textarea>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>文章来源</label>
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>行业</label>
             <div class="col-sm-8 col-xs-12">
-                <input type="text" class="form-control" maxlength="20" name="from" value="{$item['from']}" placeholder="请输入文章来源"/>
-            </div>
-        </div>
-        <!--<div class="form-group">-->
-        <!--<label class="col-xs-12 col-sm-3 col-md-2 control-label">文章链接地址</label>-->
-        <!--<div class="col-xs-12 col-sm-8">-->
-        <!--<div class="input-group">-->
-        <!--<input type="text" class="form-control js-article-url" placeholder="请输入以http://或https://开头的完整的文章链接地址">-->
-        <!--<span class="input-group-addon js-curl-btn" style="cursor: pointer">立即抓取</span>-->
-        <!--</div>-->
-        <!--<span class="help-block">请输入以http://或https://开头的完整的文章链接地址（声音类别或者视频，请自己手动上传）</span>-->
-        <!--</div>-->
-        <!--</div>-->
-        <div class="form-group">
-            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>音频文件</label>
-            <div class="col-sm-8 col-xs-12">
-                {php echo tpl_form_field_audio('audio',$item['audio']);}
-                <span class="help-block">当选择声音类别的时候请，上传音频文件；其他类别可不上传，若上传，则作为背景音乐</span>
+                <input type="text" class="form-control" name="industry" maxlength="255" value="{$item['industry']}" placeholder="请输入行业"/>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>视频文件</label>
+            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>联系方式</label>
             <div class="col-sm-8 col-xs-12">
-                {php echo tpl_form_field_wechat_video('audio',$item['audio']);}
-                <span class="help-block">当选择声音类别的时候请，上传音频文件；其他类别可不上传，若上传，则作为背景音乐</span>
-            </div>
-        </div>
-        <!--<div class="form-group">-->
-        <!--<label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>文章简介</label>-->
-        <!--<div class="col-sm-8 col-xs-12">-->
-        <!--<textarea class="form-control" name="desc" placeholder="请输入文章简介">{$item['desc']}</textarea>-->
-        <!--</div>-->
-        <!--</div>-->
-        <div class="form-group">
-            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>文章缩略图</label>
-            <div class="col-sm-8 col-xs-12">
-                {php echo tpl_form_field_multi_image('thumbs',$item['thumbs']);}
-                <span class="help-block">建议宽高比例，1:1,上传3张图片；可直接选择电脑3张图片，或者按住Ctrl键并点击鼠标左键选择3张图片</span>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-xs-12 col-sm-3 col-md-2 control-label">文章详情</label>
-            <div class="col-sm-8 col-xs-12">
-                {php echo tpl_ueditor('detail', $item['detail']);}
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span>浏览量</label>
-            <div class="col-sm-8 col-xs-12">
-                <input type="text" class="form-control" name="look_num" value="{$item['look_num']}" placeholder="请输入浏览量"/>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-xs-12 col-sm-3 col-md-2 control-label"><span class="text-danger">*</span> 点赞数</label>
-            <div class="col-sm-8 col-xs-12">
-                <input type="text" class="form-control" name="zan_num" value="{$item['zan_num']}" placeholder="请输入点赞数"/>
+                <input type="text" class="form-control" name="contact" maxlength="255" value="{$item['contact']}" placeholder="请输入联系方式"/>
             </div>
         </div>
         {if $_W['ad_type'] == 1}
@@ -231,11 +165,11 @@
             <label class="col-xs-12 col-sm-3 col-md-2 control-label">显示状态</label>
             <div class="col-sm-9 col-xs-12">
                 <label class="radio-inline">
-                    <input type="radio" name="is_display" value="1" {if $item['is_display'] == 1 || empty($item)}checked{/if}>
+                    <input type="radio" name="is_display" value="1" {if $item['is_display'] == 1}checked{/if}>
                     显示
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" name="is_display" value="0" {if $item['is_display'] != 1 && !empty($item)}checked{/if}>
+                    <input type="radio" name="is_display" value="0" {if $item['is_display'] != 0}checked{/if}>
                     隐藏
                 </label>
             </div>
@@ -257,7 +191,7 @@
         {/if}
         <div class="form-group">
             <div class="col-sm-8 col-md-8 col-xs-12 col-sm-offset-2 col-sm-offset-2">
-                <input type="hidden" name="id" value="{$item['id']}"/>
+                <input type="hidden" name="id" value="{$id}"/>
                 <button type="button" name="submit" class="btn btn-primary">提交</button>
                 <input type="hidden" name="token" value="{$_W['token']}" />
             </div>
@@ -271,12 +205,7 @@
                     window.location.href,
                     $('#post_form').serialize(),
                     function(ret){
-                        if(ret.type == 'success'){
-                            util.message(ret.message,ret.redirect,'success');
-                            return true;
-                        }
-                        util.message(ret.message,'','error');
-                        return false;
+                        util.message(ret.message,ret.redirect,ret.type);
                     },'json'
                 );
             });
@@ -369,14 +298,14 @@
                         <td>{$li['province']}{$li['city']}{$li['district']}</td>
                         <td><span class="label label-primary">{$li['industry']}</span></td>
                         <td>
-                            {if $li['is_check1'] == 1}
+                            {if $li['is_check'] == 1}
                             <span class="label label-success">已审核</span>
                             {else}
                             <span class="label label-default">未审核</span>
                             {/if}
                         </td>
                         <td>
-                            {if $li['is_check2'] == 1}
+                            {if $li['is_display'] == 1}
                             <span class="label label-success">已审核</span>
                             {else}
                             <span class="label label-default">未审核</span>

@@ -37,7 +37,7 @@ if($do == 'display'){
     if(!empty($keyword)){
         $where .= " AND a.title LIKE '%{$keyword}%'";
     }
-    $list = pdo_fetchall("SELECT a.*,b.is_check1,b.is_check2,b.pay_status,b.pay_method,b.price,b.pay_goods_price,b.id AS order_id FROM ".tablename('sj_news_ad')." a LEFT JOIN ".tablename('sj_news_ad_order')." b ON a.id=b.ad_id WHERE {$where} ORDER BY a.id DESC LIMIT {$pindex},{$psize}");
+    $list = pdo_fetchall("SELECT a.*,b.is_check,b.pay_status,b.pay_method,b.price,b.pay_goods_price,b.id AS order_id FROM ".tablename('sj_news_ad')." a LEFT JOIN ".tablename('sj_news_ad_order')." b ON a.id=b.ad_id WHERE {$where} ORDER BY a.id DESC LIMIT {$pindex},{$psize}");
     if(check_data($list)){
         $payMethodArrSpan = array(
             1 => '<span class="label label-default">余额</span>',
@@ -70,66 +70,71 @@ if($do == 'post'){
         message('广告未支付','','error');
     }
     //广告显示和有效期
-    $ad_info = pdo_get('sj_news_ad',array(
+    $item = pdo_get('sj_news_ad',array(
         'id' => $order['ad_id'],
         'uniacid'=>$order['sj_uniacid']
     ));
-    if(!check_data($ad_info)) {
+    if(!check_data($item)) {
         message('广告信息不存在','','error');
     }
-    if($_W['ad_type'] == 1){
-        //总平台
-        if($order['is_check1'] == 0){
-            message('地级市尚未审核','','error');
-        }
-        if($order['is_check2'] == 1){
-            message('广告已经审核，无需重复操作','','error');
-        }
-        //开启事务
-        pdo_begin();
-        //修改订单
-        $status = pdo_update('sj_news_ad_order',array(
-            'is_check2' => 1,
+    if($_W['isajax']){
+        $data = array(
+           'title' => trim($_GPC['title']),
+            'desc' => trim($_GPC['desc']),
+            'thumb' => trim($_GPC['thumb']),
+            'link' => trim($_GPC['link']),
+            'industry' => trim($_GPC['industry']),
+            'qualifications' => trim($_GPC['qualifications']),
+            'contact' => trim($_GPC['contact']),
             'updatetime' => TIMESTAMP
-        ),array(
-            'sj_uniacid'=>$_W['uniacid'],
-            'id' => $id
-        ));
-        if(!$status){
-            pdo_rollback();
-            message('审核失败：-1','','error');
+        );
+        if($_W['ad_type'] == 1){
+            //总平台
+            if($order['is_check'] == 0){
+                message('地级市尚未审核','','error');
+            }
+            //开启事务
+            pdo_begin();
+            //修改广告
+            $data['is_display'] = floor(trim($_GPC['is_display'])) == 1?1:0;
+            $data['last_time']  = ($item['last_time'] < TIMESTAMP?TIMESTAMP:$item['last_time']) + $order['day']*24*3600;
+            $status2 = pdo_update('sj_news_ad',$data,array(
+                'id' => $order['ad_id'],
+                'uniacid'=>$order['sj_uniacid']
+            ));
+            if(!$status2){
+                pdo_rollback();
+                message('审核失败:-2','','error');
+            }
+            pdo_commit();
+            message('审核成功',referer(),'success');
+        }else{
+            //开启事务
+            pdo_begin();
+            //修改订单
+            $status = pdo_update('sj_news_ad_order',array(
+                'is_check' => floor(trim($_GPC['is_check'])) == 1?1:0,
+                'updatetime' => TIMESTAMP
+            ),array(
+                'sj_uniacid'=>$_W['uniacid'],
+                'id' => $id
+            ));
+            if(!$status){
+                pdo_rollback();
+                message('审核失败：-1','','error');
+            }
+            //修改广告
+            $status2 = pdo_update('sj_news_ad',$data,array(
+                'id' => $order['ad_id'],
+                'uniacid'=>$order['sj_uniacid']
+            ));
+            if(!$status2){
+                pdo_rollback();
+                message('审核失败:-2','','error');
+            }
+            pdo_commit();
+            message('审核成功',referer(),'success');
         }
-        //修改广告
-        $status2 = pdo_update('sj_news_ad',array(
-            'is_display' => 1,
-            'last_time' => ($ad_info['last_time'] < TIMESTAMP?TIMESTAMP:$ad_info['last_time']) + $order['day']*24*3600,
-            'updatetime' => TIMESTAMP
-        ),array(
-            'id' => $order['ad_id'],
-            'uniacid'=>$order['sj_uniacid']
-        ));
-        if(!$status2){
-            pdo_rollback();
-            message('审核失败:-2','','error');
-        }
-        pdo_commit();
-        message('审核成功',referer(),'success');
-    }else{
-        if($ad_info['is_check1'] == 1){
-            message('广告已经审核，无需重复操作','','error');
-        }
-        //如果是地级市，只需修改订单的状态
-        $status = pdo_update('sj_news_ad_order',array(
-            'is_check1' => 1,
-            'updatetime' => TIMESTAMP
-        ),array(
-            'sj_uniacid'=>$_W['uniacid'],
-            'id' => $id
-        ));
-        if(!$status){
-            message('审核失败','','error');
-        }
-        message('审核成功',referer(),'success');
     }
 }
 
@@ -157,26 +162,11 @@ if($do == 'renew'){
         }
         if($_W['ad_type'] == 1){
             //总平台
-            if($order['is_check1'] == 0){
+            if($order['is_check'] == 0){
                 message('地级市尚未审核','','error');
-            }
-            if($order['is_check2'] == 1){
-                message('广告已经审核，无需重复操作','','error');
             }
             //开启事务
             pdo_begin();
-            //修改订单
-            $status = pdo_update('sj_news_ad_renew_order',array(
-                'is_check2' => 1,
-                'updatetime' => TIMESTAMP
-            ),array(
-                'sj_uniacid'=>$_W['uniacid'],
-                'id' => $id
-            ));
-            if(!$status){
-                pdo_rollback();
-                message('审核失败：-1','','error');
-            }
             //修改广告
             $status2 = pdo_update('sj_news_ad',array(
                 'renew_is_check' => 0,
@@ -193,12 +183,12 @@ if($do == 'renew'){
             pdo_commit();
             message('审核成功',referer(),'success');
         }else{
-            if($ad_info['is_check1'] == 1){
+            if($ad_info['is_check'] == 1){
                 message('广告已经审核，无需重复操作','','error');
             }
             //如果是地级市，只需修改订单的状态
             $status = pdo_update('sj_news_ad_renew_order',array(
-                'is_check1' => 1,
+                'is_check' => 1,
                 'updatetime' => TIMESTAMP
             ),array(
                 'sj_uniacid'=>$_W['uniacid'],
@@ -236,7 +226,7 @@ if($do == 'renew'){
     if(!empty($keyword)){
         $where .= " AND a.title LIKE '%{$keyword}%'";
     }
-    $list = pdo_fetchall("SELECT a.*,b.is_check1,b.is_check2,b.pay_status,b.pay_method,b.price,b.pay_goods_price,b.id AS order_id FROM ".tablename('sj_news_ad')." a RIGHT JOIN ".tablename('sj_news_ad_renew_order')." b ON a.id=b.ad_id WHERE {$where} ORDER BY a.id DESC LIMIT {$pindex},{$psize}");
+    $list = pdo_fetchall("SELECT a.*,b.is_check,b.pay_status,b.pay_method,b.price,b.pay_goods_price,b.id AS order_id FROM ".tablename('sj_news_ad')." a RIGHT JOIN ".tablename('sj_news_ad_renew_order')." b ON a.id=b.ad_id WHERE {$where} ORDER BY a.id DESC LIMIT {$pindex},{$psize}");
     if(check_data($list)){
         $payMethodArrSpan = array(
             1 => '<span class="label label-default">余额</span>',
