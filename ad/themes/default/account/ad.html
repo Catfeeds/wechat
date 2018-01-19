@@ -6,7 +6,7 @@
         </li>
         {if $do == 'post' && !empty($item)}
         <li class="active">
-            <a href="{php echo url('account/ad/post',array('id' => $item['ad_id']));}">广告详情</a>
+            <a href="{php echo url('account/ad/post',array('id' => $id));}">广告详情</a>
         </li>
         {/if}
         <li {if $do == 'renew'}class="active"{/if}>
@@ -104,7 +104,7 @@
                         </td>
                         <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
                         <td>
-                            <a role="button" href="{php echo url('account/ad/post',array('id' => $li['id']));}" class="btn btn-sm btn-info">广告详情</a>
+                            <a role="button" href="{php echo url('account/ad/post',array('id' => $li['order_id']));}" class="btn btn-sm btn-info">广告详情</a>
                         </td>
                     </tr>
                     {/loop}
