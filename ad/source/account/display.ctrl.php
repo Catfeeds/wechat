@@ -64,7 +64,6 @@ if($do == 'display'){
             $data['province'] = $_GPC['area']['province'];
             $data['city'] = $_GPC['area']['city'];
             $data['district'] = $_GPC['area']['district'];
-            $data['push_type'] = 2;
             $data['is_display'] = floor(trim($_GPC['is_display'])) == 1?1:0;
             $data['is_check'] = 1;
         }else{
@@ -72,7 +71,6 @@ if($do == 'display'){
             $data['province'] = $_W['province'];
             $data['city'] = $_W['city'];
             $data['district'] = $_W['district'];
-            $data['push_type'] = 1;
             $data['is_check'] = floor(trim($_GPC['is_check'])) == 1?1:0;
             if($data['is_check'] != 1){
                 $data['is_display'] = 0;
@@ -94,6 +92,7 @@ if($do == 'display'){
             }
         }
         if(empty($item)){ //插入数据
+            $data['push_type'] = $_W['ad_type'] == 1?2:1;
             $data['ad_account_id'] = $_W['ad_id'];
             $data['uniacid'] = $_W['uniacid'];
             $data['createtime'] = TIMESTAMP;
