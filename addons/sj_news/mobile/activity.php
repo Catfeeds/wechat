@@ -14,7 +14,7 @@ if($op == 'display'){
     $page = getApartPageNo('page');
     $psize = 20;
     $pindex = ($page-1)*$psize;
-    $list = pdo_fetchall("SELECT * FROM ".tablename('sj_news_activity')." WHERE uniacid='{$_W['uniacid']}' AND city='{$_W['location']['city']}' ORDER BY id DESC LIMIT {$pindex},{$psize}");
+    $list = pdo_fetchall("SELECT * FROM ".tablename('sj_news_activity')." WHERE uniacid='{$_W['uniacid']}' AND is_display=1 AND city='{$_W['location']['city']}' ORDER BY id DESC LIMIT {$pindex},{$psize}");
     $pager = mobilePagination(pdo_fetchcolumn("SELECT COUNT(1) FROM ".tablename('sj_news_activity')." WHERE uniacid='{$_W['uniacid']}' AND city='{$_W['location']['city']}'"),$page,$psize);
     include $this->template('activity');
 }

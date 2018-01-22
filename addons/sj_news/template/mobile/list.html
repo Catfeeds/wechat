@@ -110,15 +110,15 @@
                             <div class="tag-bottom">
                                 {if $li['type'] == 0}
                                 <span class="city_label space">
-                                            {if $li['is_admin'] == 1}
-                                               报社
-                                            {else}
-                                                {if !empty($li['city'])}
-                                                    {php echo str_replace('市','',$li['city']);}
-                                                {else}
-                                                    报社
-                                                {/if}
-                                            {/if}
+                                           {if $li['push_type'] == 0}
+											{$li['author']}
+											{/if}
+											{if $li['push_type'] == 1}
+											 {php echo str_replace('市','',$li['city']);}
+											{/if}
+											{if $li['push_type'] == 2}
+											报社
+											{/if}
                                         </span>
                                 {/if}
                                 <span class="src space">{$li['category']}</span>
@@ -143,15 +143,15 @@
                             <div class="tag-bottom">
                                 {if $li['type'] == 0}
                                 <span class="city_label space">
-                                           {if $li['is_admin'] == 1}
-                                               报社
-                                            {else}
-                                                {if !empty($li['city'])}
-                                                    {php echo str_replace('市','',$li['city']);}
-                                                {else}
-                                                    报社
-                                                {/if}
-                                            {/if}
+                                          {if $li['push_type'] == 0}
+											{$li['author']}
+											{/if}
+											{if $li['push_type'] == 1}
+											 {php echo str_replace('市','',$li['city']);}
+											{/if}
+											{if $li['push_type'] == 2}
+											报社
+											{/if}
                                         </span>
                                 {/if}
                                 <span class="src space">{$li['category']}</span>
@@ -193,15 +193,15 @@
                             <div class="tag-bottom">
                                 {if $li['type'] == 0}
                                 <span class="city_label space">
-                                           {if $li['is_admin'] == 1}
-                                               报社
-                                            {else}
-                                                {if !empty($li['city'])}
-                                                    {php echo str_replace('市','',$li['city']);}
-                                                {else}
-                                                    报社
-                                                {/if}
-                                            {/if}
+                                          {if $li['push_type'] == 0}
+											{$li['author']}
+											{/if}
+											{if $li['push_type'] == 1}
+											 {php echo str_replace('市','',$li['city']);}
+											{/if}
+											{if $li['push_type'] == 2}
+											报社
+											{/if}
                                         </span>
                                 {/if}
                                 <span class="src space">{$li['category']}</span>
