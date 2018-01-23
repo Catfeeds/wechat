@@ -80,7 +80,11 @@ if($do == 'display'){
     $list = pdo_fetchall("SELECT a.*,b.title AS store_title,c.nickname,c.realname FROM ".tablename('order_offline')." a LEFT JOIN ".tablename('store_list')." b ON a.store_id=b.id LEFT JOIN ".tablename('mc_members')." c ON a.uid=c.uid WHERE {$where}");
     $pager = pagination($total,floor(trim($_GPC['page'])),$psize);
 
-}elseif($do == 'fee'){
+}
+
+
+
+if($do == 'fee'){
     $keyword = trim($_GPC['keyword']);
     $page = getApartPageNo('page');
     $psize = 20;
@@ -126,7 +130,10 @@ if($do == 'display'){
     $where .=" ORDER BY createtime DESC LIMIT {$pindex},{$psize}";
     $list = pdo_fetchall("SELECT a.*,b.nickname,b.nickname FROM ".tablename('fangyuanbao_user_order')." a LEFT JOIN ".tablename('mc_members')." b ON a.uid=b.uid WHERE {$where}");
     $pager = pagination($total,$page,$psize);
-}elseif($do == 'person'){
+}
+
+
+if($do == 'person'){
     $psize = 15;
     $pindex = (max(1,floor(trim($_GPC['page'])))-1)*$psize;
     list($starttime,$endtime) = getStartTimeEndTimeByGPC('createtime');
@@ -168,7 +175,10 @@ if($do == 'display'){
     $where .= " ORDER BY createtime DESC LIMIT {$pindex},{$psize}";
     $list = pdo_fetchall("SELECT a.*,b.nickname,b.realname FROM ".tablename('order_person')." a LEFT JOIN ".tablename('mc_members')." b ON a.pay_uid=b.uid WHERE {$where}");
     $pager = pagination($total,floor(trim($_GPC['page'])),$psize);
-}elseif($do == 'shop'){
+}
+
+
+if($do == 'shop'){
     $psize = 15;
     $pindex = (max(1,floor(trim($_GPC['page'])))-1)*$psize;
     list($starttime,$endtime) = getStartTimeEndTimeByGPC('createtime');
@@ -221,5 +231,91 @@ if(empty($total_pay_price)){
 }
 if(empty($total_pay_credit1)){
     $total_pay_credit1 = 0;
+}
+
+
+
+//广告配置
+$adConfig = pdo_get('sj_news_ad_config',array(
+    'uniacid' => 11
+));
+if(!empty($adConfig['setting'])){
+    $adConfig['setting'] = iunserializer($adConfig['setting']);
+}
+
+//广告支付订单
+if($do == 'ad_order'){
+    $page = getApartPageNo('page');
+    $psize = 20;
+    $pindex = ($page-1)*$psize;
+    $keyword = trim($_GPC['keyword']);
+    $where = "a.uniacid='{$_W['uniacid']}'";
+    $province = $_GPC['area']['province'];
+    if(!empty($province)){
+        $where .= " AND a.province='{$province}'";
+    }
+    $city = $_GPC['area']['city'];
+    if(!empty($city)){
+        $where .= " AND a.city='{$city}'";
+    }
+    if(!empty($keyword)){
+        $where .= " AND a.title LIKE '%{$keyword}%'";
+    }
+    $list = pdo_fetchall("SELECT a.*,b.is_check,b.pay_status,b.pay_method,b.price,b.pay_goods_price,b.id AS order_id FROM ".tablename('sj_news_ad')." a LEFT JOIN ".tablename('sj_news_ad_order')." b ON a.id=b.ad_id WHERE {$where} ORDER BY a.id DESC LIMIT {$pindex},{$psize}");
+    if(check_data($list)){
+        $payMethodArrSpan = array(
+            1 => '<span class="label label-default">余额</span>',
+            2 => '<span class="label label-info">微信</span>',
+            3 => '<span class="label label-warning">支付宝</span>',
+            4 => '<span class="label label-success">银行卡</span>',
+            5 => '<span class="label label-warning">微信</span>',
+            6 => '<span class="label label-danger">货到</span>'
+        );
+        foreach($list as $k => &$v){
+            $v['package_name'] = $adConfig['setting'][$v['package_id']]['name'];
+            $v['pay_method'] = $payMethodArrSpan[$v['pay_method']];
+            $v['thumb'] = tomedia($v['thumb']);
+            $v['qualifications'] = tomedia($v['qualifications']);
+        }
+    }
+    $pager = pagination(pdo_fetchcolumn("SELECT COUNT(a.id) FROM ".tablename('sj_news_ad')." a WHERE {$where}"),$page,$psize);
+}
+
+//广告续费订单
+if($do == 'ad_re_order'){
+    $page = getApartPageNo('page');
+    $psize = 20;
+    $pindex = ($page-1)*$psize;
+    $keyword = trim($_GPC['keyword']);
+    $where = "a.uniacid='{$_W['uniacid']}'";
+    $province = $_GPC['area']['province'];
+    if(!empty($province)){
+        $where .= " AND a.province='{$province}'";
+    }
+    $city = $_GPC['area']['city'];
+    if(!empty($city)){
+        $where .= " AND a.city='{$city}'";
+    }
+    if(!empty($keyword)){
+        $where .= " AND a.title LIKE '%{$keyword}%'";
+    }
+    $list = pdo_fetchall("SELECT a.*,b.is_check,b.pay_status,b.pay_method,b.price,b.pay_goods_price,b.id AS order_id FROM ".tablename('sj_news_ad')." a RIGHT JOIN ".tablename('sj_news_ad_renew_order')." b ON a.id=b.ad_id WHERE {$where} ORDER BY a.id DESC LIMIT {$pindex},{$psize}");
+    if(check_data($list)){
+        $payMethodArrSpan = array(
+            1 => '<span class="label label-default">余额</span>',
+            2 => '<span class="label label-info">微信</span>',
+            3 => '<span class="label label-warning">支付宝</span>',
+            4 => '<span class="label label-success">银行卡</span>',
+            5 => '<span class="label label-warning">微信</span>',
+            6 => '<span class="label label-danger">货到</span>'
+        );
+        foreach($list as $k => &$v){
+            $v['package_name'] = $adConfig['setting'][$v['package_id']]['name'];
+            $v['pay_method'] = $payMethodArrSpan[$v['pay_method']];
+            $v['thumb'] = tomedia($v['thumb']);
+            $v['qualifications'] = tomedia($v['qualifications']);
+        }
+    }
+    $pager = pagination(pdo_fetchcolumn("SELECT COUNT(a.id) FROM ".tablename('sj_news_ad')." a WHERE {$where}"),$page,$psize);
 }
 template('account/display');

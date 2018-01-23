@@ -24,7 +24,7 @@ if($op == 'display'){
             'title' => trim($_GPC['title']),
             'cid' => trim($_GPC['cid']),
             'type' => 3,
-            'author' => !empty($member['nickname'])?$member['nickname']:$member['realname'],
+            'author' => trim($_GPC['author']),
             'from' => '作者原创',
             'desc' => mb_substr($_GPC['detail'],0,120,'utf-8'),
             'detail' => $_GPC['detail'],

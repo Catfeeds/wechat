@@ -13,6 +13,12 @@
         <li {if $do == 'shop'}class="active"{/if}>
         <a href="{php echo url('account/display/shop');}">开店订单</a>
         </li>
+        <li {if $do == 'ad_order'}class="active"{/if}>
+        <a href="{php echo url('account/display/ad_order');}">广告订单</a>
+        </li>
+        <li {if $do == 'ad_re_order'}class="active"{/if}>
+        <a href="{php echo url('account/display/ad_re_order');}">广告续费订单</a>
+        </li>
     </ul>
 </div>
 <div class="page-content">
@@ -492,6 +498,200 @@
                             <span class="label label-primary">未支付</span>
                             {/if}
                         </td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+    {elseif $do == 'ad_order'}
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选
+            <span style="float: right">合计{$total}单 -  支付金额共计￥{$total_pay_price}元 - 支付总积分 {$total_pay_credit1}积分</span>
+        </div>
+        <div class="panel-body">
+            <form method="get" action="./index.php" class="form-horizontal" role="form">
+                <input type="hidden" name="c" value="account" />
+                <input type="hidden" name="a" value="display" />
+                <input type="hidden" name="do" value="ad_order" />
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入关键词，广告标题" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">地区</label>
+                    <div class="col-xs-12 col-sm-8 col-md-6">
+                        {php echo tpl_form_field_district('area', array('province' => $province, 'city' => $city, 'district' => $district));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                        <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form method="post" class="form-horizontal">
+        <input type="hidden" name="ac" value="delete" />
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>标题</th>
+                        <th>套餐</th>
+                        <th>地区</th>
+                        <th>行业</th>
+                        <th>初级审核</th>
+                        <th>高级审核</th>
+                        <th>支付状态</th>
+                        <th>支付方式</th>
+                        <th>价格</th>
+                        <th>货价</th>
+                        <th>添加时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $li}
+                    <tr>
+                        <td>{$li['title']}</td>
+                        <td><span class="label label-success">{$li['package_name']}</span></td>
+                        <td>{$li['province']}{$li['city']}{$li['district']}</td>
+                        <td><span class="label label-primary">{$li['industry']}</span></td>
+                        <td>
+                            {if $li['is_check'] == 1}
+                            <span class="label label-success">已审核</span>
+                            {else}
+                            <span class="label label-default">未审核</span>
+                            {/if}
+                        </td>
+                        <td>
+                            {if $li['is_display'] == 1}
+                            <span class="label label-success">已审核</span>
+                            {else}
+                            <span class="label label-default">未审核</span>
+                            {/if}
+                        </td>
+                        <td>
+                            {if $li['pay_status'] == 1}
+                            <span class="label label-success">已支付</span>
+                            {else}
+                            <span class="label label-default">未支付</span>
+                            {/if}
+                        </td>
+                        <td>{$li['pay_method']}</td>
+                        <td>￥{$li['price']}</td>
+                        <td>
+                            {if empty(floor($li['pay_goods_price']))}
+                            免抵货
+                            {else}
+                            ￥{$li['pay_goods_price']}
+                            {/if}
+                        </td>
+                        <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
+                    </tr>
+                    {/loop}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {$pager}
+    </form>
+    {elseif $do == 'ad_re_order'}
+    <div class="panel panel-info">
+        <div class="panel-heading">筛选
+            <span style="float: right">合计{$total}单 -  支付金额共计￥{$total_pay_price}元 - 支付总积分 {$total_pay_credit1}积分</span>
+        </div>
+        <div class="panel-body">
+            <form method="get" action="./index.php" class="form-horizontal" role="form">
+                <input type="hidden" name="c" value="account" />
+                <input type="hidden" name="a" value="display" />
+                <input type="hidden" name="do" value="ad_re_order" />
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">关键词</label>
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12">
+                        <input type="text" class="form-control" name="keyword" value="{$_GPC['keyword']}" placeholder="请输入关键词，广告标题" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-12 col-sm-3 col-md-2 control-label">地区</label>
+                    <div class="col-xs-12 col-sm-8 col-md-6">
+                        {php echo tpl_form_field_district('area', array('province' => $province, 'city' => $city, 'district' => $district));}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-6 col-md-8 col-lg-8 col-xs-12 col-sm-offset-2 col-md-offset-2">
+                        <button class="btn btn-default"><i class="fa fa-search"></i> 搜索</button>
+                        <input type="hidden" name="token" value="{$_W['token']}"/>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form method="post" class="form-horizontal" id="display_form">
+        <input type="hidden" name="ac" value="delete" />
+        <div class="panel panel-default ">
+            <div class="table-responsive panel-body">
+                <table class="table table-hover">
+                    <thead class="navbar-inner">
+                    <tr>
+                        <th>标题</th>
+                        <th>套餐</th>
+                        <th>地区</th>
+                        <th>行业</th>
+                        <th>初级审核</th>
+                        <th>高级审核</th>
+                        <th>支付状态</th>
+                        <th>支付方式</th>
+                        <th>价格</th>
+                        <th>货价</th>
+                        <th>添加时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {loop $list $li}
+                    <tr>
+                        <td>{$li['title']}</td>
+                        <td><span class="label label-success">{$li['package_name']}</span></td>
+                        <td>{$li['province']}{$li['city']}{$li['district']}</td>
+                        <td><span class="label label-primary">{$li['industry']}</span></td>
+                        <td>
+                            {if $li['is_check'] == 1}
+                            <span class="label label-success">已审核</span>
+                            {else}
+                            <span class="label label-default">未审核</span>
+                            {/if}
+                        </td>
+                        <td>
+                            {if $li['is_display'] == 1}
+                            <span class="label label-success">已审核</span>
+                            {else}
+                            <span class="label label-default">未审核</span>
+                            {/if}
+                        </td>
+                        <td>
+                            {if $li['pay_status'] == 1}
+                            <span class="label label-success">已支付</span>
+                            {else}
+                            <span class="label label-default">未支付</span>
+                            {/if}
+                        </td>
+                        <td>{$li['pay_method']}</td>
+                        <td>￥{$li['price']}</td>
+                        <td>
+                            {if empty(floor($li['pay_goods_price']))}
+                            免抵货
+                            {else}
+                            ￥{$li['pay_goods_price']}
+                            {/if}
+                        </td>
+                        <td>{php echo date('Y-m-d H:i',$li['createtime']);}</td>
                     </tr>
                     {/loop}
                     </tbody>
