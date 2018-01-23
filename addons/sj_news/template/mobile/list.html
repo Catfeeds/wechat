@@ -108,19 +108,17 @@
                         <h3 class="dotdot line3">{$li['title']}</h3>
                         <div class="item_info">
                             <div class="tag-bottom">
-                                {if $li['type'] == 0}
                                 <span class="city_label space">
-                                           {if $li['push_type'] == 0}
-											{$li['author']}
-											{/if}
-											{if $li['push_type'] == 1}
-											 {php echo str_replace('市','',$li['city']);}
-											{/if}
-											{if $li['push_type'] == 2}
-											报社
-											{/if}
-                                        </span>
-                                {/if}
+                                    {if $li['push_type'] == 0}
+                                    {$li['author']}
+                                    {/if}
+                                    {if $li['push_type'] == 1}
+                                    {php echo str_replace('市','',$li['city']);}
+                                    {/if}
+                                    {if $li['push_type'] == 2}
+                                    报社
+                                    {/if}
+                                </span>
                                 <span class="src space">{$li['category']}</span>
                                 <span class="cmt space">评论&nbsp;{$li['talk_num']}</span>
                                 <span class="time">{php echo date('Y-m-d',$li['createtime']);}</span>
@@ -141,19 +139,17 @@
                         <h3 class="dotdot line3 image-margin-right">{$li['title']}</h3>
                         <div class="item_info">
                             <div class="tag-bottom">
-                                {if $li['type'] == 0}
                                 <span class="city_label space">
-                                          {if $li['push_type'] == 0}
-											{$li['author']}
-											{/if}
-											{if $li['push_type'] == 1}
-											 {php echo str_replace('市','',$li['city']);}
-											{/if}
-											{if $li['push_type'] == 2}
-											报社
-											{/if}
-                                        </span>
-                                {/if}
+                                    {if $li['push_type'] == 0}
+                                    {$li['author']}
+                                    {/if}
+                                    {if $li['push_type'] == 1}
+                                    {php echo str_replace('市','',$li['city']);}
+                                    {/if}
+                                    {if $li['push_type'] == 2}
+                                    报社
+                                    {/if}
+                                </span>
                                 <span class="src space">{$li['category']}</span>
                                 <span class="cmt space">评论&nbsp;{$li['talk_num']}</span>
                                 <span class="time">{php echo date('Y-m-d',$li['createtime']);}</span>
@@ -191,19 +187,17 @@
                         </div>
                         <div class="item_info">
                             <div class="tag-bottom">
-                                {if $li['type'] == 0}
                                 <span class="city_label space">
-                                          {if $li['push_type'] == 0}
-											{$li['author']}
-											{/if}
-											{if $li['push_type'] == 1}
-											 {php echo str_replace('市','',$li['city']);}
-											{/if}
-											{if $li['push_type'] == 2}
-											报社
-											{/if}
-                                        </span>
-                                {/if}
+                                    {if $li['push_type'] == 0}
+                                    {$li['author']}
+                                    {/if}
+                                    {if $li['push_type'] == 1}
+                                    {php echo str_replace('市','',$li['city']);}
+                                    {/if}
+                                    {if $li['push_type'] == 2}
+                                    报社
+                                    {/if}
+                                </span>
                                 <span class="src space">{$li['category']}</span>
                                 <span class="cmt space">评论&nbsp;{$li['talk_num']}</span>
                                 <span class="time">{php echo date('Y-m-d',$li['createtime']);}</span>
