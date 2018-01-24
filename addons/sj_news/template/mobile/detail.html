@@ -87,13 +87,15 @@
             <p>
                 {$item['detail']}
             </p>
-            <!--{if !empty($item['thumbs'])}-->
-                <!--<div class="images">-->
-                    <!--{loop $item['thumbs'] $thumb}-->
-                        <!--<img src="{$thumb}">-->
-                    <!--{/loop}-->
-                <!--</div>-->
-            <!--{/if}-->
+            {if $li['push_type'] == 0}
+                {if !empty($item['thumbs'])}
+                    <div class="images">
+                        {loop $item['thumbs'] $thumb}
+                            <img src="{$thumb}">
+                        {/loop}
+                    </div>
+                {/if}
+            {/if}
             {if !empty($item['audio_src'])}
                 <div class="audio">
                     <audio src="{$item['audio_src']}" controls="controls"></audio>
