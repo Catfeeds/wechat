@@ -7,7 +7,6 @@ if($op == 'display'){
     $id = floor(trim($_GPC['id']));
     $where = "a.uniacid='{$_W['uniacid']}' AND a.id='{$id}'";
     $item = pdo_fetch("SELECT a.*,b.nickname,b.realname FROM ".tablename('sj_news_list')." a LEFT JOIN ".tablename('mc_members')." b ON a.uid=b.uid WHERE {$where}");
-    print_r($item);
     $_share['title'] = $item['title'];
     if(!empty($item['detail'])){
         $item['detail'] = htmlspecialchars_decode($item['detail']);
