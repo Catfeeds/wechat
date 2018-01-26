@@ -75,7 +75,7 @@
             <span>{php echo date('Y年m月d日 H:i',$item['createtime']);}</span>
         </div>
         <div class="tags-1">
-            {if $item['type'] == 0}
+            {if $item['push_type'] > 0}
             <span>编辑：{$item['author']}</span>
             <span>编审：{$item['bianshen']}</span>
             <span>来源：{$item['from']}</span>
@@ -87,7 +87,7 @@
             <p>
                 {$item['detail']}
             </p>
-            {if $li['push_type'] == 0}
+            {if $item['push_type'] == 0}
                 {if !empty($item['thumbs'])}
                     <div class="images">
                         {loop $item['thumbs'] $thumb}
@@ -117,7 +117,7 @@
             </script>
             {/if}
         </div>
-        {if $item['type'] == 0}
+        {if $item['push_type'] > 0}
         <div class="tags-1">
             <span>投稿邮箱：{$item['tgemail']}</span>
             <span>商务热线：{$item['swhotline']}</span>
