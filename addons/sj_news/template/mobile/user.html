@@ -16,7 +16,7 @@
     <div class="user-top"></div>
     <div class="user-info">
         <div class="info-box">
-            <div class="face">
+            <div class="face" onclick="location.href='{php echo url('set/display/display');}'">
                 <img src="{php echo tomedia($member['avatar']);}">
             </div>
             <span>{$member['nickname']}</span>

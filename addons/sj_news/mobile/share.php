@@ -25,7 +25,7 @@ if($op == 'display'){
                         pdo_insert('sj_news_rebate',array(
                             'uniacid' => $_W['uniacid'],
                             'uid' => $_W['member']['uid'],
-                            'credit1' => $setting['credit1'],
+                            'credit1' => $setting['share'],
                             'type' => 5,
                             'createtime' => TIMESTAMP
                         ));

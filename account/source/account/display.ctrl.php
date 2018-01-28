@@ -249,7 +249,7 @@ if($do == 'ad_order'){
     $psize = 20;
     $pindex = ($page-1)*$psize;
     $keyword = trim($_GPC['keyword']);
-    $where = "a.uniacid='{$_W['uniacid']}'";
+    $where = "a.uniacid='11'";
     $province = $_GPC['area']['province'];
     if(!empty($province)){
         $where .= " AND a.province='{$province}'";
@@ -261,7 +261,7 @@ if($do == 'ad_order'){
     if(!empty($keyword)){
         $where .= " AND a.title LIKE '%{$keyword}%'";
     }
-    $list = pdo_fetchall("SELECT a.*,b.is_check,b.pay_status,b.pay_method,b.price,b.pay_goods_price,b.id AS order_id FROM ".tablename('sj_news_ad')." a LEFT JOIN ".tablename('sj_news_ad_order')." b ON a.id=b.ad_id WHERE {$where} ORDER BY a.id DESC LIMIT {$pindex},{$psize}");
+    $list = pdo_fetchall("SELECT a.*,b.is_check,b.pay_status,b.pay_method,b.price,b.pay_goods_price,b.id AS order_id FROM ".tablename('sj_news_ad')." a RIGHT JOIN ".tablename('sj_news_ad_order')." b ON a.id=b.ad_id WHERE {$where} ORDER BY a.id DESC LIMIT {$pindex},{$psize}");
     if(check_data($list)){
         $payMethodArrSpan = array(
             1 => '<span class="label label-default">余额</span>',
@@ -287,7 +287,7 @@ if($do == 'ad_re_order'){
     $psize = 20;
     $pindex = ($page-1)*$psize;
     $keyword = trim($_GPC['keyword']);
-    $where = "a.uniacid='{$_W['uniacid']}'";
+    $where = "a.uniacid='11'";
     $province = $_GPC['area']['province'];
     if(!empty($province)){
         $where .= " AND a.province='{$province}'";
