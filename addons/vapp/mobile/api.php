@@ -233,23 +233,23 @@ if($op == 'pay'){
 }
 
 //获取社群列表
-if($op == 'get_groups'){
-    $user_info = auth_check($_GPC['token']);
-    if(empty($user_info)){
-        to_json(-1,'请先登录');
-    }
-    $page = getApartPageNo();
-    $psize = 20;
-    $pindex = ($page-1)*$psize;
-    $list = pdo_fetchall("SELECT id,title,logo,max_count,member_count,topic_count,talk_count FROM ".tablename('vapp_group')." WHERE uniacid='{$_W['uniacid']}' AND is_display='1' ORDER BY order_by DESC LIMIT {$pindex},{$psize}");
-    if(!check_data($list)){
-        to_json(1,'没有找到相关社群');
-    }
-    foreach ($list as $k => &$v){
-        $v['logo'] = tomedia($v['logo']);
-    }
-    to_json(0,'返回社群列表',$list);
-}
+//if($op == 'get_groups'){
+//    $user_info = auth_check($_GPC['token']);
+//    if(empty($user_info)){
+//        to_json(-1,'请先登录');
+//    }
+//    $page = getApartPageNo();
+//    $psize = 20;
+//    $pindex = ($page-1)*$psize;
+//    $list = pdo_fetchall("SELECT id,title,logo,max_count,member_count,topic_count,talk_count FROM ".tablename('vapp_group')." WHERE uniacid='{$_W['uniacid']}' AND is_display='1' ORDER BY order_by DESC LIMIT {$pindex},{$psize}");
+//    if(!check_data($list)){
+//        to_json(1,'没有找到相关社群');
+//    }
+//    foreach ($list as $k => &$v){
+//        $v['logo'] = tomedia($v['logo']);
+//    }
+//    to_json(0,'返回社群列表',$list);
+//}
 
 
 //订单列表
@@ -1347,74 +1347,74 @@ if($op == 'push_circle_like'){
 }
 
 //获取圈子列表
-if($op == 'get_circle_list'){
-    $page = getApartPageNo();
-    $psize = 20;
-    $pindex = ($page - 1)*$psize;
-    $type = floor(trim($_GPC['type']));
-    $user_info = auth_check($_GPC['token']);
-    if($type == 4 && empty($user_info)){
-        to_json(-1,'请先登录');
-    }
-    $where = "a.uniacid='{$_W['uniacid']}' AND a.is_display='1'";
-
-    //关注
-    if($type == 4){
-       $where .= " AND a.uid IN (SELECT focus_uid FROM ".tablename('vapp_focus')." WHERE uniacid='{$_W['uniacid']}' AND uid='{$user_info['uid']}')";
-    }
-
-    //红人
-    if($type == 3){
-        $where .= " AND a.uid IN (SELECT focus_uid FROM (SELECT COUNT(1) AS count,focus_uid FROM ".tablename('vapp_focus')." GROUP BY focus_uid ORDER BY count DESC LIMIT 0,100) A)";
-    }
-    switch ($type){
-        case 1:$where.=" ORDER BY a.order_by DESC";break;
-        case 2:$where .= " ORDER BY a.look_num DESC";break;
-        default:$where .= " ORDER BY a.id DESC";
-    }
-    $list = pdo_fetchall("SELECT a.id,a.type,a.content,a.src,a.createtime,b.mobile,b.nickname,b.realname,b.avatar FROM ".tablename('vapp_circle')." a LEFT JOIN ".tablename('vapp_member')." b ON a.uid=b.uid WHERE {$where} LIMIT {$pindex},{$psize}");
-    //处理$list
-    if(check_data($list)){
-        foreach ($list as $k => &$v){
-            $v['avatar'] = tomedia($v['avatar']);
-            $v['src'] = tomedia($v['src']);
-            $v['createtime'] = friend_date($v['createtime']);
-            $v['show_name'] = !!$v['nickname']?$v['nickname']:(!!$v['realname']?$v['realname']:$v['mobile']);
-            $v['talk_list'] = pdo_fetchall("SELECT a.id,a.content,a.thumb,b.uid,b.avatar,b.mobile,b.nickname,b.realname FROM ".tablename('vapp_circle_talk')." a LEFT JOIN ".tablename('vapp_member')." b ON a.uid=b.uid WHERE a.uniacid='{$_W['uniacid']}' AND a.circle_id='{$v['id']}' ORDER BY a.id DESC LIMIT 0,100");;
-            if(check_data($v['talk_list'])){
-                foreach ($v['talk_list'] as $k2 => &$v2){
-                    $v2['show_name'] = !!$v2['nickname']?$v2['nickname']:(!!$v2['realname']?$v2['realname']:$v2['mobile']);
-                    $v2['avatar'] = tomedia($v2['avatar']);
-                    $v2['thumb'] = tomedia($v2['thumb']);
-                }
-            }
-            $v['like_list'] = pdo_fetchall("SELECT a.id,b.uid,b.avatar,b.mobile,b.nickname,b.realname FROM ".tablename('vapp_circle_like')." a LEFT JOIN ".tablename('vapp_member')." b ON a.uid=b.uid WHERE a.uniacid='{$_W['uniacid']}' AND a.circle_id='{$v['id']}' ORDER BY a.id DESC LIMIT 0,100");
-            if(check_data($v['like_list'])){
-                foreach ($v['like_list'] as $k3 => &$v3){
-                    $v3['show_name'] = !!$v3['nickname']?$v3['nickname']:(!!$v3['realname']?$v3['realname']:$v3['mobile']);
-                    $v3['avatar'] = tomedia($v3['avatar']);
-                }
-            }
-            $v['is_like'] = 0;
-            if(check_data($user_info)){
-                $is_exist_like = pdo_get('vapp_circle_like',array(
-                    'uniacid' => $_W['uniacid'],
-                    'circle_id' => $v['id'],
-                    'uid' => $user_info['uid']
-                ));
-                if(check_data($is_exist_like)){
-                   $v['is_like'] = 1;
-                }
-            }
-        }
-    }
-    to_json(0,'',array(
-        'push_num' => pdo_fetchcolumn("SELECT COUNT(1) FROM ".tablename('vapp_circle')." WHERE uniacid='{$_W['uniacid']}' AND is_display='1'"),
-        'member_num' => pdo_fetchcolumn("SELECT COUNT(1) FROM ".tablename('vapp_member')." WHERE uniacid='{$_W['uniacid']}'"),
-        'sum_credit2' => pdo_fetchcolumn("SELECT SUM(credit2) FROM ".tablename('vapp_member')." WHERE uniacid='{$_W['uniacid']}'"),
-        'list' => $list
-    ));
-}
+//if($op == 'get_circle_list'){
+//    $page = getApartPageNo();
+//    $psize = 20;
+//    $pindex = ($page - 1)*$psize;
+//    $type = floor(trim($_GPC['type']));
+//    $user_info = auth_check($_GPC['token']);
+//    if($type == 4 && empty($user_info)){
+//        to_json(-1,'请先登录');
+//    }
+//    $where = "a.uniacid='{$_W['uniacid']}' AND a.is_display='1'";
+//
+//    //关注
+//    if($type == 4){
+//       $where .= " AND a.uid IN (SELECT focus_uid FROM ".tablename('vapp_focus')." WHERE uniacid='{$_W['uniacid']}' AND uid='{$user_info['uid']}')";
+//    }
+//
+//    //红人
+//    if($type == 3){
+//        $where .= " AND a.uid IN (SELECT focus_uid FROM (SELECT COUNT(1) AS count,focus_uid FROM ".tablename('vapp_focus')." GROUP BY focus_uid ORDER BY count DESC LIMIT 0,100) A)";
+//    }
+//    switch ($type){
+//        case 1:$where.=" ORDER BY a.order_by DESC";break;
+//        case 2:$where .= " ORDER BY a.look_num DESC";break;
+//        default:$where .= " ORDER BY a.id DESC";
+//    }
+//    $list = pdo_fetchall("SELECT a.id,a.type,a.content,a.src,a.createtime,b.mobile,b.nickname,b.realname,b.avatar FROM ".tablename('vapp_circle')." a LEFT JOIN ".tablename('vapp_member')." b ON a.uid=b.uid WHERE {$where} LIMIT {$pindex},{$psize}");
+//    //处理$list
+//    if(check_data($list)){
+//        foreach ($list as $k => &$v){
+//            $v['avatar'] = tomedia($v['avatar']);
+//            $v['src'] = tomedia($v['src']);
+//            $v['createtime'] = friend_date($v['createtime']);
+//            $v['show_name'] = !!$v['nickname']?$v['nickname']:(!!$v['realname']?$v['realname']:$v['mobile']);
+//            $v['talk_list'] = pdo_fetchall("SELECT a.id,a.content,a.thumb,b.uid,b.avatar,b.mobile,b.nickname,b.realname FROM ".tablename('vapp_circle_talk')." a LEFT JOIN ".tablename('vapp_member')." b ON a.uid=b.uid WHERE a.uniacid='{$_W['uniacid']}' AND a.circle_id='{$v['id']}' ORDER BY a.id DESC LIMIT 0,100");;
+//            if(check_data($v['talk_list'])){
+//                foreach ($v['talk_list'] as $k2 => &$v2){
+//                    $v2['show_name'] = !!$v2['nickname']?$v2['nickname']:(!!$v2['realname']?$v2['realname']:$v2['mobile']);
+//                    $v2['avatar'] = tomedia($v2['avatar']);
+//                    $v2['thumb'] = tomedia($v2['thumb']);
+//                }
+//            }
+//            $v['like_list'] = pdo_fetchall("SELECT a.id,b.uid,b.avatar,b.mobile,b.nickname,b.realname FROM ".tablename('vapp_circle_like')." a LEFT JOIN ".tablename('vapp_member')." b ON a.uid=b.uid WHERE a.uniacid='{$_W['uniacid']}' AND a.circle_id='{$v['id']}' ORDER BY a.id DESC LIMIT 0,100");
+//            if(check_data($v['like_list'])){
+//                foreach ($v['like_list'] as $k3 => &$v3){
+//                    $v3['show_name'] = !!$v3['nickname']?$v3['nickname']:(!!$v3['realname']?$v3['realname']:$v3['mobile']);
+//                    $v3['avatar'] = tomedia($v3['avatar']);
+//                }
+//            }
+//            $v['is_like'] = 0;
+//            if(check_data($user_info)){
+//                $is_exist_like = pdo_get('vapp_circle_like',array(
+//                    'uniacid' => $_W['uniacid'],
+//                    'circle_id' => $v['id'],
+//                    'uid' => $user_info['uid']
+//                ));
+//                if(check_data($is_exist_like)){
+//                   $v['is_like'] = 1;
+//                }
+//            }
+//        }
+//    }
+//    to_json(0,'',array(
+//        'push_num' => pdo_fetchcolumn("SELECT COUNT(1) FROM ".tablename('vapp_circle')." WHERE uniacid='{$_W['uniacid']}' AND is_display='1'"),
+//        'member_num' => pdo_fetchcolumn("SELECT COUNT(1) FROM ".tablename('vapp_member')." WHERE uniacid='{$_W['uniacid']}'"),
+//        'sum_credit2' => pdo_fetchcolumn("SELECT SUM(credit2) FROM ".tablename('vapp_member')." WHERE uniacid='{$_W['uniacid']}'"),
+//        'list' => $list
+//    ));
+//}
 
 //提交圈子
 if($op == 'push_circle'){
@@ -1451,31 +1451,31 @@ if($op == 'push_circle'){
 }
 
 //获取发现菜单
-if($op == 'get_find'){
-    $menus = pdo_fetchall("SELECT id,title,thumb,page FROM ".tablename('vapp_find')." WHERE uniacid='{$_W['uniacid']}' AND is_display='1' ORDER BY order_by DESC LIMIT 0,20");
-    if(!check_data($menus)){
-        to_json(1,'没有设置相关菜单');
-    }
-    foreach ($menus as $k => &$v){
-        $v['thumb'] = tomedia($v['thumb']);
-    }
-    to_json(0,'返回菜单列表',$menus);
-}
+//if($op == 'get_find'){
+//    $menus = pdo_fetchall("SELECT id,title,thumb,page FROM ".tablename('vapp_find')." WHERE uniacid='{$_W['uniacid']}' AND is_display='1' ORDER BY order_by DESC LIMIT 0,20");
+//    if(!check_data($menus)){
+//        to_json(1,'没有设置相关菜单');
+//    }
+//    foreach ($menus as $k => &$v){
+//        $v['thumb'] = tomedia($v['thumb']);
+//    }
+//    to_json(0,'返回菜单列表',$menus);
+//}
 
 //获取app配置信息
-if($op == 'get_config'){
-    $config = pdo_get('vapp_config',array(
-        'uniacid' => $_W['uniacid']
-    ));
-    if(!check_data($config)){
-        to_json(1,'配置错误：-1');
-    }
-    $setting = iunserializer($config['setting']);
-    if(!check_data($setting)){
-        to_json(1,'配置错误：-2');
-    }
-    to_json(0,'返回配置信息',$setting);
-}
+//if($op == 'get_config'){
+//    $config = pdo_get('vapp_config',array(
+//        'uniacid' => $_W['uniacid']
+//    ));
+//    if(!check_data($config)){
+//        to_json(1,'配置错误：-1');
+//    }
+//    $setting = iunserializer($config['setting']);
+//    if(!check_data($setting)){
+//        to_json(1,'配置错误：-2');
+//    }
+//    to_json(0,'返回配置信息',$setting);
+//}
 
 //获取栏目文章信息
 if($op == 'get_article'){
@@ -1531,250 +1531,250 @@ if($op == 'get_company_info'){
 }
 
 //联盟
-if($op == 'union'){
-    //获取所有的分类
-    $categories = array(
-        0 => array(
-            'id' => 0,
-            'title' => '特别推荐'
-        )
-    );
-    $sql_categories = pdo_fetchall("SELECT id,title FROM ".tablename('vapp_company_category')." WHERE uniacid='{$_W['uniacid']}' AND is_display='1' ORDER BY order_by DESC LIMIT 0,50");
-    if(check_data($sql_categories)){
-        foreach ($sql_categories as $k => $v){
-            $categories[$k+1]['id'] = $v['id'];
-            $categories[$k+1]['title'] = $v['title'];
-        }
-    }
-    //获取所有的公司
-    $page = getApartPageNo('page');
-    $psize = 20;
-    $pindex = ($page-1)*$psize;
-    $category_id = $_GPC['cid'];
-    $where = "uniacid='{$_W['uniacid']}' AND is_display='1'";
-    if(!check_id($category_id)){
-        $where .= " AND is_recommend='1'";
-    }else{
-        $where .= " AND category_id='{$category_id}'";
-    }
-    $where .= " ORDER BY order_by DESC,createtime DESC LIMIT {$pindex},{$psize}";
-    $companies = array();
-    $sql_companies = pdo_fetchall("SELECT id,thumb,logo,title,`desc` FROM ".tablename('vapp_company')." WHERE {$where}");
-    if(check_data($sql_companies)){
-        foreach ($sql_companies as $k => &$v){
-            $v['logo'] = tomedia($v['logo']);
-            $v['thumb'] = tomedia($v['thumb']);
-        }
-        $companies = $sql_companies;
-    }
-    //返回数据
-    to_json(0,'返回分类列表',array(
-        'categories' => $categories,
-        'companies' => $companies
-    ));
-}
+//if($op == 'union'){
+//    //获取所有的分类
+//    $categories = array(
+//        0 => array(
+//            'id' => 0,
+//            'title' => '特别推荐'
+//        )
+//    );
+//    $sql_categories = pdo_fetchall("SELECT id,title FROM ".tablename('vapp_company_category')." WHERE uniacid='{$_W['uniacid']}' AND is_display='1' ORDER BY order_by DESC LIMIT 0,50");
+//    if(check_data($sql_categories)){
+//        foreach ($sql_categories as $k => $v){
+//            $categories[$k+1]['id'] = $v['id'];
+//            $categories[$k+1]['title'] = $v['title'];
+//        }
+//    }
+//    //获取所有的公司
+//    $page = getApartPageNo('page');
+//    $psize = 20;
+//    $pindex = ($page-1)*$psize;
+//    $category_id = $_GPC['cid'];
+//    $where = "uniacid='{$_W['uniacid']}' AND is_display='1'";
+//    if(!check_id($category_id)){
+//        $where .= " AND is_recommend='1'";
+//    }else{
+//        $where .= " AND category_id='{$category_id}'";
+//    }
+//    $where .= " ORDER BY order_by DESC,createtime DESC LIMIT {$pindex},{$psize}";
+//    $companies = array();
+//    $sql_companies = pdo_fetchall("SELECT id,thumb,logo,title,`desc` FROM ".tablename('vapp_company')." WHERE {$where}");
+//    if(check_data($sql_companies)){
+//        foreach ($sql_companies as $k => &$v){
+//            $v['logo'] = tomedia($v['logo']);
+//            $v['thumb'] = tomedia($v['thumb']);
+//        }
+//        $companies = $sql_companies;
+//    }
+//    //返回数据
+//    to_json(0,'返回分类列表',array(
+//        'categories' => $categories,
+//        'companies' => $companies
+//    ));
+//}
 
 //发送验证码
-if($op == 'send_code'){
-    $res = sendCode($_GPC['mobile']);
-    if(is_error($res)){
-        to_json(1,$res['message']);
-    }
-    to_json(0,'发送成功');
-}
+//if($op == 'send_code'){
+//    $res = sendCode($_GPC['mobile']);
+//    if(is_error($res)){
+//        to_json(1,$res['message']);
+//    }
+//    to_json(0,'发送成功');
+//}
 
 //会员登录
-if($op == 'login'){
-    $mobile = trim($_GPC['mobile']);
-    if(!check_mobile($mobile)){
-        to_json(1,'手机号格式错误');
-    }
-    $password = $_GPC['password'];
-    if(empty($password)){
-        to_json(1,'请输入密码');
-    }
-    $member = pdo_get('vapp_member',array(
-        'uniacid' => $_W['uniacid'],
-        'mobile' => $mobile
-    ));
-    if(!check_data($member)){
-        to_json(1,'会员信息不存在');
-    }
-    if(!check_md5_password($member['password'],$password,$member['salt'])){
-        to_json(1,'密码输入错误，请重试');
-    }
-    $token = auth_login(array(
-        'uniacid' => $_W['uniacid'],
-        'uid' => $member['uid'],
-        'ip' => CLIENT_IP,
-        'time' => TIMESTAMP
-    ));
-    to_json(0,'登录成功',array('token' => $token));
-}
+//if($op == 'login'){
+//    $mobile = trim($_GPC['mobile']);
+//    if(!check_mobile($mobile)){
+//        to_json(1,'手机号格式错误');
+//    }
+//    $password = $_GPC['password'];
+//    if(empty($password)){
+//        to_json(1,'请输入密码');
+//    }
+//    $member = pdo_get('vapp_member',array(
+//        'uniacid' => $_W['uniacid'],
+//        'mobile' => $mobile
+//    ));
+//    if(!check_data($member)){
+//        to_json(1,'会员信息不存在');
+//    }
+//    if(!check_md5_password($member['password'],$password,$member['salt'])){
+//        to_json(1,'密码输入错误，请重试');
+//    }
+//    $token = auth_login(array(
+//        'uniacid' => $_W['uniacid'],
+//        'uid' => $member['uid'],
+//        'ip' => CLIENT_IP,
+//        'time' => TIMESTAMP
+//    ));
+//    to_json(0,'登录成功',array('token' => $token));
+//}
 
 //会员注册
-if($op == 'register'){
-    $mobile = trim($_GPC['mobile']);
-    if(!check_mobile($mobile)){
-        to_json(1,'手机号格式错误');
-    }
-    $is_exist = pdo_get('vapp_member',array(
-        'uniacid' => $_W['uniacid'],
-        'mobile' => $mobile
-    ));
-    if(check_data($is_exist)){
-        to_json(1,'手机号已被注册');
-    }
-    $password = $_GPC['password'];
-    if(empty($password)){
-        to_json(1,'请输入密码');
-    }
-    if(mb_strlen($password,'utf-8') < 6){
-        to_json(1,'密码不能少于6位');
-    }
-    $repassword = $_GPC['repassword'];
-    if(empty($repassword)){
-        to_json(1,'请再次输入密码');
-    }
-    if($password != $repassword){
-        to_json(1,'两次输入密码不一致');
-    }
-    $code = trim($_GPC['code']);
-    if(empty($code)){
-        to_json(1,'请输入验证码');
-    }
-    $check = verifyCode($mobile,$code);
-    if(is_error($check)){
-        to_json(1,$check['message']);
-    }
-    $salt = random(8);
-    $status = pdo_insert('vapp_member',array(
-        'uniacid' => $_W['uniacid'],
-        'mobile' => $mobile,
-        'password' => md5_password($password,$salt),
-        'salt' => $salt,
-        'parent_uid' => floor(trim($_GPC['parent_uid'])),
-        'createtime' => TIMESTAMP
-    ));
-    if(!$status){
-        to_json(1,'注册失败');
-    }
-    $token = auth_login(array(
-        'uniacid' => $_W['uniacid'],
-        'uid' => pdo_insertid(),
-        'ip' => CLIENT_IP,
-        'time' => TIMESTAMP
-    ));
-    to_json(0,'注册成功',array('token'=>$token));
-}
+//if($op == 'register'){
+//    $mobile = trim($_GPC['mobile']);
+//    if(!check_mobile($mobile)){
+//        to_json(1,'手机号格式错误');
+//    }
+//    $is_exist = pdo_get('vapp_member',array(
+//        'uniacid' => $_W['uniacid'],
+//        'mobile' => $mobile
+//    ));
+//    if(check_data($is_exist)){
+//        to_json(1,'手机号已被注册');
+//    }
+//    $password = $_GPC['password'];
+//    if(empty($password)){
+//        to_json(1,'请输入密码');
+//    }
+//    if(mb_strlen($password,'utf-8') < 6){
+//        to_json(1,'密码不能少于6位');
+//    }
+//    $repassword = $_GPC['repassword'];
+//    if(empty($repassword)){
+//        to_json(1,'请再次输入密码');
+//    }
+//    if($password != $repassword){
+//        to_json(1,'两次输入密码不一致');
+//    }
+//    $code = trim($_GPC['code']);
+//    if(empty($code)){
+//        to_json(1,'请输入验证码');
+//    }
+//    $check = verifyCode($mobile,$code);
+//    if(is_error($check)){
+//        to_json(1,$check['message']);
+//    }
+//    $salt = random(8);
+//    $status = pdo_insert('vapp_member',array(
+//        'uniacid' => $_W['uniacid'],
+//        'mobile' => $mobile,
+//        'password' => md5_password($password,$salt),
+//        'salt' => $salt,
+//        'parent_uid' => floor(trim($_GPC['parent_uid'])),
+//        'createtime' => TIMESTAMP
+//    ));
+//    if(!$status){
+//        to_json(1,'注册失败');
+//    }
+//    $token = auth_login(array(
+//        'uniacid' => $_W['uniacid'],
+//        'uid' => pdo_insertid(),
+//        'ip' => CLIENT_IP,
+//        'time' => TIMESTAMP
+//    ));
+//    to_json(0,'注册成功',array('token'=>$token));
+//}
 
 //找回密码
-if($op == 'forget'){
-    $mobile = trim($_GPC['mobile']);
-    if(!check_mobile($mobile)){
-        to_json(1,'手机号格式错误');
-    }
-    $member = pdo_get('vapp_member',array(
-        'uniacid' => $_W['uniacid'],
-        'mobile' => $mobile
-    ));
-    if(!check_data($member)){
-        to_json(1,'会员信息不存在');
-    }
-    $password = $_GPC['password'];
-    if(empty($password)){
-        to_json(1,'请输入新密码');
-    }
-    if(mb_strlen($password,'utf-8') < 6){
-        to_json(1,'新密码不能少于6位');
-    }
-    $repassword = $_GPC['repassword'];
-    if(empty($repassword)){
-        to_json(1,'请再次输入新密码');
-    }
-    if($password != $repassword){
-        to_json(1,'两次输入密码不一致');
-    }
-    $code = trim($_GPC['code']);
-    if(empty($code)){
-        to_json(1,'请输入验证码');
-    }
-    $check = verifyCode($mobile,$code);
-    if(is_error($check)){
-       to_json(1,$check['message']);
-    }
-    $status = pdo_update('vapp_member',array(
-        'password' => md5_password($password,$member['salt']),
-        'updatetime' => TIMESTAMP
-    ),array(
-        'uniacid' => $_W['uniacid'],
-        'uid' => $member['uid'],
-        'mobile' => $mobile
-    ));
-    if(!$status){
-        to_json(1,'找回失败');
-    }
-    $token = auth_login(array(
-        'uniacid' => $_W['uniacid'],
-        'uid' => $member['uid'],
-        'ip' => CLIENT_IP,
-        'time' => TIMESTAMP
-    ));
-    to_json(0,'找回成功',array('token'=>$token));
-}
+//if($op == 'forget'){
+//    $mobile = trim($_GPC['mobile']);
+//    if(!check_mobile($mobile)){
+//        to_json(1,'手机号格式错误');
+//    }
+//    $member = pdo_get('vapp_member',array(
+//        'uniacid' => $_W['uniacid'],
+//        'mobile' => $mobile
+//    ));
+//    if(!check_data($member)){
+//        to_json(1,'会员信息不存在');
+//    }
+//    $password = $_GPC['password'];
+//    if(empty($password)){
+//        to_json(1,'请输入新密码');
+//    }
+//    if(mb_strlen($password,'utf-8') < 6){
+//        to_json(1,'新密码不能少于6位');
+//    }
+//    $repassword = $_GPC['repassword'];
+//    if(empty($repassword)){
+//        to_json(1,'请再次输入新密码');
+//    }
+//    if($password != $repassword){
+//        to_json(1,'两次输入密码不一致');
+//    }
+//    $code = trim($_GPC['code']);
+//    if(empty($code)){
+//        to_json(1,'请输入验证码');
+//    }
+//    $check = verifyCode($mobile,$code);
+//    if(is_error($check)){
+//       to_json(1,$check['message']);
+//    }
+//    $status = pdo_update('vapp_member',array(
+//        'password' => md5_password($password,$member['salt']),
+//        'updatetime' => TIMESTAMP
+//    ),array(
+//        'uniacid' => $_W['uniacid'],
+//        'uid' => $member['uid'],
+//        'mobile' => $mobile
+//    ));
+//    if(!$status){
+//        to_json(1,'找回失败');
+//    }
+//    $token = auth_login(array(
+//        'uniacid' => $_W['uniacid'],
+//        'uid' => $member['uid'],
+//        'ip' => CLIENT_IP,
+//        'time' => TIMESTAMP
+//    ));
+//    to_json(0,'找回成功',array('token'=>$token));
+//}
 
 //修改资料
-if($op == 'update_user_info'){
-    $user_info = auth_check($_GPC['token']);
-    if(empty($user_info)){
-        to_json(-1,'请先登录');
-    }
-    $data = array(
-        'avatar' => trim($_GPC['avatar']),
-        'nickname' => trim($_GPC['nickname']),
-        'gender' => floor(trim($_GPC['gender'])) == 1?'男':(floor(trim($_GPC['gender'])) == 2?'女':'保密'),
-        'age' => floor(trim($_GPC['age'])),
-        'province' => trim($_GPC['province']),
-        'city' => trim($_GPC['city']),
-        'district' => trim($_GPC['district']),
-        'updatetime' => TIMESTAMP
-    );
-    //如果是数据库以前的头像地址，则删除，不进行修改
-    if(preg_match("/^(http:\/\/|https:\/\/).*$/",$data['avatar'])){
-        unset($data['avatar']);
-    }
-    //base64转图像
-    if(!empty($data['avatar'])){
+//if($op == 'update_user_info'){
+//    $user_info = auth_check($_GPC['token']);
+//    if(empty($user_info)){
+//        to_json(-1,'请先登录');
+//    }
+//    $data = array(
+//        'avatar' => trim($_GPC['avatar']),
+//        'nickname' => trim($_GPC['nickname']),
+//        'gender' => floor(trim($_GPC['gender'])) == 1?'男':(floor(trim($_GPC['gender'])) == 2?'女':'保密'),
+//        'age' => floor(trim($_GPC['age'])),
+//        'province' => trim($_GPC['province']),
+//        'city' => trim($_GPC['city']),
+//        'district' => trim($_GPC['district']),
+//        'updatetime' => TIMESTAMP
+//    );
+//    //如果是数据库以前的头像地址，则删除，不进行修改
+//    if(preg_match("/^(http:\/\/|https:\/\/).*$/",$data['avatar'])){
+//        unset($data['avatar']);
+//    }
+//    //base64转图像
+//    if(!empty($data['avatar'])){
         $data['avatar'] = base64ToImage($data['avatar']);
-    }
-    $status = pdo_update('vapp_member',$data,array(
-        'uniacid' => $_W['uniacid'],
-        'uid' => $user_info['uid']
-    ));
-    if(!$status){
-        to_json(1,'修改失败');
-    }
-    to_json(0,'修改成功');
-}
+//    }
+//    $status = pdo_update('vapp_member',$data,array(
+//        'uniacid' => $_W['uniacid'],
+//        'uid' => $user_info['uid']
+//    ));
+//    if(!$status){
+//        to_json(1,'修改失败');
+//    }
+//    to_json(0,'修改成功');
+//}
 
 //获取会员信息
-if($op == 'get_user_info'){
-    $user_info = auth_check($_GPC['token']);
-    if(empty($user_info)){
-        to_json(-1,'请先登录');
-    }
-    $member = pdo_get('vapp_member',array(
-        'uniacid' => $_W['uniacid'],
-        'uid' => $user_info['uid']
-    ));
-    if(!check_data($member)){
-        to_json(1,'会员信息不存在');
-    }
-    $member['avatar'] = tomedia($member['avatar']);
-    $member['gender'] == 1?'男':($member['gender'] == 2?'女':'保密');
-    $member['createtime'] = date('Y年m月d日',$member['createtime']);
-    to_json(0,'返回会员信息',$member);
-}
+//if($op == 'get_user_info'){
+//    $user_info = auth_check($_GPC['token']);
+//    if(empty($user_info)){
+//        to_json(-1,'请先登录');
+//    }
+//    $member = pdo_get('vapp_member',array(
+//        'uniacid' => $_W['uniacid'],
+//        'uid' => $user_info['uid']
+//    ));
+//    if(!check_data($member)){
+//        to_json(1,'会员信息不存在');
+//    }
+//    $member['avatar'] = tomedia($member['avatar']);
+//    $member['gender'] == 1?'男':($member['gender'] == 2?'女':'保密');
+//    $member['createtime'] = date('Y年m月d日',$member['createtime']);
+//    to_json(0,'返回会员信息',$member);
+//}
 
 
 message('访问出错','','error');
