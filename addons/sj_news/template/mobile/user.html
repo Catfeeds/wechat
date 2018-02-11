@@ -26,13 +26,13 @@
         <b>{$member['credit1']}</b>&nbsp;积分
     </div>
     <div class="menu">
-        <a href="{php echo $this->createMobileUrl('m_text');}">
-            <i style="color: blueviolet" class="iconfont icon-document_fill"></i>
-            <span>文章</span>
+        <a href="{php echo $this->createMobileUrl('activity');}">
+            <i style="color: mediumturquoise;"  class="iconfont icon-huodong"></i>
+            <span>活动</span>
         </a>
         <a href="{php echo $this->createMobileUrl('m_image');}">
             <i style="color: chocolate" class="iconfont icon-picture_fill"></i>
-            <span>图片</span>
+            <span>图文</span>
         </a>
         <a href="{php echo $this->createMobileUrl('m_video');}">
             <i style="color: deepskyblue"  class="iconfont icon-video_fill"></i>
@@ -193,9 +193,9 @@
             <span class="iconfont icon-addition{if in_array($_GPC['do'] ,array('text','image','video'))}_fill{/if}"></span>
             <span class="text top">发布</span>
         </a>
-		<a href="{php echo $this->createMobileUrl('activity');}" class="{if in_array($_GPC['do'] ,array('activity'))}active{/if}">
-            <span class="iconfont icon-huodong"></span>
-            <span class="text top">活动</span>
+        <a href="http://lezhibo.tianqist.cn/mobile/history?liveroom=5560166c5a0b421c92840e04bc28938d&inviter=8e8af34013c44c22a017e14e6dd81bb4&from=singlemessage" class="{if in_array($_GPC['do'] ,array('activity'))}active{/if}">
+            <span class="iconfont icon-zhibo-01"></span>
+            <span class="text top">直播</span>
         </a>
         <a  {if $_GPC['do'] == 'user'}class="active"{/if} href="{php echo $this->createMobileUrl('user');}">
         <span class="iconfont icon-addressbook{if $_GPC['do'] == 'user'}_fill{/if}"></span>
@@ -204,11 +204,11 @@
     </div>
     <div class="footer-menu">
         <div class="push-box">
-            <a href="{php echo $this->createMobileUrl('text');}" style="color: #4f88f6">
+            <a href="{php echo $this->createMobileUrl('activity');}" style="color: #4f88f6">
                 <span>
-                    <i class="iconfont icon-document_fill"></i>
+                    <i class="iconfont icon-huodong"></i>
                 </span>
-                <span style="font-size: 12px" class="text top">文章</span>
+                <span style="font-size: 12px" class="text top">活动</span>
             </a>
             <a href="{php echo $this->createMobileUrl('image');}" style="color: #1dda9a">
                 <span>
