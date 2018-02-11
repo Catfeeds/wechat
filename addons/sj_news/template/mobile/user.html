@@ -26,9 +26,9 @@
         <b>{$member['credit1']}</b>&nbsp;积分
     </div>
     <div class="menu">
-        <a href="#">
+        <a href="{php echo $this->createMobileUrl('activity');}">
             <i style="color: mediumturquoise;"  class="iconfont icon-tubiao-"></i>
-            <span>评选</span>
+            <span>活动</span>
         </a>
         <a href="{php echo $this->createMobileUrl('m_image');}">
             <i style="color: chocolate" class="iconfont icon-picture_fill"></i>
@@ -59,7 +59,7 @@
                 <i style="color: red"  class="iconfont icon-shangjiabanduijiang"></i>
                 <span>兑奖</span>
             </a>
-            <a href="#">
+            <a class="js-px">
                 <i style="color: mediumturquoise;"  class="iconfont icon-tubiao-"></i>
                 <span>评选</span>
             </a>
@@ -287,6 +287,10 @@
 
             $('.push-close').click(function(){
                 $('.footer-menu').slideUp();
+            });
+
+            $('.js-px').click(function () {
+                util.message('功能暂未开启，敬请期待','','error');
             });
         });
     </script>
