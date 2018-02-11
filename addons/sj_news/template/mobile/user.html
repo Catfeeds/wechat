@@ -27,7 +27,7 @@
     </div>
     <div class="menu">
         <a href="{php echo $this->createMobileUrl('activity');}">
-            <i style="color: mediumturquoise;"  class="iconfont icon-tubiao-"></i>
+            <i style="color: mediumturquoise;"  class="iconfont icon-huodong"></i>
             <span>活动</span>
         </a>
         <a href="{php echo $this->createMobileUrl('m_image');}">
@@ -239,6 +239,11 @@
     <script type="text/javascript">
         //点赞
         require(['layer'],function(layer){
+
+            $('.js-px').click(function () {
+                util.message('功能暂未开放','','error');
+            });
+
             $('.js-exchange').click(function(){
                 var _index = layer.open({
                     'title':'兑奖说明',
@@ -287,10 +292,6 @@
 
             $('.push-close').click(function(){
                 $('.footer-menu').slideUp();
-            });
-
-            $('.js-px').click(function () {
-                util.message('功能暂未开启，敬请期待','','error');
             });
         });
     </script>
